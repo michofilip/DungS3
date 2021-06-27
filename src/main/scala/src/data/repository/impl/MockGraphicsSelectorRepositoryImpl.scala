@@ -1,9 +1,9 @@
-package src.entity.repository.impl
+package src.data.repository.impl
 
-import src.entity.EntityPrototype
-import src.entity.parts.{Direction, Graphics, Physics}
-import src.entity.repository.GraphicsSelectorRepository
-import src.entity.selector.GraphicsSelector
+import src.data.repository.GraphicsSelectorRepository
+import src.game.entity.EntityPrototype
+import src.game.entity.parts.{Direction, Graphics, Physics}
+import src.game.entity.selector.GraphicsSelector
 
 final class MockGraphicsSelectorRepositoryImpl() extends GraphicsSelectorRepository :
     override def findByName(name: String): Option[GraphicsSelector] =

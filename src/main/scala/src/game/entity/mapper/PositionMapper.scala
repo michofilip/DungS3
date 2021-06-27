@@ -1,6 +1,6 @@
-package src.entity.mapper
+package src.game.entity.mapper
 
-import src.entity.parts.Position
+import src.game.entity.parts.Position
 
 sealed abstract class PositionMapper extends Mapper[Position]
 

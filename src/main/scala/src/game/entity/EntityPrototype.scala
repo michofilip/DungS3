@@ -1,8 +1,8 @@
-package src.entity
+package src.game.entity
 
-import src.entity.EntityPrototype.defaultPosition
-import src.entity.parts.{Direction, Position, State}
-import src.entity.selector.{GraphicsSelector, PhysicsSelector}
+import src.game.entity.EntityPrototype.defaultPosition
+import src.game.entity.parts.{Direction, Position, State}
+import src.game.entity.selector.{GraphicsSelector, PhysicsSelector}
 
 final class EntityPrototype(private val name: String,
                             private val availableStates: Seq[State],

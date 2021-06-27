@@ -1,6 +1,6 @@
-package src.entity.repository
+package src.data.repository
 
-import src.entity.selector.PhysicsSelector
+import src.game.entity.selector.PhysicsSelector
 
 trait PhysicsSelectorRepository:
     def findByName(name: String): Option[PhysicsSelector]

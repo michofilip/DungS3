@@ -1,6 +1,7 @@
-package src.entity.repository
+package src.data.repository
 
-import src.entity.EntityPrototype
+import src.data.repository.{GraphicsSelectorRepository, PhysicsSelectorRepository}
+import src.game.entity.EntityPrototype
 
 trait EntityPrototypeRepository:
     protected val physicsSelectorRepository: PhysicsSelectorRepository

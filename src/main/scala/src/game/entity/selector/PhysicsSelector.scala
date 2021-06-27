@@ -1,6 +1,6 @@
-package src.entity.selector
+package src.game.entity.selector
 
-import src.entity.parts.{Physics, State}
+import src.game.entity.parts.{Physics, State}
 
 final class PhysicsSelector private(physicsMap: Map[Option[State], Physics]):
     def selectPhysics(state: Option[State]): Option[Physics] = physicsMap.get(state)

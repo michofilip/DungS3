@@ -1,6 +1,6 @@
-package src.entity.mapper
+package src.game.entity.mapper
 
-import src.entity.parts.Direction
+import src.game.entity.parts.Direction
 
 sealed abstract class DirectionMapper extends Mapper[Direction]
 

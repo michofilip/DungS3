@@ -1,7 +1,7 @@
-package src.entity
+package src.game.entity
 
-import src.entity.parts.{Direction, Position, State}
-import src.entity.repository.EntityPrototypeRepository
+import src.data.repository.EntityPrototypeRepository
+import src.game.entity.parts.{Direction, Position, State}
 
 import java.util.UUID
 

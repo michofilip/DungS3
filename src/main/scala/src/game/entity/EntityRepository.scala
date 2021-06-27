@@ -1,7 +1,7 @@
-package src.entity.repository
+package src.game.entity
 
-import src.entity.Entity
-import src.entity.parts.Position
+import src.game.entity.Entity
+import src.game.entity.parts.Position
 
 import java.util.UUID
 

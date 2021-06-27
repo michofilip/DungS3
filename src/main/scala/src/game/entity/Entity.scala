@@ -1,8 +1,8 @@
-package src.entity
+package src.game.entity
 
-import src.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
-import src.entity.parts.{Direction, Graphics, Physics, Position, State}
-import src.entity.selector.{GraphicsSelector, PhysicsSelector}
+import src.game.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
+import src.game.entity.parts.{Direction, Graphics, Physics, Position, State}
+import src.game.entity.selector.{GraphicsSelector, PhysicsSelector}
 
 import java.util.UUID
 

@@ -1,6 +1,6 @@
 package src.game
 
-import src.entity.repository.EntityRepository
+import src.game.entity.EntityRepository
 import src.game.event.Event
 
 // TODO time, turn, etc

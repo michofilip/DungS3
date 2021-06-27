@@ -1,10 +1,9 @@
 package src
 
-import src.entity.mapper.{DirectionMapper, PositionMapper}
-import src.entity.parts.{Direction, Position, State}
-import src.entity.repository.impl.{MockEntityPrototypeRepositoryImpl, MockGraphicsSelectorRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
-import src.entity.repository.{EntityPrototypeRepository, EntityRepository, GraphicsSelectorRepository}
-import src.entity.{Entity, EntityPrototype, EntityService}
+import src.game.entity.mapper.{DirectionMapper, PositionMapper}
+import src.game.entity.parts.{Direction, Position, State}
+import src.data.repository.impl.{MockEntityPrototypeRepositoryImpl, MockGraphicsSelectorRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
+import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
 import src.game.event.{Event, PositionEvent}
 import src.game.{GameFrame, GameState}
 
