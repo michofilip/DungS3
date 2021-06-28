@@ -2,13 +2,15 @@ package src.game
 
 import src.game.entity.EntityRepository
 import src.game.event.Event
+import src.game.temporal.Timer
 
-// TODO time, turn, etc
-final class GameState(val entities: EntityRepository):
+// TODO turn, etc
+final class GameState(val timer: Timer, val entities: EntityRepository):
 
     def updated(entities: EntityRepository = entities): GameState =
         GameState(
+            timer = timer,
             entities = entities
         )
 
-    override def toString: String = s"GameState(entities=$entities)"
+    override def toString: String = s"GameState(timestamp=${timer.timestamp}, entities=$entities)"

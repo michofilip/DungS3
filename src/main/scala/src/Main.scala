@@ -1,10 +1,11 @@
 package src
 
+import src.data.repository.impl.{MockEntityPrototypeRepositoryImpl, MockGraphicsSelectorRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
-import src.data.repository.impl.{MockEntityPrototypeRepositoryImpl, MockGraphicsSelectorRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
 import src.game.event.{Event, PositionEvent}
+import src.game.temporal.Timer
 import src.game.{GameFrame, GameState}
 
 import java.util.UUID
@@ -31,8 +32,10 @@ object Main:
         val event = PositionEvent.MoveBy(entityId = entity1.id, dx = 10, dy = 15)
 
         val entityRepository = EntityRepository(Seq(entity1))
-        val gameState = GameState(entities = entityRepository)
+        val gameState = GameState(timer = Timer(running = true), entities = entityRepository)
         val gameFrame = new GameFrame(gameState = gameState, events = Vector(event))
 
+        Thread.sleep(1000)
         println(gameFrame)
+        Thread.sleep(1000)
         println(gameFrame.nextFrame())
