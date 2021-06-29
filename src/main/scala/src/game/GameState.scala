@@ -7,7 +7,7 @@ import src.game.temporal.Timer
 // TODO turn, etc
 final class GameState(val timer: Timer, val entities: EntityRepository):
 
-    def updated(entities: EntityRepository = entities): GameState =
+    def updated(timer: Timer = timer, entities: EntityRepository = entities): GameState =
         GameState(
             timer = timer,
             entities = entities
