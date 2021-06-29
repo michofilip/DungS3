@@ -13,4 +13,4 @@ final class GameState(val timer: Timer, val entities: EntityRepository):
             entities = entities
         )
 
-    override def toString: String = s"GameState(timestamp=${timer.timestamp}, entities=$entities)"
+    override def toString: String = s"GameState(timer=$timer, entities=$entities)"
