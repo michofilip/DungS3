@@ -23,7 +23,7 @@ class Timer private(private val initialTimestamp: Timestamp,
         }
 
     def durationSince(timestamp: Timestamp): Duration =
-        Duration.durationBetween(timestamp, timestamp)
+        Duration.durationBetween(timestamp, this.timestamp)
 
 object Timer:
     def apply(initialTimestamp: Timestamp = Timestamp.zero, running: Boolean = false): Timer =
