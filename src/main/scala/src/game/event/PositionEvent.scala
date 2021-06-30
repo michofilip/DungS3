@@ -12,7 +12,7 @@ object PositionEvent:
         gameState.entities.findById(entityId)
             .filter(entity => entity.hasPosition)
             .fold((gameState, Vector.empty)) { entity =>
-                val updatedEntity = entity.updated(position = positionMapper)
+                val updatedEntity = entity.updated(position = positionMapper, timestamp = gameState.timer.timestamp)
                 val isSolidAtTarget = updatedEntity.position.exists(gameState.entities.existSolidAtPosition)
 
                 if !isSolidAtTarget then

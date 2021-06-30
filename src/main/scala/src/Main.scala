@@ -5,7 +5,7 @@ import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
 import src.game.event.{Event, PositionEvent}
-import src.game.temporal.Timer
+import src.game.temporal.{Timer, Timestamp}
 import src.game.{GameFrame, GameState}
 
 import java.util.UUID
@@ -26,7 +26,8 @@ object Main:
         val entity1 = entityService.createEntity(
             id = UUID.randomUUID(),
             name = "entity",
-            position = Some(Position(10, 20))
+            position = Some(Position(10, 20)),
+            timestamp = Timestamp.zero
         ).get
 
         val event = PositionEvent.MoveBy(entityId = entity1.id, dx = 10, dy = 15)

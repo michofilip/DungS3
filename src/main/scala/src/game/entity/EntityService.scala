@@ -2,6 +2,7 @@ package src.game.entity
 
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.parts.{Direction, Position, State}
+import src.game.temporal.Timestamp
 
 import java.util.UUID
 
@@ -11,9 +12,11 @@ class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
                      name: String,
                      state: Option[State] = None,
                      position: Option[Position] = None,
-                     direction: Option[Direction] = None): Option[Entity] =
+                     direction: Option[Direction] = None,
+                     timestamp: Timestamp): Option[Entity] =
         entityPrototypeRepository.findByName(name).map { entityPrototype =>
             val validState = entityPrototype.getValidatedState(state)
+            val stateTimestamp = if (validState.isDefined) Some(timestamp) else None
             val validPosition = entityPrototype.getValidatedPosition(position)
             val validDirection = entityPrototype.getValidatedDirection(direction)
             val physicsSelector = entityPrototype.physicsSelector
@@ -23,6 +26,7 @@ class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
                 id = id,
                 name = name,
                 state = validState,
+                stateTimestamp = stateTimestamp,
                 position = validPosition,
                 direction = validDirection,
                 physicsSelector = physicsSelector,
