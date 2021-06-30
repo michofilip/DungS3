@@ -1,6 +1,5 @@
 package src.game.event
 
-import src.game.entity.mapper.PositionMapper
 import src.game.GameState
 import src.game.event.Event
 import src.game.event.Event.EventResponse
