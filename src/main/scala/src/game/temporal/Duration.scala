@@ -1,28 +1,28 @@
 package src.game.temporal
 
-class Duration private(private[temporal] val durationValue: Long):
+class Duration private(private[temporal] val milliseconds: Long):
     def unary_+ : Duration = this
 
-    def unary_- : Duration = new Duration(-durationValue)
+    def unary_- : Duration = new Duration(-milliseconds)
 
-    def +(that: Duration): Duration = Duration(durationValue + that.durationValue)
+    def +(that: Duration): Duration = Duration(milliseconds + that.milliseconds)
 
-    def -(that: Duration): Duration = Duration(durationValue - that.durationValue)
+    def -(that: Duration): Duration = Duration(milliseconds - that.milliseconds)
 
-    override def toString: String = durationValue.toString
+    override def toString: String = milliseconds.toString
 
 object Duration:
-    def apply(durationValue: Long): Duration = new Duration(durationValue)
+    def apply(milliseconds: Long): Duration = new Duration(milliseconds)
 
     def zero: Duration = Duration(0)
 
-    def durationBetween(from: Timestamp, to: Timestamp): Duration = Duration(to.timestampValue - from.timestampValue)
+    def durationBetween(from: Timestamp, to: Timestamp): Duration = Duration(to.milliseconds - from.milliseconds)
 
-    extension (durationValue: Long)
-        def milliseconds: Duration = Duration(durationValue)
+    extension (milliseconds: Long)
+        def milliseconds: Duration = Duration(milliseconds)
 
-        def seconds: Duration = Duration(durationValue * 1000)
+        def seconds: Duration = Duration(milliseconds * 1000)
 
-        def minutes: Duration = Duration(durationValue * 1000 * 60)
+        def minutes: Duration = Duration(milliseconds * 1000 * 60)
 
-        def hours: Duration = Duration(durationValue * 1000 * 60 * 60)
+        def hours: Duration = Duration(milliseconds * 1000 * 60 * 60)

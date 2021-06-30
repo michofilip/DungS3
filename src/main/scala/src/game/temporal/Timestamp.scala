@@ -1,14 +1,14 @@
 package src.game.temporal
 
-class Timestamp private(private[temporal] val timestampValue: Long):
-    def +(duration: Duration): Timestamp = Timestamp(timestampValue + duration.durationValue)
+class Timestamp private(private[temporal] val milliseconds: Long):
+    def +(duration: Duration): Timestamp = Timestamp(milliseconds + duration.milliseconds)
 
-    def -(duration: Duration): Timestamp = Timestamp(timestampValue - duration.durationValue)
+    def -(duration: Duration): Timestamp = Timestamp(milliseconds - duration.milliseconds)
 
-    override def toString: String = timestampValue.toString
+    override def toString: String = milliseconds.toString
 
 object Timestamp:
-    def apply(timestampValue: Long): Timestamp = new Timestamp(timestampValue)
+    def apply(milliseconds: Long): Timestamp = new Timestamp(milliseconds)
 
     def zero: Timestamp = Timestamp(0)
 
