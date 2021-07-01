@@ -1,10 +1,10 @@
 package src.data.repository.impl
 
-import src.data.repository.{AnimationSelectorRepository, GraphicsSelectorRepository}
+import src.data.repository.AnimationSelectorRepository
 import src.game.entity.EntityPrototype
 import src.game.entity.parts.animation.{Animation, Frame, LoopingAnimation}
-import src.game.entity.parts.{Direction, Graphics, Physics}
-import src.game.entity.selector.{AnimationSelector, GraphicsSelector}
+import src.game.entity.parts.{Direction, Physics}
+import src.game.entity.selector.AnimationSelector
 
 final class MockAnimationSelectorRepositoryImpl() extends AnimationSelectorRepository :
     override def findByName(name: String): Option[AnimationSelector] =
