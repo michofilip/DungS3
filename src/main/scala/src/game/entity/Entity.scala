@@ -2,8 +2,8 @@ package src.game.entity
 
 import src.game.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
 import src.game.entity.parts.animation.Animation
-import src.game.entity.parts.{Direction, Graphics, Physics, Position, State}
-import src.game.entity.selector.{AnimationSelector, GraphicsSelector, PhysicsSelector}
+import src.game.entity.parts.{Direction, Physics, Position, State}
+import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
 import src.game.temporal.Timestamp
 
 import java.util.UUID
@@ -15,7 +15,6 @@ class Entity(val id: UUID,
              val position: Option[Position] = None,
              val direction: Option[Direction] = None,
              private val physicsSelector: PhysicsSelector = PhysicsSelector.empty,
-             @Deprecated private val graphicsSelector: GraphicsSelector = GraphicsSelector.empty,
              private val animationSelector: AnimationSelector = AnimationSelector.empty):
 
     def updated(state: StateMapper = StateMapper.Identity,
@@ -33,25 +32,23 @@ class Entity(val id: UUID,
             position = position(this.position),
             direction = direction(this.direction),
             physicsSelector = physicsSelector,
-            graphicsSelector = graphicsSelector,
             animationSelector = animationSelector
         )
 
     def physics: Option[Physics] =
         physicsSelector.selectPhysics(state)
 
-    @Deprecated
-    def graphics: Option[Graphics] =
-        graphicsSelector.selectGraphics(state, direction)
-
     def animation: Option[Animation] =
         animationSelector.selectAnimation(state, direction)
 
-    def hasState: Boolean = state.isDefined
+    def hasState: Boolean =
+        state.isDefined
 
-    def hasPosition: Boolean = position.isDefined
+    def hasPosition: Boolean =
+        position.isDefined
 
-    def hasDirection: Boolean = direction.isDefined
+    def hasDirection: Boolean =
+        direction.isDefined
 
     override def toString: String =
         Seq(

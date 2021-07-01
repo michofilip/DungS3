@@ -1,6 +1,6 @@
 package src
 
-import src.data.repository.impl.{MockAnimationSelectorRepositoryImpl, MockEntityPrototypeRepositoryImpl, MockGraphicsSelectorRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
+import src.data.repository.impl.{MockAnimationSelectorRepositoryImpl, MockEntityPrototypeRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
@@ -15,9 +15,8 @@ object Main:
     @main
     def start(): Unit =
         val physicsSelectorRepository = new MockPhysicsSelectorRepositoryImpl()
-        val graphicsSelectorRepository = new MockGraphicsSelectorRepositoryImpl()
         val animationSelectorRepository = new MockAnimationSelectorRepositoryImpl()
-        val entityPrototypeRepository = new MockEntityPrototypeRepositoryImpl(physicsSelectorRepository, graphicsSelectorRepository, animationSelectorRepository)
+        val entityPrototypeRepository = new MockEntityPrototypeRepositoryImpl(physicsSelectorRepository, animationSelectorRepository)
 
         val entityService = new EntityService(entityPrototypeRepository)
 

@@ -20,7 +20,6 @@ class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
             val validPosition = entityPrototype.getValidatedPosition(position)
             val validDirection = entityPrototype.getValidatedDirection(direction)
             val physicsSelector = entityPrototype.physicsSelector
-            val graphicsSelector = entityPrototype.graphicsSelector
             val animationSelector = entityPrototype.animationSelector
 
             Entity(
@@ -31,7 +30,6 @@ class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
                 position = validPosition,
                 direction = validDirection,
                 physicsSelector = physicsSelector,
-                graphicsSelector = graphicsSelector,
                 animationSelector = animationSelector
             )
         }
