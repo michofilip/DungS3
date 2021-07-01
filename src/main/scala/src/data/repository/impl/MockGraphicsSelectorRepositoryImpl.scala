@@ -5,6 +5,7 @@ import src.game.entity.EntityPrototype
 import src.game.entity.parts.{Direction, Graphics, Physics}
 import src.game.entity.selector.GraphicsSelector
 
+@Deprecated
 final class MockGraphicsSelectorRepositoryImpl() extends GraphicsSelectorRepository :
     override def findByName(name: String): Option[GraphicsSelector] =
         Some {

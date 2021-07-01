@@ -2,14 +2,15 @@ package src.game.entity
 
 import src.game.entity.EntityPrototype.defaultPosition
 import src.game.entity.parts.{Direction, Position, State}
-import src.game.entity.selector.{GraphicsSelector, PhysicsSelector}
+import src.game.entity.selector.{AnimationSelector, GraphicsSelector, PhysicsSelector}
 
 final class EntityPrototype(private val name: String,
                             private val availableStates: Seq[State],
                             private val hasPosition: Boolean,
                             private val hasDirection: Boolean,
                             val physicsSelector: PhysicsSelector,
-                            val graphicsSelector: GraphicsSelector):
+                            val graphicsSelector: GraphicsSelector,
+                            val animationSelector: AnimationSelector):
 
     def getValidatedState(state: Option[State]): Option[State] =
         state.filter(availableStates.contains).fold(availableStates.headOption)(_ => state)

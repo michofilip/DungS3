@@ -2,6 +2,7 @@ package src.game.entity.selector
 
 import src.game.entity.parts.{Direction, Graphics, State}
 
+@Deprecated
 final class GraphicsSelector private(graphicsMap: Map[(Option[State], Option[Direction]), Graphics]):
     def selectGraphics(state: Option[State], direction: Option[Direction]): Option[Graphics] = graphicsMap.get(state, direction)
 

@@ -1,6 +1,6 @@
 package src.game.temporal
 
-class Duration private(private[temporal] val milliseconds: Long):
+class Duration private(val milliseconds: Long):
     def unary_+ : Duration = this
 
     def unary_- : Duration = new Duration(-milliseconds)
@@ -26,3 +26,12 @@ object Duration:
         def minutes: Duration = Duration(milliseconds * 1000 * 60)
 
         def hours: Duration = Duration(milliseconds * 1000 * 60 * 60)
+
+    extension (milliseconds: Double)
+        def milliseconds: Duration = Duration(milliseconds.toLong)
+
+        def seconds: Duration = Duration((milliseconds * 1000).toLong)
+
+        def minutes: Duration = Duration((milliseconds * 1000 * 60).toLong)
+
+        def hours: Duration = Duration((milliseconds * 1000 * 60 * 60).toLong)
