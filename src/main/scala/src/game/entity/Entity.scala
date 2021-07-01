@@ -10,12 +10,12 @@ import java.util.UUID
 
 class Entity(val id: UUID,
              val name: String,
-             val state: Option[State] = None,
-             val stateTimestamp: Option[Timestamp] = None,
-             val position: Option[Position] = None,
-             val direction: Option[Direction] = None,
-             private val physicsSelector: PhysicsSelector = PhysicsSelector.empty,
-             private val animationSelector: AnimationSelector = AnimationSelector.empty):
+             val state: Option[State],
+             val stateTimestamp: Option[Timestamp],
+             val position: Option[Position],
+             val direction: Option[Direction],
+             private val physicsSelector: PhysicsSelector,
+             private val animationSelector: AnimationSelector):
 
     def updated(state: StateMapper = StateMapper.Identity,
                 position: PositionMapper = PositionMapper.Identity,
