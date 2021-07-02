@@ -1,6 +1,5 @@
 package src.game.entity
 
-import src.data.repository.EntityPrototypeRepository
 import src.game.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
 import src.game.entity.parts.animation.Animation
 import src.game.entity.parts.{Direction, Physics, Position, State}
@@ -61,31 +60,31 @@ class Entity private(val id: UUID,
             direction.map(direction => s"direction=$direction")
         ).flatten.mkString("Entity(", ", ", ")")
 
-object Entity:
+object Entity
 
-    def create(id: UUID,
-               name: String,
-               state: Option[State] = None,
-               position: Option[Position] = None,
-               direction: Option[Direction] = None,
-               timestamp: Timestamp)(using entityPrototypeRepository: EntityPrototypeRepository): Option[Entity] =
-
-        entityPrototypeRepository.findByName(name).map { entityPrototype =>
-            val validState = entityPrototype.getValidatedState(state)
-            val stateTimestamp = if validState.isDefined then Some(timestamp) else None
-            val validPosition = entityPrototype.getValidatedPosition(position)
-            val validDirection = entityPrototype.getValidatedDirection(direction)
-            val physicsSelector = entityPrototype.physicsSelector
-            val animationSelector = entityPrototype.animationSelector
-
-            Entity(
-                id = id,
-                name = name,
-                state = validState,
-                stateTimestamp = stateTimestamp,
-                position = validPosition,
-                direction = validDirection,
-                physicsSelector = physicsSelector,
-                animationSelector = animationSelector
-            )
-        }
+//    def create(id: UUID,
+//               name: String,
+//               state: Option[State] = None,
+//               position: Option[Position] = None,
+//               direction: Option[Direction] = None,
+//               timestamp: Timestamp)(using entityPrototypeRepository: EntityPrototypeRepository): Option[Entity] =
+//
+//        entityPrototypeRepository.findByName(name).map { entityPrototype =>
+//            val validState = entityPrototype.getValidatedState(state)
+//            val stateTimestamp = if validState.isDefined then Some(timestamp) else None
+//            val validPosition = entityPrototype.getValidatedPosition(position)
+//            val validDirection = entityPrototype.getValidatedDirection(direction)
+//            val physicsSelector = entityPrototype.physicsSelector
+//            val animationSelector = entityPrototype.animationSelector
+//
+//            Entity(
+//                id = id,
+//                name = name,
+//                state = validState,
+//                stateTimestamp = stateTimestamp,
+//                position = validPosition,
+//                direction = validDirection,
+//                physicsSelector = physicsSelector,
+//                animationSelector = animationSelector
+//            )
+//        }

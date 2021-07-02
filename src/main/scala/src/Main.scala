@@ -1,7 +1,6 @@
 package src
 
-import src.data.repository.impl.{MockAnimationSelectorRepositoryImpl, MockEntityPrototypeRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
-import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository}
+import src.data.repository.{AnimationRepository, AnimationSelectorRepository, FrameRepository, PhysicsRepository}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository}
@@ -49,6 +48,9 @@ object Main:
 
         given animationSelectorRepository: AnimationSelectorRepository = new AnimationSelectorRepository
 
+        given physicsRepository: PhysicsRepository = new PhysicsRepository
+
         println(frameRepository.findById(1))
         println(animationRepository.findById(1).map(_.frame(Duration.zero)))
         println(animationSelectorRepository.findById("player"))
+        println(physicsRepository.findById(1))
