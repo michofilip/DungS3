@@ -1,9 +1,10 @@
 package src
 
+import src.data.repository.EntityPrototypeRepository
 import src.data.repository.impl.{MockAnimationSelectorRepositoryImpl, MockEntityPrototypeRepositoryImpl, MockPhysicsSelectorRepositoryImpl}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
-import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
+import src.game.entity.{Entity, EntityPrototype, EntityRepository}
 import src.game.event.{Event, PositionEvent}
 import src.game.temporal.{Timer, Timestamp}
 import src.game.{GameFrame, GameState}
@@ -16,14 +17,15 @@ object Main:
     def start(): Unit =
         val physicsSelectorRepository = new MockPhysicsSelectorRepositoryImpl()
         val animationSelectorRepository = new MockAnimationSelectorRepositoryImpl()
-        val entityPrototypeRepository = new MockEntityPrototypeRepositoryImpl(physicsSelectorRepository, animationSelectorRepository)
 
-        val entityService = new EntityService(entityPrototypeRepository)
+        given EntityPrototypeRepository = new MockEntityPrototypeRepositoryImpl(physicsSelectorRepository, animationSelectorRepository)
+
+        //        val entityService = new EntityService(entityPrototypeRepository)
 
         //        val entity1 = Entity(UUID.randomUUID(), "entity", None, Some(Position(10, 15)), Some(Direction.North))
         //        println(entity1)
         //        println(entity1.update(direction = DirectionMapper.TurnBack))
-        val entity1 = entityService.createEntity(
+        val entity1 = Entity.create(
             id = UUID.randomUUID(),
             name = "entity",
             position = Some(Position(10, 20)),
