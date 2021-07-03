@@ -3,7 +3,7 @@ package src.game.entity.parts.animation
 import src.game.entity.parts.animation.Frame
 import src.game.temporal.Duration
 import src.game.temporal.Duration.*
-import src.game.utils.MathUtils
+import src.utils.MathUtils
 
 import scala.concurrent.duration
 
