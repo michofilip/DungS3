@@ -10,6 +10,7 @@ import scala.util.Try
 case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction])
 
 object EntityEntry:
+    
     val reader: Reader[EntityEntry] = strArr => Try {
         val id = strArr(0)
         val name = strArr(1)

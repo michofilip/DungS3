@@ -39,19 +39,26 @@ class EntityRepository private(private val entitiesById: Map[UUID, Entity],
     def --(entities: Seq[Entity]): EntityRepository =
         entities.foldLeft(this)(_ - _)
 
-    def findById(id: UUID): Option[Entity] = entitiesById.get(id)
+    def findAll: Seq[Entity] =
+        entitiesById.values.toSeq
 
-    def findByPosition(position: Position): Map[UUID, Entity] = entitiesByPosition.getOrElse(position, Map.empty)
+    def findById(id: UUID): Option[Entity] =
+        entitiesById.get(id)
 
-    def existAtPosition(position: Position)(predicate: Entity => Boolean): Boolean = findByPosition(position).values.exists(predicate)
+    def findByPosition(position: Position): Map[UUID, Entity] =
+        entitiesByPosition.getOrElse(position, Map.empty)
 
-    def forallAtPosition(position: Position)(predicate: Entity => Boolean): Boolean = findByPosition(position).values.forall(predicate)
+    def existAtPosition(position: Position)(predicate: Entity => Boolean): Boolean =
+        findByPosition(position).values.exists(predicate)
+
+    def forallAtPosition(position: Position)(predicate: Entity => Boolean): Boolean =
+        findByPosition(position).values.forall(predicate)
 
     def existSolidAtPosition(position: Position): Boolean = existAtPosition(position: Position) { entity =>
         entity.physics.fold(false)(_.solid)
     }
 
-    override def toString: String = entitiesById.values.mkString("Entities(", ", ", ")")
+    override def toString: String = findAll.mkString("Entities(", ", ", ")")
 
 
 object EntityRepository:

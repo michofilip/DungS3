@@ -3,11 +3,12 @@ package src
 import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
-import src.game.entity.{Entity, EntityService, EntityPrototype, EntityRepository}
+import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
 import src.game.event.{Event, PositionEvent}
 import src.game.temporal.{Duration, Timer, Timestamp}
 import src.game.{GameFrame, GameState}
 
+import java.io.File
 import java.util.UUID
 
 object Main:
@@ -47,3 +48,8 @@ object Main:
         println(gameFrame)
         Thread.sleep(1000)
         println(gameFrame.nextFrame())
+
+        Thread.sleep(1000)
+        entityService.saveEntitiesToFile(File("entities.txt"), gameState.entities.findAll)
+        Thread.sleep(1000)
+        println(entityService.loadEntitiesFromFile(File("entities.txt")))

@@ -39,36 +39,36 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
         }
 
     def loadEntitiesFromFile(file: File): Seq[Entity] =
+        def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
+            val position = for {
+                x <- entityEntry.x
+                y <- entityEntry.y
+            } yield {
+                Position(x, y)
+            }
+
+            createEntity(
+                id = UUID.fromString(entityEntry.id),
+                name = entityEntry.name,
+                timestamp = Timestamp(entityEntry.timestamp),
+                state = entityEntry.state,
+                position = position,
+                direction = entityEntry.direction
+            )
+
         FileReader.readFile(file, EntityEntry.reader)
             .flatMap(convertToEntity)
 
     def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
+        def convertToEntry(entity: Entity): EntityEntry =
+            EntityEntry(
+                id = entity.id.toString,
+                name = entity.name,
+                timestamp = entity.timestamp.milliseconds,
+                state = entity.state,
+                x = entity.position.map(_.x),
+                y = entity.position.map(_.y),
+                direction = entity.direction
+            )
+
         FileWriter.writeFile(file, entities.map(convertToEntry), EntityEntry.writer)
-
-    private def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
-        val position = for {
-            x <- entityEntry.x
-            y <- entityEntry.y
-        } yield {
-            Position(x, y)
-        }
-
-        createEntity(
-            id = UUID.fromString(entityEntry.id),
-            name = entityEntry.name,
-            timestamp = Timestamp(entityEntry.timestamp),
-            state = entityEntry.state,
-            position = position,
-            direction = entityEntry.direction
-        )
-
-    private def convertToEntry(entity: Entity): EntityEntry =
-        EntityEntry(
-            id = entity.id.toString,
-            name = entity.name,
-            timestamp = entity.timestamp.milliseconds,
-            state = entity.state,
-            x = entity.position.map(_.x),
-            y = entity.position.map(_.y),
-            direction = entity.direction
-        )
