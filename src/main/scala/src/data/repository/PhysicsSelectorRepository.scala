@@ -15,7 +15,7 @@ class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) exte
                 physicsSelectorEntry.state -> animation
             }
 
-            PhysicsSelector(physics: _*)
+            PhysicsSelector(physics)
 
         FileReader.readFile(Resources.physicsSelectorEntriesFile, PhysicsSelectorEntry.reader)
             .groupBy(_.id)

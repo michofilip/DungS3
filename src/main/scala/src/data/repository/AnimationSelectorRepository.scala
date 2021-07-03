@@ -15,7 +15,7 @@ class AnimationSelectorRepository(using animationRepository: AnimationRepository
                 (animationSelectorEntry.state, animationSelectorEntry.direction) -> animation
             }
 
-            AnimationSelector(animations: _*)
+            AnimationSelector(animations)
         }
 
         FileReader.readFile(Resources.animationSelectorEntriesFile, AnimationSelectorEntry.reader)
