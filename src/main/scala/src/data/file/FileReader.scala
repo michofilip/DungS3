@@ -27,6 +27,9 @@ object FileReader:
         def asInt: Int =
             str.toInt
 
+        def asLong: Long =
+            str.toLong
+
         def asFloat: Float =
             str.toFloat
 

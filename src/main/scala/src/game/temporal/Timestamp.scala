@@ -1,6 +1,6 @@
 package src.game.temporal
 
-class Timestamp private(private[temporal] val milliseconds: Long):
+class Timestamp private(val milliseconds: Long):
     def +(duration: Duration): Timestamp = Timestamp(milliseconds + duration.milliseconds)
 
     def -(duration: Duration): Timestamp = Timestamp(milliseconds - duration.milliseconds)

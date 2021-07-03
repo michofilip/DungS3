@@ -3,7 +3,7 @@ package src
 import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
-import src.game.entity.{Entity, EntityFactory, EntityPrototype, EntityRepository}
+import src.game.entity.{Entity, EntityService, EntityPrototype, EntityRepository}
 import src.game.event.{Event, PositionEvent}
 import src.game.temporal.{Duration, Timer, Timestamp}
 import src.game.{GameFrame, GameState}
@@ -24,12 +24,12 @@ object Main:
 
     given entityPrototypeRepository: EntityPrototypeRepository = new EntityPrototypeRepository
 
-    given entityFactory: EntityFactory = new EntityFactory
+    given entityService: EntityService = new EntityService
 
     @main
     def start(): Unit =
 
-        val entity1 = entityFactory.createEntity(
+        val entity1 = entityService.createEntity(
             id = UUID.randomUUID(),
             name = "player",
             timestamp = Timestamp.zero,
