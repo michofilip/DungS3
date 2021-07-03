@@ -11,8 +11,8 @@ import java.util.UUID
 
 class Entity private[entity](val id: UUID,
                              val name: String,
+                             val timestamp: Timestamp,
                              val state: Option[State],
-                             val stateTimestamp: Option[Timestamp],
                              val position: Option[Position],
                              val direction: Option[Direction],
                              private val physicsSelector: PhysicsSelector,
@@ -22,14 +22,15 @@ class Entity private[entity](val id: UUID,
                 position: PositionMapper = PositionMapper.Identity,
                 direction: DirectionMapper = DirectionMapper.Identity,
                 timestamp: Timestamp): Entity =
+
         val newState = state(this.state)
-        val newStateChangeTimestamp = if (this.state != newState) Some(timestamp) else stateTimestamp
+        val newTimestamp = if this.state != newState then timestamp else this.timestamp
 
         Entity(
             id = id,
             name = name,
+            timestamp = newTimestamp,
             state = newState,
-            stateTimestamp = stateTimestamp,
             position = position(this.position),
             direction = direction(this.direction),
             physicsSelector = physicsSelector,
@@ -55,8 +56,8 @@ class Entity private[entity](val id: UUID,
         Seq(
             Some(s"id=$id"),
             Some(s"name=$name"),
+            Some(s"timestamp=$timestamp"),
             state.map(state => s"state=$state"),
-            stateTimestamp.map(stateTimestamp => s"stateTimestamp=$stateTimestamp"),
             position.map(position => s"position=$position"),
             direction.map(direction => s"direction=$direction")
         ).flatten.mkString("Entity(", ", ", ")")

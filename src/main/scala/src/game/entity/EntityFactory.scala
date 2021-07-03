@@ -18,7 +18,6 @@ class EntityFactory(using entityPrototypeRepository: EntityPrototypeRepository):
         entityPrototypeRepository.findById(name).map { entityPrototype =>
 
             val validState = entityPrototype.getValidatedState(state)
-            val stateTimestamp = if validState.isDefined then Some(timestamp) else None
             val validPosition = entityPrototype.getValidatedPosition(position)
             val validDirection = entityPrototype.getValidatedDirection(direction)
             val physicsSelector = entityPrototype.physicsSelector
@@ -27,8 +26,8 @@ class EntityFactory(using entityPrototypeRepository: EntityPrototypeRepository):
             Entity(
                 id = id,
                 name = name,
+                timestamp = timestamp,
                 state = validState,
-                stateTimestamp = stateTimestamp,
                 position = validPosition,
                 direction = validDirection,
                 physicsSelector = physicsSelector,
