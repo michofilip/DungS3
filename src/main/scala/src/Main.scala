@@ -32,8 +32,9 @@ object Main:
         val entity1 = entityFactory.createEntity(
             id = UUID.randomUUID(),
             name = "player",
+            timestamp = Timestamp.zero,
             position = Some(Position(10, 20)),
-            timestamp = Timestamp.zero
+            direction = Some(Direction.East)
         ).get
 
         val event = PositionEvent.MoveBy(entityId = entity1.id, dx = 10, dy = 15)

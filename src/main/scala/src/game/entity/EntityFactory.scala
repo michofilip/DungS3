@@ -10,10 +10,10 @@ class EntityFactory(using entityPrototypeRepository: EntityPrototypeRepository):
 
     def createEntity(id: UUID,
                      name: String,
+                     timestamp: Timestamp,
                      state: Option[State] = None,
                      position: Option[Position] = None,
-                     direction: Option[Direction] = None,
-                     timestamp: Timestamp): Option[Entity] =
+                     direction: Option[Direction] = None): Option[Entity] =
 
         entityPrototypeRepository.findById(name).map { entityPrototype =>
 
