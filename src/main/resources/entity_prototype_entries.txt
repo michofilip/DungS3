@@ -1,0 +1,5 @@
+# EntityPrototypeEntry
+# entityName; availableStates; hasPosition; hasDirection; physicsSelectorId; animationSelectorId
+
+#player; Standing, Walking; 1; 1; 1; 1
+player; ; 1; 1; 1; 1

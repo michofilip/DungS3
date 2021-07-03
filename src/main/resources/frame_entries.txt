@@ -1,4 +1,5 @@
-#id; imageId; layer; offsetX; offsetY
+# FrameEntry
+# id; imageId; layer; offsetX; offsetY
 1; 1; 0; 0.0; 0.0
 2; 2; 0; 0.0; 0.0
 3; 3; 0; 0.0; 0.0

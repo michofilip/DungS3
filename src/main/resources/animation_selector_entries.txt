@@ -1,9 +1,10 @@
-#name; state; direction; animationId
-player; ; North; 1
-player; ; East; 2
-player; ; South; 3
-player; ; West; 4
-player; ; North; 5
-player; ; East; 6
-player; ; South; 7
-player; ; West; 8
+# AnimationSelectorEntry
+# id; state; direction; animationId
+1; ; North; 1
+1; ; East; 2
+1; ; South; 3
+1; ; West; 4
+1; ; North; 5
+1; ; East; 6
+1; ; South; 7
+1; ; West; 8

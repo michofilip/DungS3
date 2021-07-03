@@ -4,9 +4,9 @@ import src.data.file.{FileReader, Resources}
 import src.data.model.PhysicsSelectorEntry
 import src.game.entity.selector.PhysicsSelector
 
-class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) extends Repository[String, PhysicsSelector] :
+class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) extends Repository[Int, PhysicsSelector] :
 
-    override protected val dataById: Map[String, PhysicsSelector] =
+    override protected val dataById: Map[Int, PhysicsSelector] =
         def convertToPhysicsSelector(physicsSelectorEntries: Seq[PhysicsSelectorEntry]): PhysicsSelector =
             val physics = for {
                 physicsSelectorEntry <- physicsSelectorEntries
@@ -18,7 +18,7 @@ class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) exte
             PhysicsSelector(physics: _*)
 
         FileReader.readFile(Resources.physicsSelectorEntriesFile, PhysicsSelectorEntry.reader)
-            .groupBy(_.name)
+            .groupBy(_.id)
             .view
             .mapValues(convertToPhysicsSelector)
             .toMap

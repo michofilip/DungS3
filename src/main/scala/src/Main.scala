@@ -1,6 +1,6 @@
 package src
 
-import src.data.repository.{AnimationRepository, AnimationSelectorRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
+import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository}
@@ -52,8 +52,11 @@ object Main:
 
         given physicsSelectorRepository: PhysicsSelectorRepository = new PhysicsSelectorRepository
 
+        given entityPrototypeRepository: EntityPrototypeRepository = new EntityPrototypeRepository
+
         println(frameRepository.findById(1))
         println(animationRepository.findById(1).map(_.frame(Duration.zero)))
-        println(animationSelectorRepository.findById("player").map(_.selectAnimation(None, Some(Direction.North))).flatten.map(_.frame(Duration.zero)))
+        println(animationSelectorRepository.findById(1).flatMap(_.selectAnimation(None, Some(Direction.North))).map(_.frame(Duration.zero)))
         println(physicsRepository.findById(1))
-        println(physicsSelectorRepository.findById("player").map(_.selectPhysics(None)).flatten)
+        println(physicsSelectorRepository.findById(1).flatMap(_.selectPhysics(None)))
+        println(entityPrototypeRepository.findById("player"))

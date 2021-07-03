@@ -7,6 +7,7 @@ import scala.util.Try
 case class AnimationEntry(id: Int, fps: Double, isLooping: Boolean, frameIds: Seq[Int])
 
 object AnimationEntry:
+    
     def reader: Reader[AnimationEntry] = strArr => Try {
         val id = strArr(0).toInt
         val fps = strArr(1).toDouble

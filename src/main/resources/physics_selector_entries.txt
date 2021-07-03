@@ -1,2 +1,3 @@
-#name; state; physicsId
-player; ; 4
+# PhysicsSelectorEntry
+# id; state; physicsId
+1; ; 4

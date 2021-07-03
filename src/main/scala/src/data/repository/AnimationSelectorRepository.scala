@@ -4,9 +4,9 @@ import src.data.file.{FileReader, Resources}
 import src.data.model.AnimationSelectorEntry
 import src.game.entity.selector.AnimationSelector
 
-class AnimationSelectorRepository(using animationRepository: AnimationRepository) extends Repository[String, AnimationSelector] :
+class AnimationSelectorRepository(using animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
 
-    override protected val dataById: Map[String, AnimationSelector] =
+    override protected val dataById: Map[Int, AnimationSelector] =
         def convertToAnimationSelector(animationSelectorEntries: Seq[AnimationSelectorEntry]): AnimationSelector = {
             val animations = for {
                 animationSelectorEntry <- animationSelectorEntries
@@ -19,7 +19,7 @@ class AnimationSelectorRepository(using animationRepository: AnimationRepository
         }
 
         FileReader.readFile(Resources.animationSelectorEntriesFile, AnimationSelectorEntry.reader)
-            .groupBy(_.name)
+            .groupBy(_.id)
             .view
             .mapValues(convertToAnimationSelector)
             .toMap
