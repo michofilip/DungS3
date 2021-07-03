@@ -35,3 +35,38 @@ class EntityFactory(using entityPrototypeRepository: EntityPrototypeRepository):
                 animationSelector = animationSelector
             )
         }
+
+//    def loadEntitiesFromFile(file: File): Seq[Entity] = {
+//        FileReader.readFile(file, EntityEntry.reader)
+//            .flatMap(convertToEntity)
+//    }
+//
+//    def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit = {
+//        FileWriter.writeFile(file, entities.map(convertToEntry), EntityEntry.writer)
+//    }
+//
+//    private def convertToEntity(entityEntry: EntityEntry): Option[Entity] = entityEntry match {
+//        case EntityEntry(id, entityName, timestamp, state, x, y, direction) =>
+//            val position = x.flatMap(x => y.map(y => Position(x, y)))
+//
+//            createEntity(
+//                id = id,
+//                entityName = entityName,
+//                timestamp = timestamp,
+//                state = state,
+//                position = position,
+//                direction = direction
+//            )
+//    }
+//
+//    private def convertToEntry(entity: Entity): EntityEntry = {
+//        EntityEntry(
+//            id = entity.id,
+//            entityName = entity.entityName,
+//            timestamp = entity.timestamp,
+//            state = entity.state,
+//            x = entity.position.map(_.x),
+//            y = entity.position.map(_.y),
+//            direction = entity.direction
+//        )
+//    }
