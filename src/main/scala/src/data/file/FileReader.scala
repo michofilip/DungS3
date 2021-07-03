@@ -2,6 +2,7 @@ package src.data.file
 
 import java.io.File
 import scala.io.Source
+import scala.reflect.ClassTag
 
 object FileReader:
 
@@ -21,3 +22,22 @@ object FileReader:
         bufferedSource.close()
 
         entries
+
+    extension (str: String)
+        def asInt: Int =
+            str.toInt
+
+        def asFloat: Float =
+            str.toFloat
+
+        def asDouble: Double =
+            str.toDouble
+
+        def asBoolean: Boolean =
+            !(str == "0")
+
+        def asOption[T](mapping: String => T): Option[T] =
+            if str.nonEmpty then Some(mapping(str)) else None
+
+        def asSeq[T](mapping: String => T)(using ClassTag[T]): Seq[T] =
+            str.split(',').map(_.trim).filter(_.nonEmpty).map(mapping).toSeq
