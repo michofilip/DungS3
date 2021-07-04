@@ -1,0 +1,12 @@
+<animationSelectorEntries>
+    <AnimationSelectorEntry>
+        <id>1</id>
+        <singleAnimationSelectorEntries>
+            <SingleAnimationSelectorEntry>
+                <!--                <state>Some state here</state>-->
+                <!--                <direction>Some direction here</direction>-->
+                <animationId>1</animationId>
+            </SingleAnimationSelectorEntry>
+        </singleAnimationSelectorEntries>
+    </AnimationSelectorEntry>
+</animationSelectorEntries>

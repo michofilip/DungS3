@@ -65,3 +65,5 @@ object Main:
 
         println(animationRepository.findById(1).map(_.frame(Duration.zero)))
         println(animationRepository.findById(2).map(_.frame(Duration.zero)))
+
+        println(animationSelectorRepository.findById(1).map(_.selectAnimation(None,None)))
