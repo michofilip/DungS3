@@ -6,9 +6,9 @@ import scala.xml.XML
 
 object Resources:
 
-    val physicsFile = File("src/main/resources/physics.xml")
-    val physicsSelectorsFile = File("src/main/resources/physicsSelectors.xml")
-    val framesFile = File("src/main/resources/frames.xml")
-    val animationsFile = File("src/main/resources/animations.xml")
-    val animationSelectorsFile = File("src/main/resources/animationSelectors.xml")
-    val entityPrototypesFile = File("src/main/resources/entityPrototypes.xml")
+    val physics = Source.fromResource("physics.xml")
+    val physicsSelectors = Source.fromResource("physicsSelectors.xml")
+    val frames = Source.fromResource("frames.xml")
+    val animations = Source.fromResource("animations.xml")
+    val animationSelectors = Source.fromResource("animationSelectors.xml")
+    val entityPrototypes = Source.fromResource("entityPrototypes.xml")

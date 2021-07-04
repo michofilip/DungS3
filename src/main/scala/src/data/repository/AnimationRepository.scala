@@ -18,7 +18,7 @@ class AnimationRepository(using frameRepository: FrameRepository) extends Reposi
             else
                 SingleRunAnimation(fps = fps, frames = frames)
 
-        val xml = XML.loadFile(Resources.animationsFile)
+        val xml = XML.load(Resources.animations.reader())
 
         (xml \ "Animation")
             .flatMap(AnimationEntry.fromXML)

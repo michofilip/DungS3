@@ -20,7 +20,7 @@ class AnimationSelectorRepository(using animationRepository: AnimationRepository
             AnimationSelector(animations)
         }
 
-        val xml = XML.loadFile(Resources.animationSelectorsFile)
+        val xml = XML.load(Resources.animationSelectors.reader())
 
         (xml \ "AnimationSelector")
             .flatMap(AnimationSelectorEntry.fromXML)

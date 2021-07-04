@@ -12,7 +12,7 @@ final class FrameRepository extends Repository[Int, Frame] :
         def convertToFrame(frameEntry: FrameEntry): Frame =
             Frame(imageId = frameEntry.imageId, layer = frameEntry.layer, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
 
-        val xml = XML.loadFile(Resources.framesFile)
+        val xml = XML.load(Resources.frames.reader())
 
         (xml \ "Frame")
             .flatMap(FrameEntry.fromXML)

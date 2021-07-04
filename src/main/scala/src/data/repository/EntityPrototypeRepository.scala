@@ -29,7 +29,7 @@ class EntityPrototypeRepository(using physicsSelectorRepository: PhysicsSelector
                 animationSelector = animationSelector
             )
 
-        val xml = XML.loadFile(Resources.entityPrototypesFile)
+        val xml = XML.load(Resources.entityPrototypes.reader())
 
         (xml \ "EntityPrototype")
             .flatMap(EntityPrototypeEntry.fromXML)
