@@ -1,0 +1,22 @@
+<physics-entries>
+    <physics-entry>
+        <id>1</id>
+        <solid>false</solid>
+        <opaque>false</opaque>
+    </physics-entry>
+    <physics-entry>
+        <id>2</id>
+        <solid>false</solid>
+        <opaque>true</opaque>
+    </physics-entry>
+    <physics-entry>
+        <id>3</id>
+        <solid>true</solid>
+        <opaque>false</opaque>
+    </physics-entry>
+    <physics-entry>
+        <id>4</id>
+        <solid>true</solid>
+        <opaque>true</opaque>
+    </physics-entry>
+</physics-entries>

@@ -53,3 +53,8 @@ object Main:
         entityService.saveEntitiesToFile(File("entities.txt"), gameState.entities.findAll)
         Thread.sleep(1000)
         println(entityService.loadEntitiesFromFile(File("entities.txt")))
+
+        println(physicsRepository.findById(1))
+        println(physicsRepository.findById(2))
+        println(physicsRepository.findById(3))
+        println(physicsRepository.findById(4))
