@@ -10,7 +10,7 @@ object PhysicsSelectorV2Entry:
 
     def fromXML(xml: Node): Option[PhysicsSelectorV2Entry] = Try {
         val id = (xml \ "id").text.trim.toInt
-        val singlePhysicsSelectorEntries = (xml \ "single-physics-selector-entries" \ "single-physics-selector-entry")
+        val singlePhysicsSelectorEntries = (xml \ "singlePhysicsSelectorEntries" \ "SinglePhysicsSelectorEntry")
             .flatMap(SinglePhysicsSelectorEntry.fromXML)
 
         PhysicsSelectorV2Entry(id, singlePhysicsSelectorEntries)

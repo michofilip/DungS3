@@ -23,7 +23,7 @@ class PhysicsRepository extends Repository[Int, Physics] :
 
         val xml = XML.loadFile(Resources.physicsEntriesXmlFile)
 
-        (xml \ "physics-entry")
+        (xml \ "PhysicsEntry")
             .flatMap(PhysicsEntry.fromXML)
             .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
             .toMap

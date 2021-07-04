@@ -11,5 +11,5 @@ object Resources:
     val animationEntriesFile = File("src/main/resources/animation_entries.txt")
     val animationSelectorEntriesFile = File("src/main/resources/animation_selector_entries.txt")
 
-    val physicsEntriesXmlFile = File("src/main/resources/physics_entries.xml")
-    val physicsSelectorEntriesXmlFile = File("src/main/resources/physics_selector_entries.xml")
+    val physicsEntriesXmlFile = File("src/main/resources/physicsEntries.xml")
+    val physicsSelectorEntriesXmlFile = File("src/main/resources/physicsSelectorEntries.xml")

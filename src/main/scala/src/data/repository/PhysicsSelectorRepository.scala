@@ -39,8 +39,7 @@ class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) exte
 
         val xml = XML.loadFile(Resources.physicsSelectorEntriesXmlFile)
 
-        (xml \ "physics-selector-entry")
+        (xml \ "PhysicsSelectorEntry")
             .flatMap(PhysicsSelectorV2Entry.fromXML)
             .map(physicsSelectorEntry => physicsSelectorEntry.id -> convertToPhysicsSelector(physicsSelectorEntry))
             .toMap
-        

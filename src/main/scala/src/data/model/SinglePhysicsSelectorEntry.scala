@@ -11,7 +11,7 @@ object SinglePhysicsSelectorEntry:
 
     def fromXML(xml: Node): Option[SinglePhysicsSelectorEntry] = Try {
         val state = (xml \ "state").map(_.text.trim).map(State.valueOf).headOption
-        val physicsId = (xml \ "physics-id").text.trim.toInt
+        val physicsId = (xml \ "physicsId").text.trim.toInt
 
         SinglePhysicsSelectorEntry(state, physicsId)
     }.toOption

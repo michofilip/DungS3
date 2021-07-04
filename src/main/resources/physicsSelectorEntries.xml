@@ -1,0 +1,15 @@
+<physicsSelectorEntries>
+    <PhysicsSelectorEntry>
+        <id>1</id>
+        <singlePhysicsSelectorEntries>
+            <SinglePhysicsSelectorEntry>
+                <!--                <state>Some state here</state>-->
+                <physicsId>4</physicsId>
+            </SinglePhysicsSelectorEntry>
+            <SinglePhysicsSelectorEntry>
+                <state>Off</state>
+                <physicsId>1</physicsId>
+            </SinglePhysicsSelectorEntry>
+        </singlePhysicsSelectorEntries>
+    </PhysicsSelectorEntry>
+</physicsSelectorEntries>
