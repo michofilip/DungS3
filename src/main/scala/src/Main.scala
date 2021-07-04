@@ -62,3 +62,6 @@ object Main:
         println(physicsSelectorRepository.findById(1).map(_.selectPhysics(None)))
 
         println(frameRepository.findById(1))
+
+        println(animationRepository.findById(1).map(_.frame(Duration.zero)))
+        println(animationRepository.findById(2).map(_.frame(Duration.zero)))
