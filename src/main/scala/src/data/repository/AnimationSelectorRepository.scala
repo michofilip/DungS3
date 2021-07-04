@@ -1,7 +1,7 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
-import src.data.model.{AnimationSelectorEntry, AnimationSelectorV2Entry, PhysicsSelectorV2Entry}
+import src.data.file.Resources
+import src.data.model.{AnimationSelectorEntry, PhysicsSelectorEntry}
 import src.game.entity.selector.AnimationSelector
 
 import scala.xml.XML
@@ -9,7 +9,7 @@ import scala.xml.XML
 class AnimationSelectorRepository(using animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
 
     override protected val dataById: Map[Int, AnimationSelector] =
-        def convertToAnimationSelector(animationSelectorEntry: AnimationSelectorV2Entry): AnimationSelector = {
+        def convertToAnimationSelector(animationSelectorEntry: AnimationSelectorEntry): AnimationSelector = {
             val animations = for {
                 variant <- animationSelectorEntry.variants
                 animation <- animationRepository.findById(variant.animationId)
@@ -23,6 +23,6 @@ class AnimationSelectorRepository(using animationRepository: AnimationRepository
         val xml = XML.loadFile(Resources.animationSelectorsFile)
 
         (xml \ "AnimationSelector")
-            .flatMap(AnimationSelectorV2Entry.fromXML)
+            .flatMap(AnimationSelectorEntry.fromXML)
             .map(animationSelectorEntry => animationSelectorEntry.id -> convertToAnimationSelector(animationSelectorEntry))
             .toMap

@@ -1,19 +1,16 @@
 package src.data.model
 
-import src.data.file.FileReader.{Reader, *}
-import src.game.entity.parts.{Direction, State}
-
 import scala.util.Try
+import scala.xml.Node
 
-case class AnimationSelectorEntry(id: Int, state: Option[State], direction: Option[Direction], animationId: Int)
+case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelectorVariantEntry])
 
 object AnimationSelectorEntry:
 
-    def reader: Reader[AnimationSelectorEntry] = strArr => Try {
-        val id = strArr(0).asInt
-        val state = strArr(1).asOption(State.valueOf)
-        val direction = strArr(2).asOption(Direction.valueOf)
-        val animationId = strArr(3).asInt
+    def fromXML(xml: Node): Option[AnimationSelectorEntry] = Try {
+        val id = (xml \ "id").text.trim.toInt
+        val singleAnimationSelectorEntries = (xml \ "variants" \ "AnimationSelectorVariant")
+            .flatMap(AnimationSelectorVariantEntry.fromXML)
 
-        AnimationSelectorEntry(id = id, state = state, direction = direction, animationId = animationId)
+        AnimationSelectorEntry(id, singleAnimationSelectorEntries)
     }.toOption

@@ -2,6 +2,7 @@ package src.data.file
 
 import java.io.{BufferedWriter, File, PrintWriter}
 
+@Deprecated
 object FileWriter:
 
     trait Writer[T] extends (T => Array[String])

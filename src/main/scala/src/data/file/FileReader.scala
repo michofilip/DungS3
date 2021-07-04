@@ -4,6 +4,7 @@ import java.io.File
 import scala.io.Source
 import scala.reflect.ClassTag
 
+@Deprecated
 object FileReader:
 
     trait Reader[T] extends (Array[String] => Option[T])
