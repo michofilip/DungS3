@@ -22,3 +22,4 @@ object Resources:
     val frameEntriesXmlFile = File("src/main/resources/frameEntries.xml")
     val animationEntriesXmlFile = File("src/main/resources/animationEntries.xml")
     val animationSelectorEntriesXXmlFile = File("src/main/resources/animationSelectorEntries.xml")
+    val entityPrototypeEntriesXmlFile = File("src/main/resources/entityPrototypeEntries.xml")

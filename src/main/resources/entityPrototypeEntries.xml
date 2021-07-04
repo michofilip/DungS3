@@ -1,0 +1,13 @@
+<entityPrototypeEntries>
+    <EntityPrototypeEntry>
+        <name>player</name>
+        <availableStates>
+            <!--            <state>State 1 here</state>-->
+            <!--            <state>State 2 here</state>-->
+        </availableStates>
+        <hasPosition>true</hasPosition>
+        <hasDirection>true</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototypeEntry>
+</entityPrototypeEntries>
