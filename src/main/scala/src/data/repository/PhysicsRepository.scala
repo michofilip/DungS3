@@ -21,10 +21,9 @@ class PhysicsRepository extends Repository[Int, Physics] :
         def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
             Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
 
-        val xml: NodeSeq = XML.loadFile(Resources.physicsEntriesXmlFile)
+        val xml = XML.loadFile(Resources.physicsEntriesXmlFile)
 
-        Try(xml \ "physics-entry")
-            .getOrElse(Seq.empty)
+        (xml \ "physics-entry")
             .flatMap(PhysicsEntry.fromXML)
             .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
             .toMap
