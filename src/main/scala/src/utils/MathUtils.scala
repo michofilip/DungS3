@@ -1,4 +1,4 @@
-package src.game.utils
+package src.utils
 
 object MathUtils:
 
@@ -17,3 +17,10 @@ object MathUtils:
     def round(x: Double, prec: Int): Double =
         val tens = Math.pow(10, prec.toDouble)
         Math.round(tens * x) / tens
+
+    extension (x: Int)
+        def %%(n: Int): Int =
+            mod(x, n)
+
+        def ><(min: Int, max: Int): Int =
+            bound(x, min, max)
