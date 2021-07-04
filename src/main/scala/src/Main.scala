@@ -60,5 +60,5 @@ object Main:
         println(physicsRepository.findById(4))
 
         println(physicsSelectorRepository.findById(1).map(_.selectPhysics(None)))
-        println(physicsSelectorRepository.findById(1).map(_.selectPhysics(Some(State.Off))))
-        println(physicsSelectorRepository.findById(1).map(_.selectPhysics(Some(State.On))))
+
+        println(frameRepository.findById(1))
