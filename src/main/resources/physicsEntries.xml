@@ -1,22 +1,22 @@
-<physicsEntries>
-    <PhysicsEntry>
+<physics>
+    <Physics>
         <id>1</id>
         <solid>false</solid>
         <opaque>false</opaque>
-    </PhysicsEntry>
-    <PhysicsEntry>
+    </Physics>
+    <Physics>
         <id>2</id>
         <solid>false</solid>
         <opaque>true</opaque>
-    </PhysicsEntry>
-    <PhysicsEntry>
+    </Physics>
+    <Physics>
         <id>3</id>
         <solid>true</solid>
         <opaque>false</opaque>
-    </PhysicsEntry>
-    <PhysicsEntry>
+    </Physics>
+    <Physics>
         <id>4</id>
         <solid>true</solid>
         <opaque>true</opaque>
-    </PhysicsEntry>
-</physicsEntries>
+    </Physics>
+</physics>

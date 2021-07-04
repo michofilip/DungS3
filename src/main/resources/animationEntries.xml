@@ -1,5 +1,5 @@
-<animationEntries>
-    <AnimationEntry>
+<animations>
+    <Animation>
         <id>1</id>
         <fps>30.0</fps>
         <looping>false</looping>
@@ -9,13 +9,13 @@
             <frameId>3</frameId>
             <frameId>4</frameId>
         </frameIds>
-    </AnimationEntry>
-    <AnimationEntry>
+    </Animation>
+    <Animation>
         <id>2</id>
         <fps>30.0</fps>
         <looping>true</looping>
         <frameIds>
             <frameId>1</frameId>
         </frameIds>
-    </AnimationEntry>
-</animationEntries>
+    </Animation>
+</animations>

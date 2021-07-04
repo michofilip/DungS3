@@ -10,29 +10,6 @@ import scala.xml.XML
 class EntityPrototypeRepository(using physicsSelectorRepository: PhysicsSelectorRepository,
                                 animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
 
-    //    override protected val dataById: Map[String, EntityPrototype] =
-    //        def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
-    //            val physicsSelector = entityPrototypeEntry.physicsSelectorId.flatMap { physicsSelectorId =>
-    //                physicsSelectorRepository.findById(physicsSelectorId)
-    //            }.getOrElse(PhysicsSelector.empty)
-    //
-    //            val animationSelector = entityPrototypeEntry.animationSelectorId.flatMap { animationSelectorId =>
-    //                animationSelectorRepository.findById(animationSelectorId)
-    //            }.getOrElse(AnimationSelector.empty)
-    //
-    //            EntityPrototype(
-    //                name = entityPrototypeEntry.name,
-    //                availableStates = entityPrototypeEntry.availableStates,
-    //                hasPosition = entityPrototypeEntry.hasPosition,
-    //                hasDirection = entityPrototypeEntry.hasDirection,
-    //                physicsSelector = physicsSelector,
-    //                animationSelector = animationSelector
-    //            )
-    //
-    //        FileReader.readFile(Resources.entityPrototypeEntriesFile, EntityPrototypeEntry.reader)
-    //            .map(entityPrototype => entityPrototype.name -> convertToEntityPrototype(entityPrototype))
-    //            .toMap
-
     override protected val dataById: Map[String, EntityPrototype] =
         def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
             val physicsSelector = entityPrototypeEntry.physicsSelectorId.flatMap { physicsSelectorId =>
@@ -52,9 +29,9 @@ class EntityPrototypeRepository(using physicsSelectorRepository: PhysicsSelector
                 animationSelector = animationSelector
             )
 
-        val xml = XML.loadFile(Resources.entityPrototypeEntriesXmlFile)
+        val xml = XML.loadFile(Resources.entityPrototypesFile)
 
-        (xml \ "EntityPrototypeEntry")
+        (xml \ "EntityPrototype")
             .flatMap(EntityPrototypeEntry.fromXML)
             .map(entityPrototype => entityPrototype.name -> convertToEntityPrototype(entityPrototype))
             .toMap

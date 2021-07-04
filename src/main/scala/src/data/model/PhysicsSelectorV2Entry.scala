@@ -4,14 +4,14 @@ import scala.util.Try
 import scala.xml.Node
 
 
-case class PhysicsSelectorV2Entry(id: Int, singlePhysicsSelectorEntries: Seq[SinglePhysicsSelectorEntry])
+case class PhysicsSelectorV2Entry(id: Int, variants: Seq[PhysicsSelectorVariantEntry])
 
 object PhysicsSelectorV2Entry:
 
     def fromXML(xml: Node): Option[PhysicsSelectorV2Entry] = Try {
         val id = (xml \ "id").text.trim.toInt
-        val singlePhysicsSelectorEntries = (xml \ "singlePhysicsSelectorEntries" \ "SinglePhysicsSelectorEntry")
-            .flatMap(SinglePhysicsSelectorEntry.fromXML)
+        val variants = (xml \ "variants" \ "PhysicsSelectorVariant")
+            .flatMap(PhysicsSelectorVariantEntry.fromXML)
 
-        PhysicsSelectorV2Entry(id, singlePhysicsSelectorEntries)
+        PhysicsSelectorV2Entry(id, variants)
     }.toOption

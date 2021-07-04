@@ -9,21 +9,13 @@ import scala.xml.{NodeSeq, XML}
 
 class PhysicsRepository extends Repository[Int, Physics] :
 
-    //    override protected val dataById: Map[Int, Physics] =
-    //        def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
-    //            Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
-    //
-    //        FileReader.readFile(Resources.physicsEntriesFile, PhysicsEntry.reader)
-    //            .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
-    //            .toMap
-
     override protected val dataById: Map[Int, Physics] =
         def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
             Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
 
-        val xml = XML.loadFile(Resources.physicsEntriesXmlFile)
+        val xml = XML.loadFile(Resources.physicsFile)
 
-        (xml \ "PhysicsEntry")
+        (xml \ "Physics")
             .flatMap(PhysicsEntry.fromXML)
             .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
             .toMap

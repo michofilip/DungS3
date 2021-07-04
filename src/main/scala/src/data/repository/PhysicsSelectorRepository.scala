@@ -9,37 +9,20 @@ import scala.xml.{NodeSeq, XML}
 
 class PhysicsSelectorRepository(using physicsRepository: PhysicsRepository) extends Repository[Int, PhysicsSelector] :
 
-    //    override protected val dataById: Map[Int, PhysicsSelector] =
-    //        def convertToPhysicsSelector(physicsSelectorEntries: Seq[PhysicsSelectorEntry]): PhysicsSelector =
-    //            val physics = for {
-    //                physicsSelectorEntry <- physicsSelectorEntries
-    //                physics <- physicsRepository.findById(physicsSelectorEntry.physicsId)
-    //            } yield {
-    //                physicsSelectorEntry.state -> physics
-    //            }
-    //
-    //            PhysicsSelector(physics)
-    //
-    //        FileReader.readFile(Resources.physicsSelectorEntriesFile, PhysicsSelectorEntry.reader)
-    //            .groupBy(_.id)
-    //            .view
-    //            .mapValues(convertToPhysicsSelector)
-    //            .toMap
-
     protected val dataById: Map[Int, PhysicsSelector] =
         def convertToPhysicsSelector(physicsSelectorEntry: PhysicsSelectorV2Entry): PhysicsSelector =
             val physics = for {
-                singlePhysicsSelectorEntry <- physicsSelectorEntry.singlePhysicsSelectorEntries
-                physics <- physicsRepository.findById(singlePhysicsSelectorEntry.physicsId)
+                variant <- physicsSelectorEntry.variants
+                physics <- physicsRepository.findById(variant.physicsId)
             } yield {
-                singlePhysicsSelectorEntry.state -> physics
+                variant.state -> physics
             }
 
             PhysicsSelector(physics)
 
-        val xml = XML.loadFile(Resources.physicsSelectorEntriesXmlFile)
+        val xml = XML.loadFile(Resources.physicsSelectorsFile)
 
-        (xml \ "PhysicsSelectorEntry")
+        (xml \ "PhysicsSelector")
             .flatMap(PhysicsSelectorV2Entry.fromXML)
             .map(physicsSelectorEntry => physicsSelectorEntry.id -> convertToPhysicsSelector(physicsSelectorEntry))
             .toMap

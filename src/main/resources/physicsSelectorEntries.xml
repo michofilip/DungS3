@@ -1,15 +1,15 @@
-<physicsSelectorEntries>
-    <PhysicsSelectorEntry>
+<physicsSelectors>
+    <PhysicsSelector>
         <id>1</id>
-        <singlePhysicsSelectorEntries>
-            <SinglePhysicsSelectorEntry>
+        <variants>
+            <PhysicsSelectorVariant>
                 <!--                <state>Some state here</state>-->
                 <physicsId>4</physicsId>
-            </SinglePhysicsSelectorEntry>
-<!--            <SinglePhysicsSelectorEntry>-->
-<!--                <state>Off</state>-->
-<!--                <physicsId>1</physicsId>-->
-<!--            </SinglePhysicsSelectorEntry>-->
-        </singlePhysicsSelectorEntries>
-    </PhysicsSelectorEntry>
-</physicsSelectorEntries>
+            </PhysicsSelectorVariant>
+            <!--            <PhysicsSelectorVariant>-->
+            <!--                <state>Off</state>-->
+            <!--                <physicsId>1</physicsId>-->
+            <!--            </PhysicsSelectorVariant>-->
+        </variants>
+    </PhysicsSelector>
+</physicsSelectors>

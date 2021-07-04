@@ -1,5 +1,5 @@
-<entityPrototypeEntries>
-    <EntityPrototypeEntry>
+<entityPrototypes>
+    <EntityPrototype>
         <name>player</name>
         <availableStates>
             <!--            <state>State 1 here</state>-->
@@ -9,5 +9,5 @@
         <hasDirection>true</hasDirection>
         <physicsSelectorId>1</physicsSelectorId>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototypeEntry>
-</entityPrototypeEntries>
+    </EntityPrototype>
+</entityPrototypes>

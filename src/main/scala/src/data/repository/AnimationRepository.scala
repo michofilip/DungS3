@@ -8,20 +8,6 @@ import scala.xml.XML
 
 class AnimationRepository(using frameRepository: FrameRepository) extends Repository[Int, Animation] :
 
-    //    override protected val dataById: Map[Int, Animation] =
-    //        def convertToAnimation(animationEntriy: AnimationEntry): Animation =
-    //            val fps = animationEntriy.fps
-    //            val frames = animationEntriy.frameIds.flatMap(frameRepository.findById).toIndexedSeq
-    //
-    //            if animationEntriy.isLooping then
-    //                LoopingAnimation(fps = fps, frames = frames)
-    //            else
-    //                SingleRunAnimation(fps = fps, frames = frames)
-    //
-    //        FileReader.readFile(Resources.animationEntriesFile, AnimationEntry.reader)
-    //            .map(animationEntry => animationEntry.id -> convertToAnimation(animationEntry))
-    //            .toMap
-
     override protected val dataById: Map[Int, Animation] =
         def convertToAnimation(animationEntriy: AnimationEntry): Animation =
             val fps = animationEntriy.fps
@@ -32,9 +18,9 @@ class AnimationRepository(using frameRepository: FrameRepository) extends Reposi
             else
                 SingleRunAnimation(fps = fps, frames = frames)
 
-        val xml = XML.loadFile(Resources.animationEntriesXmlFile)
+        val xml = XML.loadFile(Resources.animationsFile)
 
-        (xml \ "AnimationEntry")
+        (xml \ "Animation")
             .flatMap(AnimationEntry.fromXML)
             .map(animationEntry => animationEntry.id -> convertToAnimation(animationEntry))
             .toMap
