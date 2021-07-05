@@ -50,9 +50,9 @@ object Main:
         println(gameFrame.nextFrame())
 
         Thread.sleep(1000)
-        entityService.saveEntitiesToFile(File("entities.txt"), gameState.entities.findAll)
+        entityService.saveEntitiesToFile(File("entities.xml"), gameState.entities.findAll)
         Thread.sleep(1000)
-        println(entityService.loadEntitiesFromFile(File("entities.txt")))
+        println(entityService.loadEntitiesFromFile(File("entities.xml")))
 
         println(physicsRepository.findById(1))
         println(physicsRepository.findById(2))

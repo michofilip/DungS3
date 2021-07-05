@@ -1,13 +1,14 @@
 package src.game.entity
 
 import src.data.file.{FileReader, FileWriter}
-import src.data.model.EntityEntry
+import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.temporal.Timestamp
 
-import java.io.File
+import java.io.{BufferedWriter, File, PrintWriter}
 import java.util.UUID
+import scala.xml.{PrettyPrinter, XML}
 
 class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
 
@@ -38,6 +39,27 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
             )
         }
 
+    //    def loadEntitiesFromFile(file: File): Seq[Entity] =
+    //        def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
+    //            val position = for {
+    //                x <- entityEntry.x
+    //                y <- entityEntry.y
+    //            } yield {
+    //                Position(x, y)
+    //            }
+    //
+    //            createEntity(
+    //                id = UUID.fromString(entityEntry.id),
+    //                name = entityEntry.name,
+    //                timestamp = Timestamp(entityEntry.timestamp),
+    //                state = entityEntry.state,
+    //                position = position,
+    //                direction = entityEntry.direction
+    //            )
+    //
+    //        FileReader.readFile(file, EntityEntry.reader)
+    //            .flatMap(convertToEntity)
+
     def loadEntitiesFromFile(file: File): Seq[Entity] =
         def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
             val position = for {
@@ -56,8 +78,24 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
                 direction = entityEntry.direction
             )
 
-        FileReader.readFile(file, EntityEntry.reader)
+        val xml = XML.loadFile(file)
+        (xml \ "Entity")
+            .flatMap(EntityEntry.fromXML)
             .flatMap(convertToEntity)
+
+    //    def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
+    //        def convertToEntry(entity: Entity): EntityEntry =
+    //            EntityEntry(
+    //                id = entity.id.toString,
+    //                name = entity.name,
+    //                timestamp = entity.timestamp.milliseconds,
+    //                state = entity.state,
+    //                x = entity.position.map(_.x),
+    //                y = entity.position.map(_.y),
+    //                direction = entity.direction
+    //            )
+    //
+    //        FileWriter.writeFile(file, entities.map(convertToEntry), EntityEntry.writer)
 
     def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
         def convertToEntry(entity: Entity): EntityEntry =
@@ -71,4 +109,17 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
                 direction = entity.direction
             )
 
-        FileWriter.writeFile(file, entities.map(convertToEntry), EntityEntry.writer)
+        val printWriter = PrintWriter(BufferedWriter(java.io.FileWriter(file)))
+        val prettyPrinter = new PrettyPrinter(80, 2)
+
+        val xml =
+            <entities>
+                {entities.map(convertToEntry).map(_.xml)}
+            </entities>
+
+        printWriter.println(prettyPrinter.format(xml))
+
+        //        prettyPrinter.format(xml)
+        //            .foreach(printWriter.println)
+
+        printWriter.close()
