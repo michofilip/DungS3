@@ -1,6 +1,6 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
+import src.data.Resources
 import src.data.model.{FrameEntry, PhysicsEntry}
 import src.game.entity.parts.animation.Frame
 

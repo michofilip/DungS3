@@ -1,8 +1,6 @@
-package src.data.file
+package src.data
 
-import java.io.File
-import scala.io.{BufferedSource, Source}
-import scala.xml.XML
+import scala.io.Source
 
 object Resources:
 

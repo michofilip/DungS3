@@ -1,6 +1,6 @@
 package src.data.repository
 
-import src.data.file.Resources
+import src.data.Resources
 import src.data.model.{AnimationSelectorEntry, PhysicsSelectorEntry}
 import src.game.entity.selector.AnimationSelector
 

@@ -1,6 +1,6 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
+import src.data.Resources
 import src.data.model.{AnimationEntry, FrameEntry}
 import src.game.entity.parts.animation.{Animation, LoopingAnimation, SingleRunAnimation}
 
