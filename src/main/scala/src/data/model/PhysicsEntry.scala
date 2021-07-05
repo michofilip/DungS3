@@ -1,7 +1,5 @@
 package src.data.model
 
-import src.data.file.FileReader.{Reader, *}
-
 import scala.util.Try
 import scala.xml.Node
 
