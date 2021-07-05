@@ -9,11 +9,11 @@ import scala.xml.XML
 class AnimationRepository(using frameRepository: FrameRepository) extends Repository[Int, Animation] :
 
     override protected val dataById: Map[Int, Animation] =
-        def convertToAnimation(animationEntriy: AnimationEntry): Animation =
-            val fps = animationEntriy.fps
-            val frames = animationEntriy.frameIds.flatMap(frameRepository.findById).toIndexedSeq
+        def convertToAnimation(animationEntry: AnimationEntry): Animation =
+            val fps = animationEntry.fps
+            val frames = animationEntry.frameIds.flatMap(frameRepository.findById).toIndexedSeq
 
-            if animationEntriy.looping then
+            if animationEntry.looping then
                 LoopingAnimation(fps = fps, frames = frames)
             else
                 SingleRunAnimation(fps = fps, frames = frames)
