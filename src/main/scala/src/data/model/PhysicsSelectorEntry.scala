@@ -1,18 +1,17 @@
 package src.data.model
 
-import src.data.file.FileReader.{Reader, *}
-import src.game.entity.parts.State
-
 import scala.util.Try
+import scala.xml.Node
 
-case class PhysicsSelectorEntry(id: Int, state: Option[State], physicsId: Int)
+
+case class PhysicsSelectorEntry(id: Int, variants: Seq[PhysicsSelectorVariantEntry])
 
 object PhysicsSelectorEntry:
 
-    val reader: Reader[PhysicsSelectorEntry] = strArr => Try {
-        val id = strArr(0).asInt
-        val state = strArr(1).asOption(State.valueOf)
-        val physicsId = strArr(2).asInt
+    def fromXML(xml: Node): Option[PhysicsSelectorEntry] = Try {
+        val id = (xml \ "id").text.trim.toInt
+        val variants = (xml \ "variants" \ "PhysicsSelectorVariant")
+            .flatMap(PhysicsSelectorVariantEntry.fromXML)
 
-        PhysicsSelectorEntry(id = id, state = state, physicsId = physicsId)
+        PhysicsSelectorEntry(id, variants)
     }.toOption

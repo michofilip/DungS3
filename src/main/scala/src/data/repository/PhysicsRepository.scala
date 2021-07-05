@@ -1,8 +1,11 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
+import src.data.Resources
 import src.data.model.PhysicsEntry
 import src.game.entity.parts.Physics
+
+import scala.util.Try
+import scala.xml.{NodeSeq, XML}
 
 class PhysicsRepository extends Repository[Int, Physics] :
 
@@ -10,6 +13,9 @@ class PhysicsRepository extends Repository[Int, Physics] :
         def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
             Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
 
-        FileReader.readFile(Resources.physicsEntriesFile, PhysicsEntry.reader)
+        val xml = XML.load(Resources.physics.reader())
+
+        (xml \ "Physics")
+            .flatMap(PhysicsEntry.fromXML)
             .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
             .toMap

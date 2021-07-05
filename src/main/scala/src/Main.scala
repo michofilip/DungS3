@@ -49,7 +49,23 @@ object Main:
         Thread.sleep(1000)
         println(gameFrame.nextFrame())
 
-        Thread.sleep(1000)
-        entityService.saveEntitiesToFile(File("entities.txt"), gameState.entities.findAll)
-        Thread.sleep(1000)
-        println(entityService.loadEntitiesFromFile(File("entities.txt")))
+//        Thread.sleep(1000)
+        entityService.saveEntitiesToFile(File("entities.xml"), gameState.entities.findAll)
+//        Thread.sleep(1000)
+        println(entityService.loadEntitiesFromFile(File("entities.xml")))
+
+        println(physicsRepository.findById(1))
+        println(physicsRepository.findById(2))
+        println(physicsRepository.findById(3))
+        println(physicsRepository.findById(4))
+
+        println(physicsSelectorRepository.findById(1).map(_.selectPhysics(None)))
+
+        println(frameRepository.findById(1))
+
+        println(animationRepository.findById(1).map(_.frame(Duration.zero)))
+        println(animationRepository.findById(2).map(_.frame(Duration.zero)))
+
+        println(animationSelectorRepository.findById(1).map(_.selectAnimation(None, None)))
+
+        println(entityPrototypeRepository.findById("player"))

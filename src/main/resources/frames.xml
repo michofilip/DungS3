@@ -1,0 +1,24 @@
+<frames>
+    <Frame>
+        <id>1</id>
+        <imageId>1</imageId>
+        <layer>0</layer>
+        <!--        <offsetX>0.0</offsetX>-->
+        <!--        <offsetY>0.0</offsetY>-->
+    </Frame>
+    <Frame>
+        <id>2</id>
+        <imageId>2</imageId>
+        <layer>0</layer>
+    </Frame>
+    <Frame>
+        <id>3</id>
+        <imageId>3</imageId>
+        <layer>0</layer>
+    </Frame>
+    <Frame>
+        <id>4</id>
+        <imageId>4</imageId>
+        <layer>0</layer>
+    </Frame>
+</frames>

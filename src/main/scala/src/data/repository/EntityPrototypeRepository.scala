@@ -1,9 +1,11 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
-import src.data.model.EntityPrototypeEntry
+import src.data.Resources
+import src.data.model.{AnimationSelectorEntry, EntityPrototypeEntry}
 import src.game.entity.EntityPrototype
 import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
+
+import scala.xml.XML
 
 class EntityPrototypeRepository(using physicsSelectorRepository: PhysicsSelectorRepository,
                                 animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
@@ -27,6 +29,9 @@ class EntityPrototypeRepository(using physicsSelectorRepository: PhysicsSelector
                 animationSelector = animationSelector
             )
 
-        FileReader.readFile(Resources.entityPrototypeEntriesFile, EntityPrototypeEntry.reader)
+        val xml = XML.load(Resources.entityPrototypes.reader())
+
+        (xml \ "EntityPrototype")
+            .flatMap(EntityPrototypeEntry.fromXML)
             .map(entityPrototype => entityPrototype.name -> convertToEntityPrototype(entityPrototype))
             .toMap

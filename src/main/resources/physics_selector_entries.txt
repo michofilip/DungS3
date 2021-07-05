@@ -1,3 +1,0 @@
-# PhysicsSelectorEntry
-# id; state; physicsId
-1; ; 4

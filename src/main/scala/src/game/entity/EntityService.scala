@@ -1,13 +1,13 @@
 package src.game.entity
 
-import src.data.file.{FileReader, FileWriter}
-import src.data.model.EntityEntry
+import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.temporal.Timestamp
 
-import java.io.File
+import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
+import scala.xml.{PrettyPrinter, XML}
 
 class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
 
@@ -56,7 +56,9 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
                 direction = entityEntry.direction
             )
 
-        FileReader.readFile(file, EntityEntry.reader)
+        val xml = XML.loadFile(file)
+        (xml \ "Entity")
+            .flatMap(EntityEntry.fromXML)
             .flatMap(convertToEntity)
 
     def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
@@ -71,4 +73,13 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
                 direction = entity.direction
             )
 
-        FileWriter.writeFile(file, entities.map(convertToEntry), EntityEntry.writer)
+        val printWriter = PrintWriter(BufferedWriter(FileWriter(file)))
+        val prettyPrinter = new PrettyPrinter(80, 2)
+
+        val xml =
+            <entities>
+                {entities.map(convertToEntry).map(_.xml)}
+            </entities>
+
+        printWriter.println(prettyPrinter.format(xml))
+        printWriter.close()

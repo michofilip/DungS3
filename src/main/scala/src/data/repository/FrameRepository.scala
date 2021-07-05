@@ -1,8 +1,10 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
-import src.data.model.FrameEntry
+import src.data.Resources
+import src.data.model.{FrameEntry, PhysicsEntry}
 import src.game.entity.parts.animation.Frame
+
+import scala.xml.XML
 
 final class FrameRepository extends Repository[Int, Frame] :
 
@@ -10,6 +12,9 @@ final class FrameRepository extends Repository[Int, Frame] :
         def convertToFrame(frameEntry: FrameEntry): Frame =
             Frame(imageId = frameEntry.imageId, layer = frameEntry.layer, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
 
-        FileReader.readFile(Resources.frameEntriesFile, FrameEntry.reader)
+        val xml = XML.load(Resources.frames.reader())
+
+        (xml \ "Frame")
+            .flatMap(FrameEntry.fromXML)
             .map(frameEntry => frameEntry.id -> convertToFrame(frameEntry))
             .toMap

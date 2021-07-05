@@ -1,21 +1,26 @@
 package src.data.repository
 
-import src.data.file.{FileReader, Resources}
-import src.data.model.AnimationEntry
+import src.data.Resources
+import src.data.model.{AnimationEntry, FrameEntry}
 import src.game.entity.parts.animation.{Animation, LoopingAnimation, SingleRunAnimation}
 
-class AnimationRepository(using frameRepository: FrameRepository) extends Repository[Int, Animation] :
-    
-    override protected val dataById: Map[Int, Animation] =
-        def convertToAnimation(animationEntriy: AnimationEntry): Animation =
-            val fps = animationEntriy.fps
-            val frames = animationEntriy.frameIds.flatMap(frameRepository.findById).toIndexedSeq
+import scala.xml.XML
 
-            if animationEntriy.isLooping then
+class AnimationRepository(using frameRepository: FrameRepository) extends Repository[Int, Animation] :
+
+    override protected val dataById: Map[Int, Animation] =
+        def convertToAnimation(animationEntry: AnimationEntry): Animation =
+            val fps = animationEntry.fps
+            val frames = animationEntry.frameIds.flatMap(frameRepository.findById).toIndexedSeq
+
+            if animationEntry.looping then
                 LoopingAnimation(fps = fps, frames = frames)
             else
                 SingleRunAnimation(fps = fps, frames = frames)
 
-        FileReader.readFile(Resources.animationEntriesFile, AnimationEntry.reader)
+        val xml = XML.load(Resources.animations.reader())
+
+        (xml \ "Animation")
+            .flatMap(AnimationEntry.fromXML)
             .map(animationEntry => animationEntry.id -> convertToAnimation(animationEntry))
             .toMap
