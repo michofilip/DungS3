@@ -10,31 +10,13 @@ case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[
 
     def xml: Node =
         <Entity>
-            <id>
-                {id}
-            </id>
-            <name>
-                {name}
-            </name>
-            <timestamp>
-                {timestamp}
-            </timestamp>{state.fold(NodeSeq.Empty) { state =>
-            <state>
-                {state}
-            </state>
-        }}{x.fold(NodeSeq.Empty) { x =>
-            <x>
-                {x}
-            </x>
-        }}{y.fold(NodeSeq.Empty) { y =>
-            <y>
-                {y}
-            </y>
-        }}{direction.fold(NodeSeq.Empty) { direction =>
-            <direction>
-                {direction}
-            </direction>
-        }}
+            <id> {id} </id>
+            <name> {name} </name>
+            <timestamp> {timestamp} </timestamp>
+            {state.fold(NodeSeq.Empty) { state => <state> {state} </state> }}
+            {x.fold(NodeSeq.Empty) { x => <x> {x} </x> }}
+            {y.fold(NodeSeq.Empty) { y => <y> {y} </y> }}
+            {direction.fold(NodeSeq.Empty) { direction => <direction> {direction} </direction> }}
         </Entity>
 
 object EntityEntry:

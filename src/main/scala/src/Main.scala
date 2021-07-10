@@ -47,7 +47,7 @@ object Main:
         Thread.sleep(1000)
         println(gameFrame)
         Thread.sleep(1000)
-        println(gameFrame.nextFrame())
+        println(gameFrame.nextFrame)
 
 //        Thread.sleep(1000)
         entityService.saveEntitiesToFile(File("entities.xml"), gameState.entities.findAll)
