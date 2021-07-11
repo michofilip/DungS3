@@ -6,7 +6,7 @@ import src.game.entity.parts.animation.{Animation, LoopingAnimation, SingleRunAn
 
 import scala.xml.XML
 
-class AnimationRepository(using frameRepository: FrameRepository) extends Repository[Int, Animation] :
+class AnimationRepository(frameRepository: FrameRepository) extends Repository[Int, Animation] :
 
     override protected val dataById: Map[Int, Animation] =
         def convertToAnimation(animationEntry: AnimationEntry): Animation =
