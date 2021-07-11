@@ -36,8 +36,8 @@ class Timer private(private val initialTimestamp: Timestamp,
 
     def toXml: Node =
         <Timer>
-            <initialTimestamp> {initialTimestamp} </initialTimestamp>
-            <previousDuration> {previousDuration} </previousDuration>
+            <timestamp> {timestamp} </timestamp>
+            <duration> {duration} </duration>
             <running> {running} </running>
         </Timer>
 
@@ -51,8 +51,8 @@ object Timer:
 
     def fromXml(xml: Node): Option[Timer] = Try {
         Timer(
-            initialTimestamp = Timestamp((xml \ "initialTimestamp").text.trim.toLong),
-            previousDuration = Duration((xml \ "previousDuration").text.trim.toLong),
+            initialTimestamp = Timestamp((xml \ "timestamp").text.trim.toLong),
+            previousDuration = Duration((xml \ "duration").text.trim.toLong),
             running = (xml \ "running").text.trim.toBoolean
         )
     }.toOption

@@ -2,6 +2,7 @@ package src.game.entity
 
 import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
+import src.game.entity.Entity
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.temporal.Timestamp
 
@@ -9,7 +10,7 @@ import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
 import scala.xml.{Node, PrettyPrinter, XML}
 
-class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
+class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
 
     def createEntity(id: UUID,
                      name: String,
@@ -74,14 +75,16 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
             .flatMap(convertToEntity)
 
 
+    @Deprecated
     def loadEntitiesFromFile(file: File): Seq[Entity] =
         val xml = XML.loadFile(file)
         (xml \ "Entity")
             .flatMap(fromXml)
 
+    @Deprecated
     def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
         val printWriter = PrintWriter(BufferedWriter(FileWriter(file)))
-        val prettyPrinter = new PrettyPrinter(80, 2)
+        val prettyPrinter = new PrettyPrinter(80, 4)
 
         val xml =
             <entities>
