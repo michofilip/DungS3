@@ -8,7 +8,7 @@ import scala.xml.{Node, NodeSeq}
 
 case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction]):
 
-    def xml: Node =
+    def toXml: Node =
         <Entity>
             <id> {id} </id>
             <name> {name} </name>

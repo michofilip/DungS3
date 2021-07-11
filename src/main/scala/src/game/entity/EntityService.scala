@@ -7,7 +7,7 @@ import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
-import scala.xml.{PrettyPrinter, XML}
+import scala.xml.{Node, PrettyPrinter, XML}
 
 class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
 
@@ -38,7 +38,21 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
             )
         }
 
-    def loadEntitiesFromFile(file: File): Seq[Entity] =
+    def toXml(entity: Entity): Node =
+        def convertToEntry(entity: Entity): EntityEntry =
+            EntityEntry(
+                id = entity.id.toString,
+                name = entity.name,
+                timestamp = entity.timestamp.milliseconds,
+                state = entity.state,
+                x = entity.position.map(_.x),
+                y = entity.position.map(_.y),
+                direction = entity.direction
+            )
+
+        convertToEntry(entity).toXml
+
+    def fromXml(xml: Node): Option[Entity] =
         def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
             val position = for {
                 x <- entityEntry.x
@@ -56,29 +70,22 @@ class EntityService(using entityPrototypeRepository: EntityPrototypeRepository):
                 direction = entityEntry.direction
             )
 
-        val xml = XML.loadFile(file)
-        (xml \ "Entity")
-            .flatMap(EntityEntry.fromXML)
+        EntityEntry.fromXML(xml)
             .flatMap(convertToEntity)
 
-    def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
-        def convertToEntry(entity: Entity): EntityEntry =
-            EntityEntry(
-                id = entity.id.toString,
-                name = entity.name,
-                timestamp = entity.timestamp.milliseconds,
-                state = entity.state,
-                x = entity.position.map(_.x),
-                y = entity.position.map(_.y),
-                direction = entity.direction
-            )
 
+    def loadEntitiesFromFile(file: File): Seq[Entity] =
+        val xml = XML.loadFile(file)
+        (xml \ "Entity")
+            .flatMap(fromXml)
+
+    def saveEntitiesToFile(file: File, entities: Seq[Entity]): Unit =
         val printWriter = PrintWriter(BufferedWriter(FileWriter(file)))
         val prettyPrinter = new PrettyPrinter(80, 2)
 
         val xml =
             <entities>
-                {entities.map(convertToEntry).map(_.xml)}
+                {entities.map(toXml)}
             </entities>
 
         printWriter.println(prettyPrinter.format(xml))
