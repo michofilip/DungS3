@@ -1,13 +1,14 @@
-package src.game
+package src.game.service
 
 import src.data.model.EntityEntry
+import src.game.GameState
 import src.game.entity.{EntityRepository, EntityService}
 import src.game.temporal.Timer
 
 import scala.util.Try
 import scala.xml.Node
 
-class GameStateXmlService(entityService: EntityService):
+class GameStateSerializationService(entityService: EntityService):
 
     def toXml(gameState: GameState): Node =
         <GameState>

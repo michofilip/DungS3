@@ -5,8 +5,9 @@ import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository, EntityService}
 import src.game.event.{Event, PositionEvent}
+import src.game.service.{GameFrameFileService, GameFrameSerializationService, GameStateSerializationService}
 import src.game.temporal.{Duration, Timer, Timestamp}
-import src.game.{GameFrame, GameFrameFileService, GameFrameXmlService, GameState, GameStateXmlService}
+import src.game.{GameFrame, GameState}
 
 import java.io.File
 import java.util.UUID
@@ -20,8 +21,8 @@ object Main:
     val physicsSelectorRepository = new PhysicsSelectorRepository(physicsRepository)
     val entityPrototypeRepository = new EntityPrototypeRepository(physicsSelectorRepository, animationSelectorRepository)
     val entityService = new EntityService(entityPrototypeRepository)
-    val gameStateXmlService = new GameStateXmlService(entityService)
-    val gameFrameXmlService = new GameFrameXmlService(gameStateXmlService)
+    val gameStateXmlService = new GameStateSerializationService(entityService)
+    val gameFrameXmlService = new GameFrameSerializationService(gameStateXmlService)
     val gameFrameFileService = new GameFrameFileService(gameFrameXmlService)
 
     @main
