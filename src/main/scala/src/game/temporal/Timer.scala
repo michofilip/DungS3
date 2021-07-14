@@ -4,55 +4,51 @@ import scala.util.Try
 import scala.xml.Node
 
 class Timer private(private val initialTimestamp: Timestamp,
-                    private val maybeLastStartTimestamp: Option[Timestamp],
-                    private val previousDuration: Duration):
+                    private val lastStartTimestamp: Option[Timestamp]):
 
-    def running: Boolean = maybeLastStartTimestamp.isDefined
+    def running: Boolean = lastStartTimestamp.isDefined
 
     def started: Timer =
         if running then
             this
         else
-            new Timer(initialTimestamp, Option(Timestamp.now), previousDuration)
+            new Timer(initialTimestamp, Option(Timestamp.now))
 
     def stopped: Timer =
         if running then
-            new Timer(timestamp, None, duration)
+            new Timer(timestamp, None)
         else
             this
 
     def timestamp: Timestamp =
-        maybeLastStartTimestamp.fold(initialTimestamp) { lastStartTimestamp =>
+        lastStartTimestamp.fold(initialTimestamp) { lastStartTimestamp =>
             initialTimestamp + Duration.durationBetween(lastStartTimestamp, Timestamp.now)
         }
 
-    def duration: Duration =
-        previousDuration + Duration.durationBetween(initialTimestamp, timestamp)
+    def duration: Duration = Duration.durationBetween(Timestamp.zero, timestamp)
 
     def durationSince(timestamp: Timestamp): Duration =
         Duration.durationBetween(timestamp, this.timestamp)
 
-    override def toString: String = s"Timer(timestamp=$timestamp, duration=$duration, running=$running)"
+    override def toString: String = s"Timer(timestamp=$timestamp, running=$running)"
 
     def toXml: Node =
         <Timer>
             <timestamp> {timestamp} </timestamp>
-            <duration> {duration} </duration>
             <running> {running} </running>
         </Timer>
 
 object Timer:
 
-    def apply(initialTimestamp: Timestamp = Timestamp.zero, previousDuration: Duration = Duration.zero, running: Boolean = false): Timer =
+    def apply(initialTimestamp: Timestamp = Timestamp.zero, running: Boolean = false): Timer =
         if running then
-            new Timer(initialTimestamp, Option(Timestamp.now), previousDuration)
+            new Timer(initialTimestamp, Option(Timestamp.now))
         else
-            new Timer(initialTimestamp, None, previousDuration)
+            new Timer(initialTimestamp, None)
 
     def fromXml(xml: Node): Option[Timer] = Try {
         Timer(
             initialTimestamp = Timestamp((xml \ "timestamp").text.trim.toLong),
-            previousDuration = Duration((xml \ "duration").text.trim.toLong),
             running = (xml \ "running").text.trim.toBoolean
         )
     }.toOption
