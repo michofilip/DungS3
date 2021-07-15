@@ -7,7 +7,7 @@ import src.game.temporal.Timestamp
 import scala.util.Try
 import scala.xml.{Node, NodeSeq}
 
-case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction]):
+final case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction]):
 
     def position: Option[Position] = for {
         x <- x

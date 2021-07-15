@@ -3,7 +3,7 @@ package src.data.model
 import scala.util.Try
 import scala.xml.Node
 
-case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelectorVariantEntry])
+final case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelectorVariantEntry])
 
 object AnimationSelectorEntry:
 

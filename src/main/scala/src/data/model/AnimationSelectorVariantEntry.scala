@@ -5,7 +5,7 @@ import src.game.entity.parts.{Direction, State}
 import scala.util.Try
 import scala.xml.Node
 
-case class AnimationSelectorVariantEntry(state: Option[State], direction: Option[Direction], animationId: Int)
+final case class AnimationSelectorVariantEntry(state: Option[State], direction: Option[Direction], animationId: Int)
 
 object AnimationSelectorVariantEntry:
 

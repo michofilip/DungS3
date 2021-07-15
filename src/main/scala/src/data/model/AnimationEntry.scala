@@ -3,7 +3,7 @@ package src.data.model
 import scala.util.Try
 import scala.xml.Node
 
-case class AnimationEntry(id: Int, fps: Double, looping: Boolean, frameIds: Seq[Int])
+final case class AnimationEntry(id: Int, fps: Double, looping: Boolean, frameIds: Seq[Int])
 
 object AnimationEntry:
 

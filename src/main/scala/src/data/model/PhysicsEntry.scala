@@ -3,7 +3,7 @@ package src.data.model
 import scala.util.Try
 import scala.xml.Node
 
-case class PhysicsEntry(id: Int, solid: Boolean, opaque: Boolean)
+final case class PhysicsEntry(id: Int, solid: Boolean, opaque: Boolean)
 
 object PhysicsEntry:
 
