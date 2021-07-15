@@ -9,14 +9,14 @@ import src.game.temporal.Timestamp
 
 import java.util.UUID
 
-class Entity private[entity](val id: UUID,
-                             val name: String,
-                             val timestamp: Timestamp,
-                             val state: Option[State],
-                             val position: Option[Position],
-                             val direction: Option[Direction],
-                             private val physicsSelector: PhysicsSelector,
-                             private val animationSelector: AnimationSelector):
+class Entity(val id: UUID,
+             val name: String,
+             val timestamp: Timestamp,
+             val state: Option[State],
+             val position: Option[Position],
+             val direction: Option[Direction],
+             private val physicsSelector: PhysicsSelector,
+             private val animationSelector: AnimationSelector):
 
     def updated(state: StateMapper = StateMapper.Identity,
                 position: PositionMapper = PositionMapper.Identity,

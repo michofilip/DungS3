@@ -15,11 +15,4 @@ final class GameState(val timer: Timer, val entities: EntityRepository):
             entities = entities
         )
 
-    def toXml:Node=
-        <GameState>
-            {timer.toXml}
-            <entities>
-            </entities>
-        </GameState>
-
     override def toString: String = s"GameState(timer=$timer, entities=$entities)"
