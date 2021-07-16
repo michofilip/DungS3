@@ -5,7 +5,7 @@ import src.game.entity.parts.State
 import scala.util.Try
 import scala.xml.Node
 
-case class EntityPrototypeEntry(name: String,
+final case class EntityPrototypeEntry(name: String,
                                 availableStates: Seq[State],
                                 hasPosition: Boolean,
                                 hasDirection: Boolean,

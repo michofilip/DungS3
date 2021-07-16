@@ -4,7 +4,7 @@ import scala.util.Try
 import scala.xml.Node
 
 
-case class PhysicsSelectorEntry(id: Int, variants: Seq[PhysicsSelectorVariantEntry])
+final case class PhysicsSelectorEntry(id: Int, variants: Seq[PhysicsSelectorVariantEntry])
 
 object PhysicsSelectorEntry:
 

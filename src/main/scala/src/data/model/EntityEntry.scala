@@ -1,23 +1,20 @@
 package src.data.model
 
-import src.game.entity.parts.{Direction, State}
+import src.game.entity.Entity
+import src.game.entity.parts.{Direction, Position, State}
 import src.game.temporal.Timestamp
 
 import scala.util.Try
 import scala.xml.{Node, NodeSeq}
 
-case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction]):
+final case class EntityEntry(id: String, name: String, timestamp: Long, state: Option[State], x: Option[Int], y: Option[Int], direction: Option[Direction]):
 
-    def toXml: Node =
-        <Entity>
-            <id> {id} </id>
-            <name> {name} </name>
-            <timestamp> {timestamp} </timestamp>
-            {state.fold(NodeSeq.Empty) { state => <state> {state} </state> }}
-            {x.fold(NodeSeq.Empty) { x => <x> {x} </x> }}
-            {y.fold(NodeSeq.Empty) { y => <y> {y} </y> }}
-            {direction.fold(NodeSeq.Empty) { direction => <direction> {direction} </direction> }}
-        </Entity>
+    def position: Option[Position] = for {
+        x <- x
+        y <- y
+    } yield {
+        Position(x, y)
+    }
 
 object EntityEntry:
 

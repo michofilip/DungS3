@@ -5,7 +5,7 @@ import src.game.entity.parts.State
 import scala.util.Try
 import scala.xml.Node
 
-case class PhysicsSelectorVariantEntry(state: Option[State], physicsId: Int)
+final case class PhysicsSelectorVariantEntry(state: Option[State], physicsId: Int)
 
 object PhysicsSelectorVariantEntry:
 

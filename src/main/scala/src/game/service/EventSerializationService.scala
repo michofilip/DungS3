@@ -1,10 +1,12 @@
-package src.game.event
+package src.game.service
+
+import src.game.event.{Event, PositionEvent, TimeEvent}
 
 import java.util.UUID
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 import scala.xml.Node
 
-object EventXmlService:
+object EventSerializationService:
 
     def toXml(event: Event): Node = event match {
         case PositionEvent.MoveBy(entityId, dx, dy) =>
