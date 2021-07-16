@@ -7,7 +7,7 @@ import src.game.entity.parts.Physics
 import scala.util.Try
 import scala.xml.{NodeSeq, XML}
 
-class PhysicsRepository extends Repository[Int, Physics] :
+final class PhysicsRepository extends Repository[Int, Physics] :
 
     override protected val dataById: Map[Int, Physics] =
         def convertToPhysics(physicsEntry: PhysicsEntry): Physics =

@@ -6,7 +6,7 @@ import src.game.entity.selector.AnimationSelector
 
 import scala.xml.XML
 
-class AnimationSelectorRepository(animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
+final class AnimationSelectorRepository(animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
 
     override protected val dataById: Map[Int, AnimationSelector] =
         def convertToAnimationSelector(animationSelectorEntry: AnimationSelectorEntry): AnimationSelector = {

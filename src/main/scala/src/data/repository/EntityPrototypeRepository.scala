@@ -7,8 +7,8 @@ import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
 
 import scala.xml.XML
 
-class EntityPrototypeRepository(physicsSelectorRepository: PhysicsSelectorRepository,
-                                animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
+final class EntityPrototypeRepository(physicsSelectorRepository: PhysicsSelectorRepository,
+                                      animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
 
     override protected val dataById: Map[String, EntityPrototype] =
         def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
