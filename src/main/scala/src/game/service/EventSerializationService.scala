@@ -1,6 +1,7 @@
 package src.game.service
 
-import src.game.event.{Event, PositionEvent, TimeEvent}
+import src.game.event2.Event
+import src.game.event2.Event.*
 
 import java.util.UUID
 import scala.util.Try
@@ -9,24 +10,24 @@ import scala.xml.Node
 object EventSerializationService:
 
     def toXml(event: Event): Node = event match {
-        case PositionEvent.MoveBy(entityId, dx, dy) =>
+        case MoveBy(entityId, dx, dy) =>
             <Event name="MoveBy">
                 <entityId> {entityId} </entityId>
                 <dx> {dx} </dx>
                 <dy> {dy} </dy>
             </Event>
 
-        case PositionEvent.MoveTo(entityId, x, y) =>
+        case MoveTo(entityId, x, y) =>
             <Event name="MoveTo">
                 <entityId> {entityId} </entityId>
                 <x> {x} </x>
                 <y> {y} </y>
             </Event>
 
-        case TimeEvent.StartTimer =>
+        case StartTimer =>
                 <Event name="StartTimer" />
 
-        case TimeEvent.StopTimer =>
+        case StopTimer =>
                 <Event name="StopTimer" />
 
         //        case _ =>
@@ -34,25 +35,21 @@ object EventSerializationService:
 
     def fromXml(xml: Node): Option[Event] = Try {
         (xml \ "@name").text.trim match {
-            case "MoveBy" =>
-                PositionEvent.MoveBy(
-                    entityId = UUID.fromString((xml \ "entityId").text.trim),
-                    dx = (xml \ "dx").text.trim.toInt,
-                    dy = (xml \ "dy").text.trim.toInt
-                )
+            case "MoveBy" => MoveBy(
+                entityId = UUID.fromString((xml \ "entityId").text.trim),
+                dx = (xml \ "dx").text.trim.toInt,
+                dy = (xml \ "dy").text.trim.toInt
+            )
 
-            case "MoveTo" =>
-                PositionEvent.MoveTo(
-                    entityId = UUID.fromString((xml \ "entityId").text.trim),
-                    x = (xml \ "x").text.trim.toInt,
-                    y = (xml \ "y").text.trim.toInt
-                )
+            case "MoveTo" => MoveTo(
+                entityId = UUID.fromString((xml \ "entityId").text.trim),
+                x = (xml \ "x").text.trim.toInt,
+                y = (xml \ "y").text.trim.toInt
+            )
 
-            case "StartTimer" =>
-                TimeEvent.StopTimer
+            case "StartTimer" => StopTimer
 
-            case "StopTimer" =>
-                TimeEvent.StopTimer
+            case "StopTimer" => StopTimer
 
         }
     }.toOption

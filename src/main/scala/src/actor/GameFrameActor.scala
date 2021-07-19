@@ -5,6 +5,7 @@ import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameFrameActor.{Command, DisplayGameState, ProcessGameFrame, SetDislayingEnbled, SetGameFrame, SetProcessingEnabled, Setup}
 import src.actor.GameFrameProcessorActor
 import src.game.GameFrame
+import src.game.service.GameFrameService
 
 private class GameFrameActor(gameFrameProcessorActor: ActorRef[GameFrameProcessorActor.Command],
                              gameStateDisplayActor: ActorRef[GameStateDisplayActor.Command],
@@ -54,9 +55,9 @@ object GameFrameActor:
                              dislayingEnbled: Boolean = false,
                              gameFrame: Option[GameFrame] = None)
 
-    def apply(): Behavior[Command] = Behaviors.setup { context =>
+    def apply(gameFrameService: GameFrameService): Behavior[Command] = Behaviors.setup { context =>
 
-        val gameFrameProcessorActor = context.spawn(GameFrameProcessorActor(context.self), "GameFrameProcessorActor")
+        val gameFrameProcessorActor = context.spawn(GameFrameProcessorActor(context.self, gameFrameService), "GameFrameProcessorActor")
         val gameStateDisplayActor = context.spawn(GameStateDisplayActor(context.self), "GameStateDisplayActor")
 
         val setup = Setup()

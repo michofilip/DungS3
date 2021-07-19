@@ -1,6 +1,6 @@
 package src.game
 
-import src.game.event.Event
+import src.game.event2.Event
 
 class GameFrame(val gameState: GameState, val events: Vector[Event]):
 
@@ -13,16 +13,16 @@ class GameFrame(val gameState: GameState, val events: Vector[Event]):
     //
     //        GameFrame(nextGameState, nextEvents)
 
-    def nextFrame: GameFrame =
-        events match {
-            case event +: otherEvents =>
-                event.applyTo(gameState) match {
-                    case (gameState, responseEvents) =>
-                        GameFrame(gameState, otherEvents ++ responseEvents)
-                }
-
-            case _ => this
-        }
+//    def nextFrame: GameFrame =
+//        events match {
+//            case event +: otherEvents =>
+//                event.applyTo(gameState) match {
+//                    case (gameState, responseEvents) =>
+//                        GameFrame(gameState, otherEvents ++ responseEvents)
+//                }
+//
+//            case _ => this
+//        }
 
     override def toString: String =
         val eventsStr = events.mkString("Events(", ", ", ")")
