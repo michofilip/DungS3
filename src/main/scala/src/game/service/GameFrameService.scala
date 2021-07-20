@@ -1,7 +1,7 @@
 package src.game.service
 
 import src.game.GameFrame
-import src.game.event2.EventProcessor
+import src.game.event.EventProcessor
 
 class GameFrameService(eventProcessor: EventProcessor):
     def processNextFrame(gameFrame: GameFrame): GameFrame =

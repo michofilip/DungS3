@@ -1,7 +1,7 @@
 package src.game.service
 
-import src.game.event2.Event
-import src.game.event2.Event.*
+import src.game.event.Event
+import src.game.event.Event.*
 
 import java.util.UUID
 import scala.util.Try

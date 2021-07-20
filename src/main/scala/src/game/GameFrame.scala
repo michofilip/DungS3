@@ -1,6 +1,6 @@
 package src.game
 
-import src.game.event2.Event
+import src.game.event.Event
 
 class GameFrame(val gameState: GameState, val events: Vector[Event]):
 

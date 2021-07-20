@@ -5,7 +5,7 @@ import src.data.repository.{AnimationRepository, AnimationSelectorRepository, En
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository}
-import src.game.event2.Event
+import src.game.event.Event
 import src.game.service.{EntitySerializationService, EntityService, GameFrameFileService, GameFrameSerializationService, GameStateSerializationService}
 import src.game.temporal.{Duration, Timer, Timestamp}
 import src.game.{GameFrame, GameState}

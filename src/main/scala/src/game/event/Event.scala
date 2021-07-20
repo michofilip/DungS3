@@ -1,15 +1,14 @@
-//package src.game.event
-//
-//import src.game.GameState
-//import src.game.event.Event
-//import src.game.event.Event.EventResponse
-//
-//import java.util.UUID
-//
-//abstract class Event:
-//    def applyTo(gameState: GameState): EventResponse
-//
-//object Event:
-//
-//    type EventResponse = (GameState, Vector[Event])
-//    
+package src.game.event
+
+import src.data.model.EntityEntry
+
+import java.util.UUID
+
+enum Event:
+
+    case MoveTo(entityId: UUID, x: Int, y: Int) extends Event
+    case MoveBy(entityId: UUID, dx: Int, dy: Int) extends Event
+    case StartTimer extends Event
+    case StopTimer extends Event
+    case Kill(entityId: UUID) extends Event
+    case Spawn(entity: EntityEntry) extends Event

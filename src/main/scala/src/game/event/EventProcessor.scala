@@ -1,10 +1,10 @@
-package src.game.event2
+package src.game.event
 
 import src.data.model.EntityEntry
 import src.game.GameState
 import src.game.entity.mapper.PositionMapper
-import src.game.event2.Event.*
-import src.game.event2.EventProcessor.handleMove
+import src.game.event.Event.*
+import src.game.event.EventProcessor.handleMove
 import src.game.service.EntityService
 
 import java.util.UUID
