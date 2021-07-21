@@ -13,24 +13,7 @@ import scala.xml.{Node, NodeSeq, PrettyPrinter, XML}
 class EntitySerializationService(entityService: EntityService):
 
     def toXml(entity: Entity): Node =
-        def entityEntryToXml(entityEntry: EntityEntry): Node = entityEntry match {
-            case EntityEntry(id, name, timestamp, state, x, y, direction) =>
-                <Entity>
-                    <id> {id} </id>
-                    <name> {name} </name>
-                    <timestamp> {timestamp} </timestamp>
-                    {state.fold(NodeSeq.Empty) { state => <state> {state} </state> }}
-                    {x.fold(NodeSeq.Empty) { x => <x> {x} </x> }}
-                    {y.fold(NodeSeq.Empty) { y => <y> {y} </y> }}
-                    {direction.fold(NodeSeq.Empty) { direction => <direction> {direction} </direction> }}
-                </Entity>
-        }
-
-        entityEntryToXml {
-            entityService.convertToEntityEntry {
-                entity
-            }
-        }
+        entityService.convertToEntityEntry(entity).toXml
 
     def fromXml(xml: Node): Option[Entity] =
         EntityEntry.fromXML(xml)

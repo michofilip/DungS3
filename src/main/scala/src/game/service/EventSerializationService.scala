@@ -1,5 +1,6 @@
 package src.game.service
 
+import src.data.model.EntityEntry
 import src.game.event.Event
 import src.game.event.Event.*
 
@@ -30,26 +31,52 @@ object EventSerializationService:
         case StopTimer =>
                 <Event name="StopTimer" />
 
-        //        case _ =>
+        case Kill(entityId) =>
+            <Event name="Kill" >
+                <entityId> {entityId} </entityId>
+            </Event>
+
+        case Spawn(entity) =>
+            <Event name="Spawn" >
+                <entity> {entity.toXml} </entity>
+            </Event>
     }
 
-    def fromXml(xml: Node): Option[Event] = Try {
+    def fromXml(xml: Node): Option[Event] =
         (xml \ "@name").text.trim match {
-            case "MoveBy" => MoveBy(
-                entityId = UUID.fromString((xml \ "entityId").text.trim),
-                dx = (xml \ "dx").text.trim.toInt,
-                dy = (xml \ "dy").text.trim.toInt
-            )
+            case "MoveBy" => Try {
+                MoveBy(
+                    entityId = UUID.fromString((xml \ "entityId").text.trim),
+                    dx = (xml \ "dx").text.trim.toInt,
+                    dy = (xml \ "dy").text.trim.toInt
+                )
+            }.toOption
 
-            case "MoveTo" => MoveTo(
-                entityId = UUID.fromString((xml \ "entityId").text.trim),
-                x = (xml \ "x").text.trim.toInt,
-                y = (xml \ "y").text.trim.toInt
-            )
+            case "MoveTo" => Try {
+                MoveTo(
+                    entityId = UUID.fromString((xml \ "entityId").text.trim),
+                    x = (xml \ "x").text.trim.toInt,
+                    y = (xml \ "y").text.trim.toInt
+                )
+            }.toOption
 
-            case "StartTimer" => StopTimer
+            case "StartTimer" => Try {
+                StopTimer
+            }.toOption
 
-            case "StopTimer" => StopTimer
+            case "StopTimer" => Try {
+                StopTimer
+            }.toOption
 
+            case "Kill" => Try {
+                Kill(
+                    entityId = UUID.fromString((xml \ "entityId").text.trim)
+                )
+            }.toOption
+
+            case "Spawn" => Try {
+                (xml \ "entity").flatMap(EntityEntry.fromXML).headOption.map { entityEntry =>
+                    Spawn(entity = entityEntry)
+                }
+            }.toOption.flatten
         }
-    }.toOption

@@ -16,6 +16,17 @@ final case class EntityEntry(id: String, name: String, timestamp: Long, state: O
         Position(x, y)
     }
 
+    def toXml: Node =
+            <Entity>
+                <id> {id} </id>
+                <name> {name} </name>
+                <timestamp> {timestamp} </timestamp>
+                {state.fold(NodeSeq.Empty) { state => <state> {state} </state> }}
+                {x.fold(NodeSeq.Empty) { x => <x> {x} </x> }}
+                {y.fold(NodeSeq.Empty) { y => <y> {y} </y> }}
+                {direction.fold(NodeSeq.Empty) { direction => <direction> {direction} </direction> }}
+            </Entity>
+
 object EntityEntry:
 
     def fromXML(xml: Node): Option[EntityEntry] = Try {
