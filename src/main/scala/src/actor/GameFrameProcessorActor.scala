@@ -4,8 +4,11 @@ import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameFrameProcessorActor.{Command, Process, Skip}
 import src.game.GameFrame
+import src.game.service.GameFrameService
 
-private class GameFrameProcessorActor(gameFrameActor: ActorRef[GameFrameActor.Command], context: ActorContext[Command]):
+private class GameFrameProcessorActor(gameFrameActor: ActorRef[GameFrameActor.Command],
+                                      gameFrameService: GameFrameService,
+                                      context: ActorContext[Command]):
 
     gameFrameActor ! GameFrameActor.ProcessGameFrame
 
@@ -15,7 +18,7 @@ private class GameFrameProcessorActor(gameFrameActor: ActorRef[GameFrameActor.Co
             Behaviors.same
 
         case Process(gameFrame) =>
-            val nextGameFrame = gameFrame.nextFrame
+            val nextGameFrame = gameFrameService.processNextFrame(gameFrame)
             gameFrameActor ! GameFrameActor.SetGameFrame(nextGameFrame)
             gameFrameActor ! GameFrameActor.ProcessGameFrame
             Behaviors.same
@@ -29,6 +32,6 @@ object GameFrameProcessorActor:
 
     case object Skip extends Command
 
-    def apply(gameFrameActor: ActorRef[GameFrameActor.Command]): Behavior[Command] = Behaviors.setup { context =>
-        new GameFrameProcessorActor(gameFrameActor, context).behavior
+    def apply(gameFrameActor: ActorRef[GameFrameActor.Command], gameFrameService: GameFrameService): Behavior[Command] = Behaviors.setup { context =>
+        new GameFrameProcessorActor(gameFrameActor, gameFrameService, context).behavior
     }

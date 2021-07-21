@@ -3,6 +3,7 @@ package src.actor
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameActor.{Command, GameFrameCommand, Setup, Shutdown}
+import src.game.service.GameFrameService
 
 private class GameActor(gameFrameActor: ActorRef[GameFrameActor.Command], context: ActorContext[Command]):
 
@@ -26,10 +27,10 @@ object GameActor:
 
     private final case class Setup()
 
-    def apply(): Behavior[Command] = Behaviors.setup { context =>
+    def apply(gameFrameService: GameFrameService): Behavior[Command] = Behaviors.setup { context =>
         context.log.info(s"strating up ${context.self.toString}")
 
-        val gameFrameActor = context.spawn(GameFrameActor(), "GameFrameActor")
+        val gameFrameActor = context.spawn(GameFrameActor(gameFrameService), "GameFrameActor")
 
         val setup = Setup()
 
