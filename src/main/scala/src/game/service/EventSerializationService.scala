@@ -79,4 +79,6 @@ object EventSerializationService:
                     Spawn(entity = entityEntry)
                 }
             }.toOption.flatten
+
+            case _ => None
         }
