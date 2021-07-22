@@ -10,7 +10,7 @@ import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
 import scala.xml.{Node, PrettyPrinter, XML}
 
-class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
+class EntityConverter(entityPrototypeRepository: EntityPrototypeRepository):
 
     def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
         entityPrototypeRepository.findById(entityEntry.name).map { entityPrototype =>
