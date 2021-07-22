@@ -1,8 +1,9 @@
-package src.game.service
+package src.game.service.serialization
 
 import src.data.model.EntityEntry
 import src.game.GameState
 import src.game.entity.EntityRepository
+import src.game.service.serialization.{EntitySerializationService, EventSerializationService}
 import src.game.temporal.Timer
 
 import scala.util.Try

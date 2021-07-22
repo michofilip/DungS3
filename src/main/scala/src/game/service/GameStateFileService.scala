@@ -1,6 +1,7 @@
 package src.game.service
 
 import src.game.GameState
+import src.game.service.serialization.GameStateSerializationService
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import scala.xml.{PrettyPrinter, XML}

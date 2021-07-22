@@ -1,4 +1,4 @@
-package src.game.service
+package src.game.service.serialization
 
 import src.game.temporal.{Timer, Timestamp}
 

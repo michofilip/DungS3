@@ -1,8 +1,8 @@
-package src.game.service
+package src.game.service.serialization
 
 import src.data.model.EntityEntry
 import src.game.event.Event
-import src.game.event.Event.*
+import src.game.event.Event.{Kill, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
 
 import java.util.UUID
 import scala.util.Try

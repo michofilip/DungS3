@@ -1,9 +1,10 @@
-package src.game.service
+package src.game.service.serialization
 
 import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.Entity
 import src.game.entity.parts.{Direction, Position, State}
+import src.game.service.EntityService
 import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}

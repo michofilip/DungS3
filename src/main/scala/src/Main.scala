@@ -7,7 +7,8 @@ import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository}
 import src.game.event.Event
-import src.game.service.{EntitySerializationService, EntityService, EventProcessorService, GameStateFileService, GameStateSerializationService, GameStateService}
+import src.game.service.serialization.{EntitySerializationService, GameStateSerializationService}
+import src.game.service.{EntityService, EventProcessorService, GameStateFileService, GameStateService}
 import src.game.temporal.{Duration, Timer, Timestamp}
 
 import java.io.File
