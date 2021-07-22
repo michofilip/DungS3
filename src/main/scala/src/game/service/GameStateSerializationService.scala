@@ -16,14 +16,22 @@ class GameStateSerializationService(entitySerializationService: EntitySerializat
             <entities>
                 {gameState.entities.findAll.map(entitySerializationService.toXml)}
             </entities>
+            <events>
+                {gameState.events.map(EventSerializationService.toXml)}
+            </events>
         </GameState>
 
     def fromXml(xml: Node): Option[GameState] = Try {
         val timer = (xml \ "Timer").headOption.flatMap(TimerSerializationService.fromXml)
         val entities = (xml \ "entities" \ "Entity").flatMap(entitySerializationService.fromXml)
+        val events = (xml \ "events" \ "Event").flatMap(EventSerializationService.fromXml)
 
         timer.map { timer =>
-            GameState(timer = timer, entities = EntityRepository(entities))
+            GameState(
+                timer = timer,
+                entities = EntityRepository(entities),
+                events = events.toVector
+            )
         }
     }.toOption.flatten
     

@@ -2,13 +2,13 @@ package src
 
 import src.data.model.EntityEntry
 import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
+import src.game.GameState
 import src.game.entity.mapper.{DirectionMapper, PositionMapper}
 import src.game.entity.parts.{Direction, Position, State}
 import src.game.entity.{Entity, EntityPrototype, EntityRepository}
 import src.game.event.Event
-import src.game.service.{EntitySerializationService, EntityService, GameFrameFileService, GameFrameSerializationService, GameStateSerializationService}
+import src.game.service.{EntitySerializationService, EntityService, EventProcessorService, GameStateFileService, GameStateSerializationService, GameStateService}
 import src.game.temporal.{Duration, Timer, Timestamp}
-import src.game.{GameFrame, GameState}
 
 import java.io.File
 import java.util.UUID
@@ -23,9 +23,12 @@ object Main:
     val entityPrototypeRepository = new EntityPrototypeRepository(physicsSelectorRepository, animationSelectorRepository)
     val entityService = new EntityService(entityPrototypeRepository)
     val entitySerializationService = new EntitySerializationService(entityService)
-    val gameStateXmlService = new GameStateSerializationService(entitySerializationService)
-    val gameFrameXmlService = new GameFrameSerializationService(gameStateXmlService)
-    val gameFrameFileService = new GameFrameFileService(gameFrameXmlService)
+    val eventProcessor = new EventProcessorService(entityService)
+    val gameStateSerializationService = new GameStateSerializationService(entitySerializationService)
+    val gameStateFileService = new GameStateFileService(gameStateSerializationService)
+    val gameStateService = new GameStateService(eventProcessor)
+    //    val gameFrameXmlService = new GameFrameSerializationService(gameStateXmlService)
+    //    val gameFrameFileService = new GameFrameFileService(gameFrameXmlService)
 
     @main
     def start(): Unit =
@@ -37,17 +40,15 @@ object Main:
         val event = Event.MoveBy(entityId = entity1.id, dx = 10, dy = 15)
 
         val entityRepository = EntityRepository(Seq(entity1))
-        val gameState = GameState(timer = Timer(running = true), entities = entityRepository)
-        val gameFrame = new GameFrame(gameState = gameState, events = Vector(event))
+        val gameState = GameState(timer = Timer(running = true), entities = entityRepository, events = Vector(event))
+        //        val gameFrame = new GameFrame(gameState = gameState, events = Vector(event))
 
         //        Thread.sleep(1000)
-        println(gameFrame)
-        //        Thread.sleep(1000)
-        //        println(gameFrame.nextFrame)
+        println(gameState)
+        Thread.sleep(1000)
+        println(gameStateService.processNextEvent(gameState))
 
         //        Thread.sleep(1000)
-        gameFrameFileService.saveToFile(File("gameFrame.xml"), gameFrame)
-        //        entityService.saveEntitiesToFile(File("entities.xml"), gameState.entities.findAll)
+        gameStateFileService.saveToFile(File("gameState.xml"), gameState)
         //        Thread.sleep(1000)
-        gameFrameFileService.loadFromFile(File("gameFrame.xml")).foreach(println)
-//        println(entityService.loadEntitiesFromFile(File("entities.xml")))
+        gameStateFileService.loadFromFile(File("gameState.xml")).foreach(println)
