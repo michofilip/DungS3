@@ -19,22 +19,28 @@ object Main:
     @main
     def start(): Unit =
 
-        val entityEntry = EntityEntry(id = UUID.randomUUID().toString, name = "player", timestamp = 0L, state = None, x = Some(10), y = Some(20), direction = Some(Direction.East))
+        val entityEntry1 = EntityEntry(id = UUID.randomUUID().toString, name = "player", timestamp = 0L, state = None, x = Some(10), y = Some(20), direction = Some(Direction.East))
+        val entityEntry2 = EntityEntry(id = UUID.randomUUID().toString, name = "player", timestamp = 0L, state = None, x = Some(0), y = Some(0), direction = Some(Direction.East))
 
-        val entity1 = EntityConverter().convertToEntity(entityEntry).get
+        val entity1 = EntityConverter().convertToEntity(entityEntry1).get
 
-        val event = Event.MoveBy(entityId = entity1.id, dx = 10, dy = 15)
+        val event1 = Event.MoveBy(entityId = entity1.id, dx = 10, dy = 15)
+        val event2 = Event.Spawn(entityEntry2)
 
         val entityRepository = EntityRepository(Seq(entity1))
-        val gameState = GameState(timer = Timer(running = true), entities = entityRepository, events = Vector(event))
-        //        val gameFrame = new GameFrame(gameState = gameState, events = Vector(event))
+        val gameState0 = GameState(timer = Timer(running = true), entities = entityRepository, events = Vector(event1, event2))
+        val gameState1 = GameStateProcessor().processNextEvent(gameState0)
+        val gameState2 = GameStateProcessor().processNextEvent(gameState1)
 
-        //        Thread.sleep(1000)
-        println(gameState)
+        println(gameState0)
         Thread.sleep(1000)
-        println(GameStateProcessor().processNextEvent(gameState))
+        println(gameState1)
+        Thread.sleep(1000)
+        println(gameState2)
 
         //        Thread.sleep(1000)
-        GameStateFileProcessor().saveToFile(File("gameState.xml"), gameState)
+        GameStateFileProcessor().saveToFile(File("gameState0.xml"), gameState0)
+        GameStateFileProcessor().saveToFile(File("gameState1.xml"), gameState1)
+        GameStateFileProcessor().saveToFile(File("gameState2.xml"), gameState2)
         //        Thread.sleep(1000)
-        GameStateFileProcessor().loadFromFile(File("gameState.xml")).foreach(println)
+        GameStateFileProcessor().loadFromFile(File("gameState0.xml")).foreach(println)

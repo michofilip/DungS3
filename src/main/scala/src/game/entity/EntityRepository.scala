@@ -58,7 +58,7 @@ class EntityRepository private(private val entitiesById: Map[UUID, Entity],
         entity.physics.fold(false)(_.solid)
     }
 
-    override def toString: String = findAll.mkString("Entities(", ", ", ")")
+    override def toString: String = findAll.mkString("[", ", ", "]")
 
 
 object EntityRepository:

@@ -20,5 +20,5 @@ final class GameState(val timer: Timer, val entities: EntityRepository, val even
         updated(events = this.events ++ events)
 
     override def toString: String =
-        val eventsStr = events.mkString("Events(", ", ", ")")
+        val eventsStr = events.mkString("[", ", ", "]")
         s"GameState(timer=$timer, entities=$entities, events=$eventsStr)"
