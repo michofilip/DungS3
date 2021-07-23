@@ -9,7 +9,7 @@ import src.game.temporal.Timer
 import scala.util.Try
 import scala.xml.Node
 
-class GameStateSerializationService(entitySerializationService: EntitySerializationService):
+class GameStateSerializationService private(entitySerializationService: EntitySerializationService):
 
     def toXml(gameState: GameState): Node =
         <GameState>
@@ -35,4 +35,9 @@ class GameStateSerializationService(entitySerializationService: EntitySerializat
             )
         }
     }.toOption.flatten
-    
+
+object GameStateSerializationService:
+
+    private lazy val gameStateSerializationService = new GameStateSerializationService(EntitySerializationService())
+
+    def apply(): GameStateSerializationService = gameStateSerializationService

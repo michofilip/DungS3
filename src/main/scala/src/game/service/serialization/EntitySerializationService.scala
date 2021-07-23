@@ -11,7 +11,7 @@ import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
 import scala.xml.{Node, NodeSeq, PrettyPrinter, XML}
 
-class EntitySerializationService(entityConverter: EntityConverter):
+class EntitySerializationService private(entityConverter: EntityConverter):
 
     def toXml(entity: Entity): Node =
         entityConverter.convertToEntityEntry(entity).toXml
@@ -19,3 +19,9 @@ class EntitySerializationService(entityConverter: EntityConverter):
     def fromXml(xml: Node): Option[Entity] =
         EntityEntry.fromXML(xml)
             .flatMap(entityConverter.convertToEntity)
+
+object EntitySerializationService:
+
+    private lazy val entitySerializationService = new EntitySerializationService(EntityConverter())
+
+    def apply(): EntitySerializationService = entitySerializationService

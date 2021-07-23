@@ -5,12 +5,12 @@ import src.game.GameState
 import src.game.entity.mapper.PositionMapper
 import src.game.event.Event
 import src.game.event.Event.*
-import src.game.service.EventProcessor.handleMove
 import src.game.service.EntityConverter
+import src.game.service.EventProcessor.handleMove
 
 import java.util.UUID
 
-class EventProcessor(entityConverter: EntityConverter):
+class EventProcessor private(entityConverter: EntityConverter):
 
     def processEvent(event: Event, gameState: GameState): GameState = event match {
         case MoveTo(entityId, x, y) =>
@@ -38,6 +38,11 @@ class EventProcessor(entityConverter: EntityConverter):
 
 
 object EventProcessor:
+
+    private lazy val eventProcessor = new EventProcessor(EntityConverter())
+
+    def apply(): EventProcessor = eventProcessor
+
     private def handleMove(entityId: UUID, gameState: GameState, positionMapper: PositionMapper): GameState =
         gameState.entities.findById(entityId)
             .filter(entity => entity.hasPosition)

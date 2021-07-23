@@ -6,7 +6,7 @@ import src.game.entity.parts.animation.{Animation, LoopingAnimation, SingleRunAn
 
 import scala.xml.XML
 
-final class AnimationRepository(frameRepository: FrameRepository) extends Repository[Int, Animation] :
+final class AnimationRepository private(frameRepository: FrameRepository) extends Repository[Int, Animation] :
 
     override protected val dataById: Map[Int, Animation] =
         def convertToAnimation(animationEntry: AnimationEntry): Animation =
@@ -24,3 +24,9 @@ final class AnimationRepository(frameRepository: FrameRepository) extends Reposi
             .flatMap(AnimationEntry.fromXML)
             .map(animationEntry => animationEntry.id -> convertToAnimation(animationEntry))
             .toMap
+
+object AnimationRepository:
+    
+    private lazy val animationRepository = new AnimationRepository(FrameRepository())
+
+    def apply(): AnimationRepository = animationRepository

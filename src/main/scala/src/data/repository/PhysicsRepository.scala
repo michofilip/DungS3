@@ -7,7 +7,7 @@ import src.game.entity.parts.Physics
 import scala.util.Try
 import scala.xml.{NodeSeq, XML}
 
-final class PhysicsRepository extends Repository[Int, Physics] :
+final class PhysicsRepository private() extends Repository[Int, Physics] :
 
     override protected val dataById: Map[Int, Physics] =
         def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
@@ -19,3 +19,9 @@ final class PhysicsRepository extends Repository[Int, Physics] :
             .flatMap(PhysicsEntry.fromXML)
             .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
             .toMap
+
+object PhysicsRepository:
+
+    private lazy val physicsRepository = new PhysicsRepository()
+
+    def apply(): PhysicsRepository = physicsRepository

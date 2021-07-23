@@ -4,7 +4,7 @@ import src.data.repository.{AnimationRepository, AnimationSelectorRepository, En
 import src.game.GameState
 import src.game.service.serialization.{EntitySerializationService, GameStateSerializationService}
 
-class GameStateProcessor(eventProcessor: EventProcessor):
+class GameStateProcessor private(eventProcessor: EventProcessor):
 
     def processNextEvent(gameState: GameState): GameState =
         gameState.events match {
@@ -13,3 +13,9 @@ class GameStateProcessor(eventProcessor: EventProcessor):
 
             case _ => gameState
         }
+
+object GameStateProcessor:
+
+    private lazy val gameStateProcessor = new GameStateProcessor(EventProcessor())
+
+    def apply(): GameStateProcessor = gameStateProcessor

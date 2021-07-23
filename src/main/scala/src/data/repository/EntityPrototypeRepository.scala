@@ -7,8 +7,8 @@ import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
 
 import scala.xml.XML
 
-final class EntityPrototypeRepository(physicsSelectorRepository: PhysicsSelectorRepository,
-                                      animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
+final class EntityPrototypeRepository private(physicsSelectorRepository: PhysicsSelectorRepository,
+                                              animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
 
     override protected val dataById: Map[String, EntityPrototype] =
         def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
@@ -35,3 +35,9 @@ final class EntityPrototypeRepository(physicsSelectorRepository: PhysicsSelector
             .flatMap(EntityPrototypeEntry.fromXML)
             .map(entityPrototype => entityPrototype.name -> convertToEntityPrototype(entityPrototype))
             .toMap
+
+object EntityPrototypeRepository:
+
+    private lazy val entityPrototypeRepository = new EntityPrototypeRepository(PhysicsSelectorRepository(), AnimationSelectorRepository())
+
+    def apply(): EntityPrototypeRepository = entityPrototypeRepository

@@ -6,7 +6,7 @@ import src.game.service.serialization.GameStateSerializationService
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import scala.xml.{PrettyPrinter, XML}
 
-class GameStateFileProcessor(gameStateSerializationService: GameStateSerializationService):
+class GameStateFileProcessor private(gameStateSerializationService: GameStateSerializationService):
 
     def loadFromFile(file: File): Option[GameState] =
         val xml = XML.loadFile(file)
@@ -20,4 +20,9 @@ class GameStateFileProcessor(gameStateSerializationService: GameStateSerializati
 
         printWriter.println(prettyPrinter.format(xml))
         printWriter.close()
-        
+
+object GameStateFileProcessor:
+
+    private lazy val gameStateFileProcessor = new GameStateFileProcessor(GameStateSerializationService())
+
+    def apply(): GameStateFileProcessor = gameStateFileProcessor

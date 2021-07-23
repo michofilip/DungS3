@@ -6,7 +6,7 @@ import src.game.entity.parts.animation.Frame
 
 import scala.xml.XML
 
-final class FrameRepository extends Repository[Int, Frame] :
+final class FrameRepository private() extends Repository[Int, Frame] :
 
     override protected val dataById: Map[Int, Frame] =
         def convertToFrame(frameEntry: FrameEntry): Frame =
@@ -18,3 +18,9 @@ final class FrameRepository extends Repository[Int, Frame] :
             .flatMap(FrameEntry.fromXML)
             .map(frameEntry => frameEntry.id -> convertToFrame(frameEntry))
             .toMap
+
+object FrameRepository:
+    
+    private lazy val frameRepository = new FrameRepository()
+
+    def apply(): FrameRepository = frameRepository
