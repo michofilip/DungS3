@@ -32,6 +32,6 @@ object GameStateProcessorActor:
 
     case object Skip extends Command
 
-    def apply(gameStateActor: ActorRef[GameStateActor.Command], gameStateProcessor: GameStateProcessor): Behavior[Command] = Behaviors.setup { context =>
-        new GameStateProcessorActor(gameStateActor, gameStateProcessor, context).behavior
+    def apply(gameStateActor: ActorRef[GameStateActor.Command]): Behavior[Command] = Behaviors.setup { context =>
+        new GameStateProcessorActor(gameStateActor, GameStateProcessor(), context).behavior
     }

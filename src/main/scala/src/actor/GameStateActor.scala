@@ -5,7 +5,6 @@ import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameStateActor.{Command, DisplayGameState, ProcessGameState, SetDislayingEnbled, SetGameState, SetProcessingEnabled, Setup}
 import src.actor.GameStateProcessorActor
 import src.game.GameState
-import src.game.service.Engine
 
 private class GameStateActor(gameStateProcessorActor: ActorRef[GameStateProcessorActor.Command],
                              gameStateDisplayActor: ActorRef[GameStateDisplayActor.Command],
@@ -55,9 +54,9 @@ object GameStateActor:
                              dislayingEnbled: Boolean = false,
                              gameState: Option[GameState] = None)
 
-    def apply(engine: Engine): Behavior[Command] = Behaviors.setup { context =>
+    def apply(): Behavior[Command] = Behaviors.setup { context =>
 
-        val gameFrameProcessorActor = context.spawn(GameStateProcessorActor(context.self, engine.gameStateProcessor), "GameStateProcessorActor")
+        val gameFrameProcessorActor = context.spawn(GameStateProcessorActor(context.self), "GameStateProcessorActor")
         val gameStateDisplayActor = context.spawn(GameStateDisplayActor(context.self), "GameStateDisplayActor")
 
         val setup = Setup()

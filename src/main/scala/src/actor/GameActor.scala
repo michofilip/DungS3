@@ -4,7 +4,6 @@ import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameActor.{Command, GameStateCommand, Setup, Shutdown}
 import src.actor.GameStateActor
-import src.game.service.Engine
 
 private class GameActor(gameFrameActor: ActorRef[GameStateActor.Command], context: ActorContext[Command]):
 
@@ -28,10 +27,10 @@ object GameActor:
 
     private final case class Setup()
 
-    def apply(engine: Engine): Behavior[Command] = Behaviors.setup { context =>
+    def apply(): Behavior[Command] = Behaviors.setup { context =>
         context.log.info(s"strating up ${context.self.toString}")
 
-        val gameStateActor = context.spawn(GameStateActor(engine), "GameStateActor")
+        val gameStateActor = context.spawn(GameStateActor(), "GameStateActor")
 
         val setup = Setup()
 
