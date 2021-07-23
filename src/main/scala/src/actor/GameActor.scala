@@ -28,12 +28,10 @@ object GameActor:
     private final case class Setup()
 
     def apply(): Behavior[Command] = Behaviors.setup { context =>
-        context.log.info(s"strating up ${context.self.toString}")
+        context.log.info(s"starting up ${context.self.toString}")
 
         val gameStateActor = context.spawn(GameStateActor(), "GameStateActor")
 
-        val setup = Setup()
-
         new GameActor(gameStateActor, context)
-            .behavior(setup)
+            .behavior(Setup())
     }

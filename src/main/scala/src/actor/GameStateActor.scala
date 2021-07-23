@@ -2,7 +2,7 @@ package src.actor
 
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
-import src.actor.GameStateActor.{Command, DisplayGameState, ProcessGameState, SetDislayingEnbled, SetGameState, SetProcessingEnabled, Setup}
+import src.actor.GameStateActor.{Command, DisplayGameState, ProcessGameState, SetDisplayingEnabled, SetGameState, SetProcessingEnabled, Setup}
 import src.actor.GameStateProcessorActor
 import src.game.GameState
 
@@ -14,8 +14,8 @@ private class GameStateActor(gameStateProcessorActor: ActorRef[GameStateProcesso
         case SetProcessingEnabled(processingEnabled) =>
             behavior(setup.copy(processingEnabled = processingEnabled))
 
-        case SetDislayingEnbled(dislayingEnbled) =>
-            behavior(setup.copy(dislayingEnbled = dislayingEnbled))
+        case SetDisplayingEnabled(displayingEnabled) =>
+            behavior(setup.copy(displayingEnabled = displayingEnabled))
 
         case SetGameState(gameState) =>
             behavior(setup.copy(gameState = Some(gameState)))
@@ -29,7 +29,7 @@ private class GameStateActor(gameStateProcessorActor: ActorRef[GameStateProcesso
 
         case DisplayGameState =>
             setup.gameState match {
-                case Some(gameState) if setup.dislayingEnbled => gameStateDisplayActor ! GameStateDisplayActor.Display(gameState)
+                case Some(gameState) if setup.displayingEnabled => gameStateDisplayActor ! GameStateDisplayActor.Display(gameState)
                 case _ => gameStateDisplayActor ! GameStateDisplayActor.Skip
             }
             Behaviors.same
@@ -42,7 +42,7 @@ object GameStateActor:
 
     final case class SetProcessingEnabled(processingEnabled: Boolean) extends Command
 
-    final case class SetDislayingEnbled(dislayingEnbled: Boolean) extends Command
+    final case class SetDisplayingEnabled(displayingEnabled: Boolean) extends Command
 
     final case class SetGameState(gameState: GameState) extends Command
 
@@ -51,7 +51,7 @@ object GameStateActor:
     private[actor] case object DisplayGameState extends Command
 
     private case class Setup(processingEnabled: Boolean = false,
-                             dislayingEnbled: Boolean = false,
+                             displayingEnabled: Boolean = false,
                              gameState: Option[GameState] = None)
 
     def apply(): Behavior[Command] = Behaviors.setup { context =>
@@ -59,8 +59,6 @@ object GameStateActor:
         val gameFrameProcessorActor = context.spawn(GameStateProcessorActor(context.self), "GameStateProcessorActor")
         val gameStateDisplayActor = context.spawn(GameStateDisplayActor(context.self), "GameStateDisplayActor")
 
-        val setup = Setup()
-
         new GameStateActor(gameFrameProcessorActor, gameStateDisplayActor, context)
-            .behavior(setup)
+            .behavior(Setup())
     }
