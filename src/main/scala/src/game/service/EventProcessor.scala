@@ -30,10 +30,20 @@ class EventProcessor private(entityConverter: EntityConverter):
                 gameState.updated(entities = gameState.entities - entity)
             }
 
-        case Spawn(entityEntry: EntityEntry) =>
-            entityConverter.convertToEntity(entityEntry).fold(gameState) { entity =>
-                gameState.updated(entities = gameState.entities + entity)
+        case Spawn(useCurrentTimestamp, entities, events) =>
+            val newEntities = entities.map { entityEntry =>
+                if useCurrentTimestamp then
+                    entityEntry.copy(timestamp = gameState.timer.timestamp.milliseconds)
+                else
+                    entityEntry
+            }.flatMap { entityEntry =>
+                entityConverter.convertToEntity(entityEntry)
             }
+
+            gameState.updated(
+                entities = gameState.entities ++ newEntities,
+                events = gameState.events ++ events
+            )
     }
 
 

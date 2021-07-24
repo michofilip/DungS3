@@ -17,7 +17,7 @@ class EntitySerializationService private(entityConverter: EntityConverter):
         entityConverter.convertToEntityEntry(entity).toXml
 
     def fromXml(xml: Node): Option[Entity] =
-        EntityEntry.fromXML(xml)
+        EntityEntry.fromXml(xml)
             .flatMap(entityConverter.convertToEntity)
 
 object EntitySerializationService:

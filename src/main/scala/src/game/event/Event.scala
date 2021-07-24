@@ -11,4 +11,4 @@ enum Event:
     case StartTimer extends Event
     case StopTimer extends Event
     case Kill(entityId: UUID) extends Event
-    case Spawn(entity: EntityEntry) extends Event
+    case Spawn(useCurrentTimestamp: Boolean, entities: Seq[EntityEntry], events: Seq[Event]) extends Event
