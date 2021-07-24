@@ -1,8 +1,8 @@
-package src.game.service
+package src.game.service.serialization
 
 import src.data.model.EntityEntry
 import src.game.event.Event
-import src.game.event.Event.*
+import src.game.event.Event.{Kill, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
 
 import java.util.UUID
 import scala.util.Try
@@ -36,9 +36,11 @@ object EventSerializationService:
                 <entityId> {entityId} </entityId>
             </Event>
 
-        case Spawn(entity) =>
+        case Spawn(useCurrentTimestamp, entities, events) =>
             <Event name="Spawn" >
-                <entity> {entity.toXml} </entity>
+                <useCurrentTimestamp> {useCurrentTimestamp} </useCurrentTimestamp>
+                <entities> {entities.map(_.toXml)} </entities>
+                <events> {events.map(EventSerializationService.toXml)} </events>
             </Event>
     }
 
@@ -75,10 +77,12 @@ object EventSerializationService:
             }.toOption
 
             case "Spawn" => Try {
-                (xml \ "entity").flatMap(EntityEntry.fromXML).headOption.map { entityEntry =>
-                    Spawn(entity = entityEntry)
-                }
-            }.toOption.flatten
+                Spawn(
+                    useCurrentTimestamp = (xml \ "useCurrentTimestamp").text.trim.toBoolean,
+                    entities = (xml \ "entities" \ "Entity").flatMap(EntityEntry.fromXml),
+                    events = (xml \ "events" \ "Event").flatMap(EventSerializationService.fromXml)
+                )
+            }.toOption
 
             case _ => None
         }

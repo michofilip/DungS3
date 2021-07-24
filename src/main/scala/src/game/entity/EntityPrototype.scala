@@ -15,13 +15,13 @@ final class EntityPrototype(private val name: String,
         state.filter(availableStates.contains).fold(availableStates.headOption)(_ => state)
 
     def getValidatedPosition(position: Option[Position]): Option[Position] =
-        if (hasPosition && position.isDefined) position
-        else if (hasPosition) Some(defaultPosition)
+        if hasPosition && position.isDefined then position
+        else if hasPosition then Some(defaultPosition)
         else None
 
     def getValidatedDirection(direction: Option[Direction]): Option[Direction] =
-        if (hasDirection && direction.isDefined) direction
-        else if (hasDirection) Some(EntityPrototype.defaultDirection)
+        if hasDirection && direction.isDefined then direction
+        else if hasDirection then Some(EntityPrototype.defaultDirection)
         else None
 
 object EntityPrototype:

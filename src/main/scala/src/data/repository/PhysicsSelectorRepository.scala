@@ -7,7 +7,7 @@ import src.game.entity.selector.PhysicsSelector
 import scala.util.Try
 import scala.xml.{NodeSeq, XML}
 
-final class PhysicsSelectorRepository(physicsRepository: PhysicsRepository) extends Repository[Int, PhysicsSelector] :
+final class PhysicsSelectorRepository private(physicsRepository: PhysicsRepository) extends Repository[Int, PhysicsSelector] :
 
     protected val dataById: Map[Int, PhysicsSelector] =
         def convertToPhysicsSelector(physicsSelectorEntry: PhysicsSelectorEntry): PhysicsSelector =
@@ -26,3 +26,9 @@ final class PhysicsSelectorRepository(physicsRepository: PhysicsRepository) exte
             .flatMap(PhysicsSelectorEntry.fromXML)
             .map(physicsSelectorEntry => physicsSelectorEntry.id -> convertToPhysicsSelector(physicsSelectorEntry))
             .toMap
+
+object PhysicsSelectorRepository:
+
+    private lazy val physicsSelectorRepository = new PhysicsSelectorRepository(PhysicsRepository())
+
+    def apply(): PhysicsSelectorRepository = physicsSelectorRepository

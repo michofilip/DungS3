@@ -10,7 +10,7 @@ import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
 import scala.xml.{Node, PrettyPrinter, XML}
 
-class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
+class EntityConverter private(entityPrototypeRepository: EntityPrototypeRepository):
 
     def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
         entityPrototypeRepository.findById(entityEntry.name).map { entityPrototype =>
@@ -43,4 +43,9 @@ class EntityService(entityPrototypeRepository: EntityPrototypeRepository):
             y = entity.position.map(_.y),
             direction = entity.direction
         )
-        
+
+object EntityConverter:
+
+    private lazy val entityConverter = new EntityConverter(EntityPrototypeRepository())
+
+    def apply(): EntityConverter = entityConverter

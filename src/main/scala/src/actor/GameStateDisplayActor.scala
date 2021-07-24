@@ -5,19 +5,19 @@ import akka.actor.typed.{ActorRef, Behavior}
 import src.actor.GameStateDisplayActor.{Command, Display, Skip}
 import src.game.GameState
 
-private class GameStateDisplayActor(gameFrameActor: ActorRef[GameFrameActor.Command],
+private class GameStateDisplayActor(gameStateActor: ActorRef[GameStateActor.Command],
                                     context: ActorContext[Command]):
 
-    gameFrameActor ! GameFrameActor.DisplayGameState
+    gameStateActor ! GameStateActor.DisplayGameState
 
     private def behavior: Behavior[Command] = Behaviors.receiveMessage {
         case Skip =>
-            gameFrameActor ! GameFrameActor.DisplayGameState
+            gameStateActor ! GameStateActor.DisplayGameState
             Behaviors.same
 
         case Display(gameState) =>
             context.log.info("Displaying gameState")
-            gameFrameActor ! GameFrameActor.DisplayGameState
+            gameStateActor ! GameStateActor.DisplayGameState
             Behaviors.same
     }
 
@@ -29,9 +29,9 @@ object GameStateDisplayActor:
 
     case object Skip extends Command
 
-    def apply(gameFrameActor: ActorRef[GameFrameActor.Command]): Behavior[Command] = Behaviors.setup { conrext =>
+    def apply(gameStateActor: ActorRef[GameStateActor.Command]): Behavior[Command] = Behaviors.setup { conrext =>
 
-        new GameStateDisplayActor(gameFrameActor, conrext).behavior
+        new GameStateDisplayActor(gameStateActor, conrext).behavior
     }
 
 

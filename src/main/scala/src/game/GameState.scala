@@ -7,12 +7,18 @@ import src.game.temporal.Timer
 import scala.xml.Node
 
 // TODO turn, etc
-final class GameState(val timer: Timer, val entities: EntityRepository):
+final class GameState(val timer: Timer, val entities: EntityRepository, val events: Vector[Event]):
 
-    def updated(timer: Timer = timer, entities: EntityRepository = entities): GameState =
+    def updated(timer: Timer = timer, entities: EntityRepository = entities, events: Vector[Event] = events): GameState =
         GameState(
             timer = timer,
-            entities = entities
+            entities = entities,
+            events = events
         )
 
-    override def toString: String = s"GameState(timer=$timer, entities=$entities)"
+    def addEvents(events: Vector[Event]): GameState =
+        updated(events = this.events ++ events)
+
+    override def toString: String =
+        val eventsStr = events.mkString("[", ", ", "]")
+        s"GameState(timer=$timer, entities=$entities, events=$eventsStr)"

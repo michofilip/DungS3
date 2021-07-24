@@ -29,7 +29,7 @@ final case class EntityEntry(id: String, name: String, timestamp: Long, state: O
 
 object EntityEntry:
 
-    def fromXML(xml: Node): Option[EntityEntry] = Try {
+    def fromXml(xml: Node): Option[EntityEntry] = Try {
         val id = (xml \ "id").text.trim
         val name = (xml \ "name").text.trim
         val timestamp = (xml \ "timestamp").text.trim.toLong

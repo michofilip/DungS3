@@ -2,17 +2,17 @@ package src.actor
 
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
 import akka.actor.typed.{ActorRef, Behavior}
-import src.actor.GameActor.{Command, GameFrameCommand, Setup, Shutdown}
-import src.game.service.GameFrameService
+import src.actor.GameActor.{Command, GameStateCommand, Setup, Shutdown}
+import src.actor.GameStateActor
 
-private class GameActor(gameFrameActor: ActorRef[GameFrameActor.Command], context: ActorContext[Command]):
+private class GameActor(gameFrameActor: ActorRef[GameStateActor.Command], context: ActorContext[Command]):
 
     private def behavior(setup: Setup): Behavior[Command] = Behaviors.receiveMessage {
         case Shutdown =>
             context.log.info(s"shutting down ${context.self.toString}")
             Behaviors.stopped
 
-        case GameFrameCommand(command) =>
+        case GameStateCommand(command) =>
             gameFrameActor ! command
             Behaviors.same
     }
@@ -23,18 +23,15 @@ object GameActor:
 
     case object Shutdown extends Command
 
-    final case class GameFrameCommand(command: GameFrameActor.Command) extends Command
+    final case class GameStateCommand(command: GameStateActor.Command) extends Command
 
     private final case class Setup()
 
-    def apply(gameFrameService: GameFrameService): Behavior[Command] = Behaviors.setup { context =>
-        context.log.info(s"strating up ${context.self.toString}")
+    def apply(): Behavior[Command] = Behaviors.setup { context =>
+        context.log.info(s"starting up ${context.self.toString}")
 
-        val gameFrameActor = context.spawn(GameFrameActor(gameFrameService), "GameFrameActor")
+        val gameStateActor = context.spawn(GameStateActor(), "GameStateActor")
 
-        val setup = Setup()
-
-        new GameActor(gameFrameActor, context)
-            .behavior(setup)
+        new GameActor(gameStateActor, context)
+            .behavior(Setup())
     }
-    
