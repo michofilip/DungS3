@@ -6,6 +6,7 @@ import src.game.entity.EntityRepository
 import src.game.service.serialization.{EntitySerializationService, EventSerializationService}
 import src.game.temporal.Timer
 
+import scala.collection.immutable.Queue
 import scala.util.Try
 import scala.xml.Node
 
@@ -31,7 +32,7 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
             GameState(
                 timer = timer,
                 entities = EntityRepository(entities),
-                events = events.toVector
+                events = Queue(events: _*)
             )
         }
     }.toOption.flatten

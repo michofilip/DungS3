@@ -13,6 +13,7 @@ import src.game.temporal.{Duration, Timer, Timestamp}
 
 import java.io.File
 import java.util.UUID
+import scala.collection.immutable.Queue
 
 object Main:
 
@@ -29,7 +30,7 @@ object Main:
         val event3 = Event.Spawn(useCurrentTimestamp = true, entities = Seq(entityEntry2), events = Seq(event2))
 
         val entityRepository = EntityRepository(Seq(entity1))
-        val gameState0 = GameState(timer = Timer(running = true), entities = entityRepository, events = Vector(event1, event3))
+        val gameState0 = GameState(timer = Timer(running = true), entities = entityRepository, events = Queue(event1, event3))
         Thread.sleep(1000)
         val gameState1 = GameStateProcessor().processNextEvent(gameState0)
         Thread.sleep(1000)
