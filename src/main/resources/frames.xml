@@ -1,24 +1,54 @@
 <frames>
-    <Frame>
+<!--    <Frame name="template">-->
+<!--        <id>1</id>-->
+<!--        <imageId>1</imageId>-->
+<!--        <layer>0</layer>-->
+<!--        <offsetX>0.0</offsetX>-->
+<!--        <offsetY>0.0</offsetY>-->
+<!--    </Frame>-->
+    <Frame name="floor_1">
         <id>1</id>
         <imageId>1</imageId>
         <layer>0</layer>
-        <!--        <offsetX>0.0</offsetX>-->
-        <!--        <offsetY>0.0</offsetY>-->
     </Frame>
-    <Frame>
+    <Frame name="wall_1">
         <id>2</id>
         <imageId>2</imageId>
-        <layer>0</layer>
+        <layer>2</layer>
     </Frame>
-    <Frame>
+    <Frame name="player_1">
         <id>3</id>
         <imageId>3</imageId>
-        <layer>0</layer>
+        <layer>2</layer>
     </Frame>
-    <Frame>
+    <Frame name="door_open_north_south_1">
         <id>4</id>
         <imageId>4</imageId>
-        <layer>0</layer>
+        <layer>1</layer>
+    </Frame>
+    <Frame name="door_open_east_west_1">
+        <id>5</id>
+        <imageId>5</imageId>
+        <layer>1</layer>
+    </Frame>
+    <Frame name="lever_off_1">
+        <id>6</id>
+        <imageId>6</imageId>
+        <layer>1</layer>
+    </Frame>
+    <Frame name="lever_on_1">
+        <id>7</id>
+        <imageId>7</imageId>
+        <layer>1</layer>
+    </Frame>
+    <Frame name="stairs-up_on_1">
+        <id>8</id>
+        <imageId>8</imageId>
+        <layer>1</layer>
+    </Frame>
+    <Frame name="stairs-down_on_1">
+        <id>9</id>
+        <imageId>9</imageId>
+        <layer>1</layer>
     </Frame>
 </frames>
