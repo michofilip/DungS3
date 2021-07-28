@@ -3,7 +3,7 @@ package src.game.service
 import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.Entity
-import src.game.entity.parts.{Direction, Position, State}
+import src.game.entity.parts.state.StateProperty
 import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
@@ -15,21 +15,19 @@ class EntityConverter private(entityPrototypeRepository: EntityPrototypeReposito
     def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
         entityPrototypeRepository.findById(entityEntry.name).map { entityPrototype =>
 
-            val validState = entityPrototype.getValidatedState(entityEntry.state)
-            val validPosition = entityPrototype.getValidatedPosition(entityEntry.position)
-            val validDirection = entityPrototype.getValidatedDirection(entityEntry.direction)
-            val physicsSelector = entityPrototype.physicsSelector
-            val animationSelector = entityPrototype.animationSelector
+            val stateProperty = entityPrototype.getStateProperty(entityEntry.state, entityEntry.stateTimestamp.map(Timestamp.apply))
+            val positionProperty = entityPrototype.getPositionProperty(entityEntry.position, entityEntry.direction, entityEntry.positionTimestamp.map(Timestamp.apply))
+            val physicsProperty = entityPrototype.getPhysicsProperty
+            val graphicsProperty = entityPrototype.getGraphicsProperty
 
-            Entity(
+            new Entity(
                 id = UUID.fromString(entityEntry.id),
                 name = entityEntry.name,
-                timestamp = Timestamp(entityEntry.timestamp),
-                state = validState,
-                position = validPosition,
-                direction = validDirection,
-                physicsSelector = physicsSelector,
-                animationSelector = animationSelector
+                creationTimestamp = Timestamp(entityEntry.creationTimestamp),
+                stateProperty = stateProperty,
+                positionProperty = positionProperty,
+                physicsProperty = physicsProperty,
+                graphicsProperty = graphicsProperty
             )
         }
 
@@ -37,11 +35,13 @@ class EntityConverter private(entityPrototypeRepository: EntityPrototypeReposito
         EntityEntry(
             id = entity.id.toString,
             name = entity.name,
-            timestamp = entity.timestamp.milliseconds,
+            creationTimestamp = entity.creationTimestamp.milliseconds,
             state = entity.state,
+            stateTimestamp = entity.stateTimestamp.map(_.milliseconds),
             x = entity.position.map(_.x),
             y = entity.position.map(_.y),
-            direction = entity.direction
+            direction = entity.direction,
+            positionTimestamp = entity.positionTimestamp.map(_.milliseconds)
         )
 
 object EntityConverter:

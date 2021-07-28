@@ -1,6 +1,6 @@
-package src.game.entity.parts.animation
+package src.game.entity.parts.graphics
 
-import src.game.entity.parts.animation.Frame
+import src.game.entity.parts.graphics.Frame
 import src.game.temporal.Duration
 import src.game.temporal.Duration.*
 import src.utils.MathUtils

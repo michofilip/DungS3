@@ -1,4 +1,4 @@
-package src.game.entity.parts.animation
+package src.game.entity.parts.graphics
 
 import src.utils.MathUtils.*
 

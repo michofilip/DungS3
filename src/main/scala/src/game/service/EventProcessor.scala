@@ -33,7 +33,13 @@ class EventProcessor private(entityConverter: EntityConverter):
         case Spawn(useCurrentTimestamp, entities, events) =>
             val newEntities = entities.map { entityEntry =>
                 if useCurrentTimestamp then
-                    entityEntry.copy(timestamp = gameState.timer.timestamp.milliseconds)
+                    val gameStateTimestamp = gameState.timer.timestamp.milliseconds
+
+                    entityEntry.copy(
+                        creationTimestamp = gameStateTimestamp,
+                        stateTimestamp = entityEntry.stateTimestamp.map(_ => gameStateTimestamp),
+                        positionTimestamp = entityEntry.positionTimestamp.map(_ => gameStateTimestamp)
+                    )
                 else
                     entityEntry
             }.flatMap { entityEntry =>
@@ -57,7 +63,7 @@ object EventProcessor:
         gameState.entities.findById(entityId)
             .filter(entity => entity.hasPosition)
             .fold(gameState) { entity =>
-                val updatedEntity = entity.updated(position = positionMapper, timestamp = gameState.timer.timestamp)
+                val updatedEntity = entity.updatedPosition(positionMapper = positionMapper, timestamp = gameState.timer.timestamp)
                 val isSolidAtTarget = updatedEntity.position.exists(gameState.entities.existSolidAtPosition)
 
                 if !isSolidAtTarget then

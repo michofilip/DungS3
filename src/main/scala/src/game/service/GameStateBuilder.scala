@@ -3,7 +3,7 @@ package src.game.service
 import src.data.model.EntityEntry
 import src.game.GameState
 import src.game.entity.EntityRepository
-import src.game.entity.parts.State
+import src.game.entity.parts.state.State
 import src.game.temporal.Timer
 
 import java.io.File
@@ -41,41 +41,50 @@ class GameStateBuilder private(entityConverter: EntityConverter):
             EntityEntry(
                 id = UUID.randomUUID().toString,
                 name = "floor",
-                timestamp = 0L,
+                creationTimestamp = 0L,
                 state = None,
+                stateTimestamp = Some(0L),
                 x = Option(x),
                 y = Option(y),
-                direction = None)
+                direction = None,
+                positionTimestamp = Some(0L)
+            )
 
         def makeWall(x: Int, y: Int): EntityEntry =
             EntityEntry(
                 id = UUID.randomUUID().toString,
                 name = "wall",
-                timestamp = 0L,
+                creationTimestamp = 0L,
                 state = None,
+                stateTimestamp = Some(0L),
                 x = Option(x),
                 y = Option(y),
-                direction = None)
+                direction = None,
+                positionTimestamp = Some(0L))
 
         def makeDoor(x: Int, y: Int): EntityEntry =
             EntityEntry(
                 id = UUID.randomUUID().toString,
                 name = "door",
-                timestamp = 0L,
+                creationTimestamp = 0L,
                 state = Option(State.Closed),
+                stateTimestamp = Some(0L),
                 x = Option(x),
                 y = Option(y),
-                direction = None)
+                direction = None,
+                positionTimestamp = Some(0L))
 
         def makePlayer(x: Int, y: Int): EntityEntry =
             EntityEntry(
                 id = UUID.randomUUID().toString,
                 name = "player",
-                timestamp = 0L,
+                creationTimestamp = 0L,
                 state = None,
+                stateTimestamp = Some(0L),
                 x = Option(x),
                 y = Option(y),
-                direction = None)
+                direction = None,
+                positionTimestamp = Some(0L))
 
         char match {
             case ' ' => Seq.empty

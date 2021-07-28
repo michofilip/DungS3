@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.{FrameEntry, PhysicsEntry}
-import src.game.entity.parts.animation.Frame
+import src.game.entity.parts.graphics.Frame
 
 import scala.xml.XML
 

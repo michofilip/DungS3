@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.{PhysicsEntry, PhysicsSelectorEntry}
-import src.game.entity.selector.PhysicsSelector
+import src.game.entity.parts.physics.PhysicsSelector
 
 import scala.util.Try
 import scala.xml.{NodeSeq, XML}

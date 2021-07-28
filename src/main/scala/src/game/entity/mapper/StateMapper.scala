@@ -1,6 +1,6 @@
 package src.game.entity.mapper
 
-import src.game.entity.parts.State
+import src.game.entity.parts.state.State
 
 sealed abstract class StateMapper extends Mapper[State]
 

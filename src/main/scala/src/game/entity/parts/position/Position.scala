@@ -1,4 +1,4 @@
-package src.game.entity.parts
+package src.game.entity.parts.position
 
 final case class Position(x: Int, y: Int):
 
