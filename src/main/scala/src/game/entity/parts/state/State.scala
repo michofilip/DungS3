@@ -1,4 +1,4 @@
-package src.game.entity.parts
+package src.game.entity.parts.state
 
 enum State:
     case Off

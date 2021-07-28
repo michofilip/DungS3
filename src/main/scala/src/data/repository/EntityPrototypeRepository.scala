@@ -14,11 +14,11 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
         def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
             val physicsSelector = entityPrototypeEntry.physicsSelectorId.flatMap { physicsSelectorId =>
                 physicsSelectorRepository.findById(physicsSelectorId)
-            }.getOrElse(PhysicsSelector.empty)
+            }
 
             val animationSelector = entityPrototypeEntry.animationSelectorId.flatMap { animationSelectorId =>
                 animationSelectorRepository.findById(animationSelectorId)
-            }.getOrElse(AnimationSelector.empty)
+            }
 
             EntityPrototype(
                 name = entityPrototypeEntry.name,

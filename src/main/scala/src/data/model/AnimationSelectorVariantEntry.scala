@@ -1,6 +1,7 @@
 package src.data.model
 
-import src.game.entity.parts.{Direction, State}
+import src.game.entity.parts.position.Direction
+import src.game.entity.parts.state.State
 
 import scala.util.Try
 import scala.xml.Node
