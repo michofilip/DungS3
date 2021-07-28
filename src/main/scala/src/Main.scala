@@ -45,7 +45,7 @@ object Main:
         //        println(gameState3)
 
         //        Thread.sleep(1000)
-        GameStateFileProcessor().saveToFile(File("gameState0.4xml"), gameState0)
+        GameStateFileProcessor().saveToFile(File("gameState0.xml"), gameState0)
         GameStateFileProcessor().saveToFile(File("gameState1.xml"), gameState1)
         GameStateFileProcessor().saveToFile(File("gameState2.xml"), gameState2)
         GameStateFileProcessor().saveToFile(File("gameState3.xml"), gameState3)
