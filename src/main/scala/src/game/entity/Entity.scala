@@ -4,10 +4,9 @@ import src.data.repository.EntityPrototypeRepository
 import src.game.entity.holder.{CommonsHolder, GraphicsHolder, PhysicsHolder, PositionHolder, StateHolder}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
 import src.game.entity.parts.graphics.{Animation, GraphicsProperty}
-import src.game.entity.parts.physics.PhysicsProperty
+import src.game.entity.parts.physics.{PhysicsProperty, PhysicsSelector}
 import src.game.entity.parts.position.PositionProperty
 import src.game.entity.parts.state.StateProperty
-import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
 import src.game.temporal.Timestamp
 
 import java.util.UUID

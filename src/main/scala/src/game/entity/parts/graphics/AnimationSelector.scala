@@ -1,4 +1,4 @@
-package src.game.entity.selector
+package src.game.entity.parts.graphics
 
 import src.game.entity.parts.graphics.Animation
 import src.game.entity.parts.position.Direction
@@ -10,4 +10,3 @@ final class AnimationSelector(animationMap: Map[(Option[State], Option[Direction
 object AnimationSelector:
     def apply(animations: Seq[((Option[State], Option[Direction]), Animation)]): AnimationSelector =
         new AnimationSelector(animations.toMap)
-        

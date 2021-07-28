@@ -1,11 +1,10 @@
 package src.game.entity
 
 import src.game.entity.EntityPrototype.{defaultDirection, defaultPosition}
-import src.game.entity.parts.graphics.GraphicsProperty
-import src.game.entity.parts.physics.PhysicsProperty
+import src.game.entity.parts.graphics.{AnimationSelector, GraphicsProperty}
+import src.game.entity.parts.physics.{PhysicsProperty, PhysicsSelector}
 import src.game.entity.parts.position.{Direction, Position, PositionProperty}
 import src.game.entity.parts.state.{State, StateProperty}
-import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
 import src.game.temporal.Timestamp
 
 final class EntityPrototype(private val name: String,

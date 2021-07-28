@@ -1,4 +1,4 @@
-package src.game.entity.selector
+package src.game.entity.parts.physics
 
 import src.game.entity.parts.physics.Physics
 import src.game.entity.parts.state.State

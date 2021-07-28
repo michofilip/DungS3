@@ -1,7 +1,6 @@
 package src.game.entity.holder
 
-import src.game.entity.parts.graphics.{Frame, GraphicsProperty}
-import src.game.entity.selector.AnimationSelector
+import src.game.entity.parts.graphics.{AnimationSelector, Frame, GraphicsProperty}
 import src.game.temporal.{Duration, Timestamp}
 
 trait GraphicsHolder:

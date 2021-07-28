@@ -1,7 +1,6 @@
 package src.game.entity.holder
 
-import src.game.entity.parts.physics.{Physics, PhysicsProperty}
-import src.game.entity.selector.PhysicsSelector
+import src.game.entity.parts.physics.{Physics, PhysicsProperty, PhysicsSelector}
 
 trait PhysicsHolder:
     this: StateHolder =>
