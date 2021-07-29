@@ -56,11 +56,12 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 name = "wall",
                 creationTimestamp = 0L,
                 state = None,
-                stateTimestamp = Some(0L),
+                stateTimestamp = None,
                 x = Option(x),
                 y = Option(y),
                 direction = None,
-                positionTimestamp = Some(0L))
+                positionTimestamp = Some(0L)
+            )
 
         def makeDoor(x: Int, y: Int): EntityEntry =
             EntityEntry(
@@ -72,7 +73,8 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 x = Option(x),
                 y = Option(y),
                 direction = None,
-                positionTimestamp = Some(0L))
+                positionTimestamp = Some(0L)
+            )
 
         def makePlayer(x: Int, y: Int): EntityEntry =
             EntityEntry(
@@ -80,11 +82,12 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 name = "player",
                 creationTimestamp = 0L,
                 state = None,
-                stateTimestamp = Some(0L),
+                stateTimestamp = None,
                 x = Option(x),
                 y = Option(y),
                 direction = None,
-                positionTimestamp = Some(0L))
+                positionTimestamp = Some(0L)
+            )
 
         char match {
             case ' ' => Seq.empty
