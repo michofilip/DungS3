@@ -25,10 +25,9 @@ class EventProcessor private(entityConverter: EntityConverter):
         case StopTimer =>
             gameState.updated(timer = gameState.timer.stopped)
 
-        case Kill(entityId) =>
-            gameState.entities.findById(entityId).fold(gameState) { entity =>
-                gameState.updated(entities = gameState.entities - entity)
-            }
+        case Despawn(entityIds) =>
+            val entities = entityIds.flatMap(gameState.entities.findById)
+            gameState.updated(entities = gameState.entities -- entities)
 
         case Spawn(useCurrentTimestamp, entities, events) =>
             val newEntities = entities.map { entityEntry =>

@@ -6,12 +6,15 @@ sealed abstract class DirectionMapper extends Mapper[Direction]
 
 object DirectionMapper:
 
+    @Deprecated
     case object Identity extends DirectionMapper :
         override def apply(directionOpt: Option[Direction]): Option[Direction] = directionOpt
 
+    @Deprecated
     final case class SetDirection(direction: Direction) extends DirectionMapper :
         override def apply(directionOpt: Option[Direction]): Option[Direction] = Some(direction)
 
+    @Deprecated
     case object RemoveDirection extends DirectionMapper :
         override def apply(directionOpt: Option[Direction]): Option[Direction] = None
 
