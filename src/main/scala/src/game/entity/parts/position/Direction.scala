@@ -1,4 +1,4 @@
-package src.game.entity.parts
+package src.game.entity.parts.position
 
 enum Direction:
     case North

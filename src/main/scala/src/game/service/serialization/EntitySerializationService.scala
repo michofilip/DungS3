@@ -3,7 +3,7 @@ package src.game.service.serialization
 import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
 import src.game.entity.Entity
-import src.game.entity.parts.{Direction, Position, State}
+import src.game.entity.parts.state.State
 import src.game.service.EntityConverter
 import src.game.temporal.Timestamp
 

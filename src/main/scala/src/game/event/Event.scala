@@ -10,5 +10,5 @@ enum Event:
     case MoveBy(entityId: UUID, dx: Int, dy: Int) extends Event
     case StartTimer extends Event
     case StopTimer extends Event
-    case Kill(entityId: UUID) extends Event
+    case Despawn(entityIds: Seq[UUID]) extends Event
     case Spawn(useCurrentTimestamp: Boolean, entities: Seq[EntityEntry], events: Seq[Event]) extends Event

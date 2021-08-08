@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.{AnimationSelectorEntry, PhysicsSelectorEntry}
-import src.game.entity.selector.AnimationSelector
+import src.game.entity.parts.graphics.AnimationSelector
 
 import scala.xml.XML
 

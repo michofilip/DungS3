@@ -1,17 +1,20 @@
 package src.game.entity.mapper
 
-import src.game.entity.parts.Position
+import src.game.entity.parts.position.Position
 
 sealed abstract class PositionMapper extends Mapper[Position]
 
 object PositionMapper:
 
+    @Deprecated
     case object Identity extends PositionMapper :
         override def apply(positionOpt: Option[Position]): Option[Position] = positionOpt
 
+    @Deprecated
     final case class SetPosition(position: Position) extends PositionMapper :
         override def apply(positionOpt: Option[Position]): Option[Position] = Some(position)
 
+    @Deprecated
     case object RemovePosition extends PositionMapper :
         override def apply(positionOpt: Option[Position]): Option[Position] = None
 

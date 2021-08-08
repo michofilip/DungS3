@@ -1,6 +1,6 @@
 package src.data.model
 
-import src.game.entity.parts.State
+import src.game.entity.parts.state.State
 
 import scala.util.Try
 import scala.xml.Node

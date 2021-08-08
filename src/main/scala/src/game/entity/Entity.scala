@@ -1,63 +1,40 @@
 package src.game.entity
 
 import src.data.repository.EntityPrototypeRepository
+import src.game.entity.holder.{CommonsHolder, GraphicsHolder, PhysicsHolder, PositionHolder, StateHolder}
 import src.game.entity.mapper.{DirectionMapper, PositionMapper, StateMapper}
-import src.game.entity.parts.animation.Animation
-import src.game.entity.parts.{Direction, Physics, Position, State}
-import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
+import src.game.entity.parts.graphics.{Animation, GraphicsProperty}
+import src.game.entity.parts.physics.{PhysicsProperty, PhysicsSelector}
+import src.game.entity.parts.position.PositionProperty
+import src.game.entity.parts.state.StateProperty
 import src.game.temporal.Timestamp
 
 import java.util.UUID
 
 class Entity(val id: UUID,
              val name: String,
-             val timestamp: Timestamp,
-             val state: Option[State],
-             val position: Option[Position],
-             val direction: Option[Direction],
-             private val physicsSelector: PhysicsSelector,
-             private val animationSelector: AnimationSelector):
+             override val creationTimestamp: Timestamp,
+             override protected val stateProperty: StateProperty,
+             override protected val positionProperty: PositionProperty,
+             override protected val physicsProperty: PhysicsProperty,
+             override protected val graphicsProperty: GraphicsProperty)
+    extends CommonsHolder
+        with StateHolder
+        with PositionHolder
+        with PhysicsHolder
+        with GraphicsHolder :
 
-    def updated(state: StateMapper = StateMapper.Identity,
-                position: PositionMapper = PositionMapper.Identity,
-                direction: DirectionMapper = DirectionMapper.Identity,
-                timestamp: Timestamp): Entity =
+    private def copy(stateProperty: StateProperty = stateProperty,
+                     positionProperty: PositionProperty = positionProperty,
+                     physicsProperty: PhysicsProperty = physicsProperty,
+                     graphicsProperty: GraphicsProperty = graphicsProperty): Entity =
+        new Entity(id, name, creationTimestamp, stateProperty, positionProperty, physicsProperty, graphicsProperty)
 
-        val newState = state(this.state)
-        val newTimestamp = if this.state != newState then timestamp else this.timestamp
+    def updatedState(stateMapper: StateMapper, timestamp: Timestamp): Entity =
+        copy(stateProperty = stateProperty.updatedState(stateMapper, timestamp))
 
-        Entity(
-            id = id,
-            name = name,
-            timestamp = newTimestamp,
-            state = newState,
-            position = position(this.position),
-            direction = direction(this.direction),
-            physicsSelector = physicsSelector,
-            animationSelector = animationSelector
-        )
+    def updatedPosition(positionMapper: PositionMapper, timestamp: Timestamp): Entity =
+        copy(positionProperty = positionProperty.updatedPosition(positionMapper, timestamp))
 
-    def physics: Option[Physics] =
-        physicsSelector.selectPhysics(state)
-
-    def animation: Option[Animation] =
-        animationSelector.selectAnimation(state, direction)
-
-    def hasState: Boolean =
-        state.isDefined
-
-    def hasPosition: Boolean =
-        position.isDefined
-
-    def hasDirection: Boolean =
-        direction.isDefined
-
-    override def toString: String =
-        Seq(
-            Some(s"id=$id"),
-            Some(s"name=$name"),
-            Some(s"timestamp=$timestamp"),
-            state.map(state => s"state=$state"),
-            position.map(position => s"position=$position"),
-            direction.map(direction => s"direction=$direction")
-        ).flatten.mkString("Entity(", ", ", ")")
+    def updatedDirection(directionMapper: DirectionMapper, timestamp: Timestamp): Entity =
+        copy(positionProperty = positionProperty.updatedDirection(directionMapper, timestamp))

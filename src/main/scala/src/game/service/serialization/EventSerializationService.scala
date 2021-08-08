@@ -2,7 +2,7 @@ package src.game.service.serialization
 
 import src.data.model.EntityEntry
 import src.game.event.Event
-import src.game.event.Event.{Kill, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
+import src.game.event.Event.{Despawn, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
 
 import java.util.UUID
 import scala.util.Try
@@ -31,9 +31,11 @@ object EventSerializationService:
         case StopTimer =>
                 <Event name="StopTimer" />
 
-        case Kill(entityId) =>
-            <Event name="Kill" >
-                <entityId> {entityId} </entityId>
+        case Despawn(entityIds) =>
+            <Event name="Despawn" >
+                <entityIds>
+                    {entityIds.map(entityId => {<entityId> {entityId} </entityId>})}
+                </entityIds>
             </Event>
 
         case Spawn(useCurrentTimestamp, entities, events) =>
@@ -70,9 +72,9 @@ object EventSerializationService:
                 StopTimer
             }.toOption
 
-            case "Kill" => Try {
-                Kill(
-                    entityId = UUID.fromString((xml \ "entityId").text.trim)
+            case "Despawn" => Try {
+                Despawn(
+                    entityIds =(xml \ "entityIds" \ "entityId").map(_.text.trim).map(UUID.fromString)
                 )
             }.toOption
 

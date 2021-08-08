@@ -1,12 +1,63 @@
 <entityPrototypes>
     <EntityPrototype>
+        <name>floor</name>
+        <availableStates/>
+        <hasPosition>true</hasPosition>
+        <hasDirection>false</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
+        <name>wall</name>
+        <availableStates/>
+        <hasPosition>true</hasPosition>
+        <hasDirection>false</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
         <name>player</name>
+        <availableStates/>
+        <hasPosition>true</hasPosition>
+        <hasDirection>true</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
+        <name>door</name>
         <availableStates>
-            <!--            <state>State 1 here</state>-->
-            <!--            <state>State 2 here</state>-->
+            <state>Open</state>
+            <state>Closed</state>
         </availableStates>
         <hasPosition>true</hasPosition>
         <hasDirection>true</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
+        <name>lever</name>
+        <availableStates>
+            <state>Off</state>
+            <state>On</state>
+        </availableStates>
+        <hasPosition>true</hasPosition>
+        <hasDirection>false</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
+        <name>stairs-up</name>
+        <availableStates/>
+        <hasPosition>true</hasPosition>
+        <hasDirection>false</hasDirection>
+        <physicsSelectorId>1</physicsSelectorId>
+        <animationSelectorId>1</animationSelectorId>
+    </EntityPrototype>
+    <EntityPrototype>
+        <name>stairs-down</name>
+        <availableStates/>
+        <hasPosition>true</hasPosition>
+        <hasDirection>false</hasDirection>
         <physicsSelectorId>1</physicsSelectorId>
         <animationSelectorId>1</animationSelectorId>
     </EntityPrototype>

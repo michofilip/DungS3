@@ -3,7 +3,7 @@ package src.data.repository
 import src.data.Resources
 import src.data.model.{AnimationSelectorEntry, EntityPrototypeEntry}
 import src.game.entity.EntityPrototype
-import src.game.entity.selector.{AnimationSelector, PhysicsSelector}
+import src.game.entity.parts.physics.PhysicsSelector
 
 import scala.xml.XML
 
@@ -14,11 +14,11 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
         def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
             val physicsSelector = entityPrototypeEntry.physicsSelectorId.flatMap { physicsSelectorId =>
                 physicsSelectorRepository.findById(physicsSelectorId)
-            }.getOrElse(PhysicsSelector.empty)
+            }
 
             val animationSelector = entityPrototypeEntry.animationSelectorId.flatMap { animationSelectorId =>
                 animationSelectorRepository.findById(animationSelectorId)
-            }.getOrElse(AnimationSelector.empty)
+            }
 
             EntityPrototype(
                 name = entityPrototypeEntry.name,
