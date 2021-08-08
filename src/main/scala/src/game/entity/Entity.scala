@@ -11,8 +11,8 @@ import src.game.temporal.Timestamp
 
 import java.util.UUID
 
-class Entity(val id: UUID,
-             val name: String,
+class Entity(override val id: UUID,
+             override val name: String,
              override val creationTimestamp: Timestamp,
              override protected val stateProperty: StateProperty,
              override protected val positionProperty: PositionProperty,
