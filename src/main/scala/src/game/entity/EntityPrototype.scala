@@ -17,10 +17,9 @@ final class EntityPrototype(private val name: String,
     def getStateProperty(state: Option[State], stateTimestamp: Option[Timestamp]): StateProperty =
         if availableStates.isEmpty then
             StateProperty.empty
-        else state match {
+        else state match
             case Some(state) if availableStates.contains(state) => StateProperty(state, stateTimestamp.getOrElse(Timestamp.zero))
             case _ => StateProperty(availableStates.head, stateTimestamp.getOrElse(Timestamp.zero))
-        }
 
     def getPositionProperty(position: Option[Position], direction: Option[Direction], positionTimestamp: Option[Timestamp]): PositionProperty =
         if !hasPosition then

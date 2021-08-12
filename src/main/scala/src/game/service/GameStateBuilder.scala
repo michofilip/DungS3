@@ -89,14 +89,14 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 positionTimestamp = Some(0L)
             )
 
-        char match {
+        char match 
             case ' ' => Seq.empty
             case '.' => Seq(makeFloor(x, y))
             case '#' => Seq(makeFloor(x, y), makeWall(x, y))
             case '+' => Seq(makeFloor(x, y), makeDoor(x, y))
             case '@' => Seq(makeFloor(x, y), makePlayer(x, y))
             case _ => Seq(makeFloor(x, y))
-        }
+        
     }
 
 object GameStateBuilder:
