@@ -13,7 +13,7 @@ final class FrameRepository private(spriteRepository: SpriteRepository) extends 
             for {
                 sprite <- spriteRepository.findById(frameEntry.spriteId)
             } yield {
-                Frame(sprite = sprite, layer = frameEntry.layer, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
+                Frame(sprite = sprite, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
             }
 
 

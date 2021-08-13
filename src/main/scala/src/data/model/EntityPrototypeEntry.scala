@@ -6,11 +6,12 @@ import scala.util.Try
 import scala.xml.Node
 
 final case class EntityPrototypeEntry(name: String,
-                                availableStates: Seq[State],
-                                hasPosition: Boolean,
-                                hasDirection: Boolean,
-                                physicsSelectorId: Option[Int],
-                                animationSelectorId: Option[Int])
+                                      availableStates: Seq[State],
+                                      hasPosition: Boolean,
+                                      hasDirection: Boolean,
+                                      physicsSelectorId: Option[Int],
+                                      layer: Option[Int],
+                                      animationSelectorId: Option[Int])
 
 object EntityPrototypeEntry:
 
@@ -20,7 +21,8 @@ object EntityPrototypeEntry:
         val hasPosition = (xml \ "hasPosition").text.trim.toBoolean
         val hasDirection = (xml \ "hasDirection").text.trim.toBoolean
         val physicsSelectorId = (xml \ "physicsSelectorId").map(_.text.trim.toInt).headOption
+        val layer = (xml \ "layer").map(_.text.trim.toInt).headOption
         val animationSelectorId = (xml \ "animationSelectorId").map(_.text.trim.toInt).headOption
 
-        EntityPrototypeEntry(name, availableStates, hasPosition, hasDirection, physicsSelectorId, animationSelectorId)
+        EntityPrototypeEntry(name, availableStates, hasPosition, hasDirection, physicsSelectorId, layer, animationSelectorId)
     }.toOption

@@ -8,6 +8,8 @@ trait GraphicsHolder:
 
     protected val graphicsProperty: GraphicsProperty
 
+    def layer: Option[Int] = graphicsProperty.layer
+
     def frame(timestamp: Timestamp): Option[Frame] =
         for {
             animationSelector <- graphicsProperty.animationSelector

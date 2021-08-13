@@ -1,4 +1,3 @@
 - add tests
 - add values
 - add scripts
-- move layer from frame to graphics property / prototype

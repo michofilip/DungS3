@@ -26,6 +26,7 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
                 hasPosition = entityPrototypeEntry.hasPosition,
                 hasDirection = entityPrototypeEntry.hasDirection,
                 physicsSelector = physicsSelector,
+                layer = entityPrototypeEntry.layer,
                 animationSelector = animationSelector
             )
 
