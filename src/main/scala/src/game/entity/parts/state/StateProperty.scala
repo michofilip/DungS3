@@ -4,20 +4,29 @@ import src.game.entity.mapper.StateMapper
 import src.game.entity.parts.state.{State, StateProperty}
 import src.game.temporal.Timestamp
 
-class StateProperty private(val state: Option[State], val stateTimestamp: Option[Timestamp]):
+sealed abstract class StateProperty:
+    val hasState: Boolean
 
-    def updatedState(stateMapper: StateMapper, timestamp: Timestamp): StateProperty =
-        val newState = stateMapper(state)
-
-        if state != newState then
-            new StateProperty(state = newState, stateTimestamp = Some(timestamp))
-        else
-            this
+    def updatedState(stateMapper: StateMapper, timestamp: Timestamp): StateProperty
 
 object StateProperty:
 
-    lazy val empty: StateProperty =
-        new StateProperty(state = None, stateTimestamp = None)
+    case object EmptyStateProperty extends StateProperty :
+        override val hasState: Boolean = false
+
+        override def updatedState(stateMapper: StateMapper, timestamp: Timestamp): StateProperty = this
+
+    final case class StatefullStateProperty(state: State, stateTimestamp: Timestamp) extends StateProperty :
+        override val hasState: Boolean = true
+
+        override def updatedState(stateMapper: StateMapper, timestamp: Timestamp): StateProperty =
+            stateMapper(state) match
+                case state if state != this.state => copy(state = state, stateTimestamp = timestamp)
+                case _ => this
+    
+
+    val empty: StateProperty =
+        EmptyStateProperty
 
     def apply(state: State, timestamp: Timestamp): StateProperty =
-        new StateProperty(state = Some(state), stateTimestamp = Some(timestamp))
+        StatefullStateProperty(state = state, stateTimestamp = timestamp)
