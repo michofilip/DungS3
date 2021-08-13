@@ -1,3 +1,5 @@
 package src.game.entity.parts.graphics
 
-final case class Frame(imageId: Int, layer: Int, offsetX: Float = 0, offsetY: Float = 0)
+import scalafx.scene.image.Image
+
+final case class Frame(sprite: Image, layer: Int, offsetX: Float = 0, offsetY: Float = 0)
