@@ -17,7 +17,7 @@ object PhysicsProperty:
 
 
     final class SelectorPhysicsProperty private[PhysicsProperty](physicsSelector: PhysicsSelector) extends PhysicsProperty :
-        override def hasPhysics: Boolean = false
+        override def hasPhysics: Boolean = true
 
         override def physics(state: Option[State]): Option[Physics] =
             physicsSelector.selectPhysics(state)

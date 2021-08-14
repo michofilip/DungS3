@@ -9,18 +9,13 @@ trait GraphicsHolder[T <: Entity]:
 
     protected val graphicsProperty: GraphicsProperty
 
+    def hasGraphics: Boolean = graphicsProperty.hasGraphics
+
     def layer: Option[Int] = graphicsProperty.layer
 
     def frame(timestamp: Timestamp): Option[Frame] =
-        for {
-            animationSelector <- graphicsProperty.animationSelector
-            animation <- animationSelector.selectAnimation(state, direction)
-        } yield {
-            val animationTimestamp = stateTimestamp.getOrElse(creationTimestamp)
+        val animationTimestamp = stateTimestamp.getOrElse(creationTimestamp)
+        val animationDuration = Duration.durationBetween(animationTimestamp, timestamp)
 
-            animation.frame(Duration.durationBetween(animationTimestamp, timestamp))
-        }
-
-    def hasGraphics: Boolean = graphicsProperty.animationSelector.isDefined
-
-
+        graphicsProperty.frame(state, direction, animationDuration)
+        
