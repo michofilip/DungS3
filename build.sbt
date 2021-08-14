@@ -23,7 +23,7 @@ lazy val root = project
         libraryDependencies += "org.scalatest" %% "scalatest" % scalatestVersion % Test,
         libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % scalaxmlVersion,
         libraryDependencies += "ch.qos.logback" % "logback-classic" % logbackVersion,
-        libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24",
+        libraryDependencies += "org.scalafx" %% "scalafx" % scalafxVersion,
 
         libraryDependencies ++= Seq(
             "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
