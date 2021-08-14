@@ -1,6 +1,6 @@
 package src.game.entity
 
-import src.game.entity.EntityPrototype.{defaultDirection, defaultGraphicsProperty, defaultPhysicsProperty, defaultPosition, defaultTimestamp}
+import src.game.entity.EntityPrototype.*
 import src.game.entity.parts.graphics.{AnimationSelector, GraphicsProperty}
 import src.game.entity.parts.physics.{PhysicsProperty, PhysicsSelector}
 import src.game.entity.parts.position.{Direction, Position, PositionProperty}
@@ -45,10 +45,7 @@ final class EntityPrototype(private val name: String,
                 physicsSelector = physicsSelector
             )
         }
-    }.getOrElse(defaultPhysicsProperty)
-    //        physicsSelector.fold(defaultPhysicsProperty) { physicsSelector =>
-    //            PhysicsProperty(physicsSelector)
-    //        }
+    }.getOrElse(PhysicsProperty.empty)
 
     def getGraphicsProperty: GraphicsProperty = {
         for {
@@ -60,19 +57,10 @@ final class EntityPrototype(private val name: String,
                 animationSelector = animationSelector
             )
         }
-    }.getOrElse(defaultGraphicsProperty)
-
-//        layer.flatMap { layer =>
-//            animationSelector.map { animationSelector =>
-//                GraphicsProperty(layer, animationSelector)
-//            }
-//        }.getOrElse(defaultGraphicsProperty)
+    }.getOrElse(GraphicsProperty.empty)
 
 
 object EntityPrototype:
     private val defaultTimestamp = Timestamp.zero
-    private val defaultLayer = 0
     private val defaultPosition = Position(0, 0)
     private val defaultDirection = Direction.North
-    private val defaultPhysicsProperty = PhysicsProperty.empty
-    private val defaultGraphicsProperty = GraphicsProperty.empty
