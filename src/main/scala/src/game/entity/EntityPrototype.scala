@@ -45,7 +45,7 @@ final class EntityPrototype(private val name: String,
                 physicsSelector = physicsSelector
             )
         }
-    }.getOrElse(defaultPhysicsProperty)
+    }.getOrElse(PhysicsProperty.empty)
 
     def getGraphicsProperty: GraphicsProperty = {
         for {
@@ -57,13 +57,10 @@ final class EntityPrototype(private val name: String,
                 animationSelector = animationSelector
             )
         }
-    }.getOrElse(defaultGraphicsProperty)
+    }.getOrElse(GraphicsProperty.empty)
 
 
 object EntityPrototype:
     private val defaultTimestamp = Timestamp.zero
-    private val defaultLayer = 0
     private val defaultPosition = Position(0, 0)
     private val defaultDirection = Direction.North
-    private val defaultPhysicsProperty = PhysicsProperty.empty
-    private val defaultGraphicsProperty = GraphicsProperty.empty
