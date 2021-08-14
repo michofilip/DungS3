@@ -2,7 +2,7 @@ package src.game.entity.mapper
 
 import src.game.entity.parts.position.Direction
 
-sealed abstract class DirectionMapper extends (Direction => Direction)
+sealed abstract class DirectionMapper extends Mapper[Direction]
 
 object DirectionMapper:
 

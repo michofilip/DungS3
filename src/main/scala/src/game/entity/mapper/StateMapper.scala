@@ -2,7 +2,7 @@ package src.game.entity.mapper
 
 import src.game.entity.parts.state.State
 
-sealed abstract class StateMapper extends (State => State)
+sealed abstract class StateMapper extends Mapper[State]
 
 object StateMapper:
 
