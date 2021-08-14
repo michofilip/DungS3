@@ -8,9 +8,6 @@ trait PhysicsHolder[T <: Entity]:
 
     protected val physicsProperty: PhysicsProperty
 
-    def physics: Option[Physics] =
-        physicsProperty.physicsSelector.flatMap { physicsSelector =>
-            physicsSelector.selectPhysics(state)
-        }
+    def hasPhysics: Boolean = physicsProperty.hasPhysics
 
-    def hasPhysics: Boolean = physicsProperty.physicsSelector.isDefined
+    def physics: Option[Physics] = physicsProperty.physics(state)
