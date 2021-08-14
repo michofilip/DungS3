@@ -1,9 +1,10 @@
 package src.game.entity.holder
 
+import src.game.entity.Entity
 import src.game.entity.parts.physics.{Physics, PhysicsProperty, PhysicsSelector}
 
-trait PhysicsHolder:
-    this: StateHolder =>
+trait PhysicsHolder[T <: Entity]:
+    this: StateHolder[T] =>
 
     protected val physicsProperty: PhysicsProperty
 
