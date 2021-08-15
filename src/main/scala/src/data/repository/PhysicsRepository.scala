@@ -4,21 +4,27 @@ import src.data.Resources
 import src.data.model.PhysicsEntry
 import src.game.entity.parts.physics.Physics
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 import scala.xml.{NodeSeq, XML}
 
 final class PhysicsRepository private() extends Repository[Int, Physics] :
 
     override protected val dataById: Map[Int, Physics] =
-        def convertToPhysics(physicsEntry: PhysicsEntry): Physics =
-            Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
+        def mapEntryFrom(physicsEntry: PhysicsEntry): Try[(Int, Physics)] = Success {
+            physicsEntry.id -> Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
+        }
 
         val xml = XML.load(Resources.physics.reader())
 
         (xml \ "Physics")
-            .flatMap(PhysicsEntry.fromXML)
-            .map(physicsEntry => physicsEntry.id -> convertToPhysics(physicsEntry))
-            .toMap
+            .map { node =>
+                PhysicsEntry.fromXML(node)
+                    .flatMap(mapEntryFrom)
+            }
+            .map {
+                case Failure(e) => throw e
+                case Success(mapEntry) => mapEntry
+            }.toMap
 
 object PhysicsRepository:
 
