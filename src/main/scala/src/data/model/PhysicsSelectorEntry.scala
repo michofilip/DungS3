@@ -1,17 +1,23 @@
 package src.data.model
 
-import scala.util.Try
-import scala.xml.Node
+import src.utils.TryUtils.*
 
+import scala.util.{Failure, Success, Try}
+import scala.xml.Node
 
 final case class PhysicsSelectorEntry(id: Int, variants: Seq[PhysicsSelectorVariantEntry])
 
 object PhysicsSelectorEntry:
 
-    def fromXML(xml: Node): Option[PhysicsSelectorEntry] = Try {
-        val id = (xml \ "id").text.trim.toInt
+    def fromXML(xml: Node): Try[PhysicsSelectorEntry] =
+        val id = Try((xml \ "id").text.trim.toInt)
         val variants = (xml \ "variants" \ "PhysicsSelectorVariant")
-            .flatMap(PhysicsSelectorVariantEntry.fromXML)
+            .map(PhysicsSelectorVariantEntry.fromXML)
+            .invertTry
 
-        PhysicsSelectorEntry(id, variants)
-    }.toOption
+        for {
+            id <- id
+            variants <- variants
+        } yield {
+            PhysicsSelectorEntry(id, variants)
+        }

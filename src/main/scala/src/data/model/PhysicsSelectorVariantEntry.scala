@@ -9,9 +9,13 @@ final case class PhysicsSelectorVariantEntry(state: Option[State], physicsId: In
 
 object PhysicsSelectorVariantEntry:
 
-    def fromXML(xml: Node): Option[PhysicsSelectorVariantEntry] = Try {
-        val state = (xml \ "state").map(_.text.trim).map(State.valueOf).headOption
-        val physicsId = (xml \ "physicsId").text.trim.toInt
+    def fromXML(xml: Node): Try[PhysicsSelectorVariantEntry] =
+        val state = Try((xml \ "state").map(_.text.trim).map(State.valueOf).headOption)
+        val physicsId = Try((xml \ "physicsId").map(_.text.trim).map(_.toInt).head)
 
-        PhysicsSelectorVariantEntry(state, physicsId)
-    }.toOption
+        for {
+            state <- state
+            physicsId <- physicsId
+        } yield {
+            PhysicsSelectorVariantEntry(state, physicsId)
+        }
