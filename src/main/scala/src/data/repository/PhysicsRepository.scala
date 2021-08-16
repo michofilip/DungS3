@@ -3,6 +3,7 @@ package src.data.repository
 import src.data.Resources
 import src.data.model.PhysicsEntry
 import src.game.entity.parts.physics.Physics
+import src.utils.TryUtils.*
 
 import scala.util.{Failure, Success, Try}
 import scala.xml.{NodeSeq, XML}
@@ -10,21 +11,19 @@ import scala.xml.{NodeSeq, XML}
 final class PhysicsRepository private() extends Repository[Int, Physics] :
 
     override protected val dataById: Map[Int, Physics] =
-        def mapEntryFrom(physicsEntry: PhysicsEntry): Try[(Int, Physics)] = Success {
-            physicsEntry.id -> Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
+        def physicsFrom(physicsEntry: PhysicsEntry): Try[Physics] = Success {
+            Physics(solid = physicsEntry.solid, opaque = physicsEntry.opaque)
         }
 
         val xml = XML.load(Resources.physics.reader())
 
-        (xml \ "Physics")
-            .map { node =>
-                PhysicsEntry.fromXML(node)
-                    .flatMap(mapEntryFrom)
+        (xml \ "Physics").map { node =>
+            PhysicsEntry.fromXML(node).flatMap { physicsEntry =>
+                physicsFrom(physicsEntry).map { physics =>
+                    physicsEntry.id -> physics
+                }
             }
-            .map {
-                case Failure(e) => throw e
-                case Success(mapEntry) => mapEntry
-            }.toMap
+        }.invertTry.map(_.toMap).get
 
 object PhysicsRepository:
 
