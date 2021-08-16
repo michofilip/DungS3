@@ -1,9 +1,10 @@
 package src.data.model
 
+import src.exception.FailedToReadObject
 import src.game.entity.parts.position.Direction
 import src.game.entity.parts.state.State
 
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.xml.Node
 
 final case class AnimationSelectorVariantEntry(state: Option[State], direction: Option[Direction], animationId: Int)
@@ -15,10 +16,13 @@ object AnimationSelectorVariantEntry:
         val direction = Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
         val animationId = Try((xml \ "animationId").map(_.text.trim).map(_.toInt).head)
 
-        for {
-            state <- state
-            direction <- direction
-            animationId <- animationId
-        } yield {
-            AnimationSelectorVariantEntry(state, direction, animationId)
+        {
+            for
+                state <- state
+                direction <- direction
+                animationId <- animationId
+            yield
+                AnimationSelectorVariantEntry(state, direction, animationId)
+        }.recoverWith {
+            case e => Failure(new FailedToReadObject("AnimationSelectorVariantEntry", e.getMessage))
         }

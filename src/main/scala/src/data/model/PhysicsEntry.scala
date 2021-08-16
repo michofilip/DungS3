@@ -1,6 +1,8 @@
 package src.data.model
 
-import scala.util.Try
+import src.exception.FailedToReadObject
+
+import scala.util.{Failure, Try}
 import scala.xml.Node
 
 final case class PhysicsEntry(id: Int, solid: Boolean, opaque: Boolean)
@@ -12,10 +14,13 @@ object PhysicsEntry:
         val solid = Try((xml \ "solid").map(_.text.trim).map(_.toBoolean).head)
         val opaque = Try((xml \ "opaque").map(_.text.trim).map(_.toBoolean).head)
 
-        for {
-            id <- id
-            solid <- solid
-            opaque <- opaque
-        } yield {
-            PhysicsEntry(id, solid, opaque)
+        {
+            for
+                id <- id
+                solid <- solid
+                opaque <- opaque
+            yield
+                PhysicsEntry(id, solid, opaque)
+        }.recoverWith {
+            case e => Failure(new FailedToReadObject("PhysicsEntry", e.getMessage))
         }

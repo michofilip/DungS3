@@ -28,12 +28,12 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
 
         val xml = XML.load(Resources.animationSelectors.reader())
 
-        (xml \ "PhysicsSelector").map { node =>
-            AnimationSelectorEntry.fromXML(node).flatMap { animationSelectorEntry =>
-                animationSelectorFrom(animationSelectorEntry).map { animationSelector =>
-                    animationSelectorEntry.id -> animationSelector
-                }
-            }
+        (xml \ "AnimationSelector").map { node =>
+            for
+                animationSelectorEntry <- AnimationSelectorEntry.fromXML(node)
+                animationSelector <- animationSelectorFrom(animationSelectorEntry)
+            yield
+                animationSelectorEntry.id -> animationSelector
         }.invertTry.map(_.toMap).get
 
 object AnimationSelectorRepository:

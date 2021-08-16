@@ -1,5 +1,6 @@
 package src.data.model
 
+import src.exception.FailedToReadObject
 import src.utils.TryUtils.*
 
 import scala.util.{Failure, Success, Try}
@@ -15,9 +16,12 @@ object PhysicsSelectorEntry:
             .map(PhysicsSelectorVariantEntry.fromXML)
             .invertTry
 
-        for {
-            id <- id
-            variants <- variants
-        } yield {
-            PhysicsSelectorEntry(id, variants)
+        {
+            for
+                id <- id
+                variants <- variants
+            yield
+                PhysicsSelectorEntry(id, variants)
+        }.recoverWith {
+            case e => Failure(new FailedToReadObject("PhysicsSelectorEntry", e.getMessage))
         }

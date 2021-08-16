@@ -33,11 +33,11 @@ final class AnimationRepository private(frameRepository: FrameRepository) extend
         val xml = XML.load(Resources.animations.reader())
 
         (xml \ "Animation").map { node =>
-            AnimationEntry.fromXML(node).flatMap { animationEntry =>
-                animationFrom(animationEntry).map { animation =>
-                    animationEntry.id -> animation
-                }
-            }
+            for
+                animationEntry <- AnimationEntry.fromXML(node)
+                animation <- animationFrom(animationEntry)
+            yield
+                animationEntry.id -> animation
         }.invertTry.map(_.toMap).get
 
 object AnimationRepository:

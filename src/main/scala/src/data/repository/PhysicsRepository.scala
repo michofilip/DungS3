@@ -18,11 +18,11 @@ final class PhysicsRepository private() extends Repository[Int, Physics] :
         val xml = XML.load(Resources.physics.reader())
 
         (xml \ "Physics").map { node =>
-            PhysicsEntry.fromXML(node).flatMap { physicsEntry =>
-                physicsFrom(physicsEntry).map { physics =>
-                    physicsEntry.id -> physics
-                }
-            }
+            for
+                physicsEntry <- PhysicsEntry.fromXML(node)
+                physics <- physicsFrom(physicsEntry)
+            yield
+                physicsEntry.id -> physics
         }.invertTry.map(_.toMap).get
 
 object PhysicsRepository:

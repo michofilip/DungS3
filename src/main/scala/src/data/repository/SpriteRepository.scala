@@ -19,9 +19,11 @@ final class SpriteRepository private() extends Repository[String, Image] :
         val height = (sprites.height / tileSize).toInt
 
         sprites.pixelReader.fold(Seq.empty) { pixelReader =>
-            for (y <- 0 until height; x <- 0 until width) yield {
+            for
+                x <- 0 until width
+                y <- 0 until height
+            yield
                 s"$spritesFileName-$x-$y" -> new WritableImage(pixelReader, x * tileSize, y * tileSize, tileSize, tileSize)
-            }
         }.toMap
 
 object SpriteRepository:

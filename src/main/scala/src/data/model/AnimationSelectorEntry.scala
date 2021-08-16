@@ -1,8 +1,9 @@
 package src.data.model
 
+import src.exception.FailedToReadObject
 import src.utils.TryUtils.*
 
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.xml.Node
 
 final case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelectorVariantEntry])
@@ -15,10 +16,12 @@ object AnimationSelectorEntry:
             .map(AnimationSelectorVariantEntry.fromXML)
             .invertTry
 
-        for {
-            id <- id
-            variants <- variants
-        } yield {
-            AnimationSelectorEntry(id, variants)
+        {
+            for
+                id <- id
+                variants <- variants
+            yield
+                AnimationSelectorEntry(id, variants)
+        }.recoverWith {
+            case e => Failure(new FailedToReadObject("AnimationSelectorEntry", e.getMessage))
         }
-        

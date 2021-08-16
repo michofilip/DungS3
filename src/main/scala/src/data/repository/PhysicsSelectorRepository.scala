@@ -29,11 +29,11 @@ final class PhysicsSelectorRepository private(physicsRepository: PhysicsReposito
         val xml = XML.load(Resources.physicsSelectors.reader())
 
         (xml \ "PhysicsSelector").map { node =>
-            PhysicsSelectorEntry.fromXML(node).flatMap { physicsSelectorEntry =>
-                physicsSelectorFrom(physicsSelectorEntry).map { physicsSelector =>
-                    physicsSelectorEntry.id -> physicsSelector
-                }
-            }
+            for
+                physicsSelectorEntry <- PhysicsSelectorEntry.fromXML(node)
+                physicsSelector <- physicsSelectorFrom(physicsSelectorEntry)
+            yield
+                physicsSelectorEntry.id -> physicsSelector
         }.invertTry.map(_.toMap).get
 
 object PhysicsSelectorRepository:
