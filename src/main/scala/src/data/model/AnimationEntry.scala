@@ -7,11 +7,17 @@ final case class AnimationEntry(id: Int, fps: Double, looping: Boolean, frameIds
 
 object AnimationEntry:
 
-    def fromXML(xml: Node): Option[AnimationEntry] = Try {
-        val id = (xml \ "id").text.trim.toInt
-        val fps = (xml \ "fps").text.trim.toDouble
-        val looping = (xml \ "looping").text.trim.toBoolean
-        val frameIds = (xml \ "frameIds" \ "frameId").map(_.text.trim.toInt)
+    def fromXML(xml: Node): Try[AnimationEntry] =
+        val id = Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
+        val fps = Try((xml \ "fps").map(_.text.trim).map(_.toDouble).head)
+        val looping = Try((xml \ "looping").map(_.text.trim).map(_.toBoolean).head)
+        val frameIds = Try((xml \ "frameIds" \ "frameId").map(_.text.trim).map(_.toInt))
 
-        AnimationEntry(id, fps, looping, frameIds)
-    }.toOption
+        for {
+            id <- id
+            fps <- fps
+            looping <- looping
+            frameIds <- frameIds
+        } yield {
+            AnimationEntry(id, fps, looping, frameIds)
+        }

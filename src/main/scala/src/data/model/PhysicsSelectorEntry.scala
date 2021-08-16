@@ -10,7 +10,7 @@ final case class PhysicsSelectorEntry(id: Int, variants: Seq[PhysicsSelectorVari
 object PhysicsSelectorEntry:
 
     def fromXML(xml: Node): Try[PhysicsSelectorEntry] =
-        val id = Try((xml \ "id").text.trim.toInt)
+        val id = Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
         val variants = (xml \ "variants" \ "PhysicsSelectorVariant")
             .map(PhysicsSelectorVariantEntry.fromXML)
             .invertTry
