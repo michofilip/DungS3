@@ -1,5 +1,7 @@
 package src.data.model
 
+import src.utils.TryUtils.*
+
 import scala.util.Try
 import scala.xml.Node
 
@@ -7,10 +9,16 @@ final case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelector
 
 object AnimationSelectorEntry:
 
-    def fromXML(xml: Node): Option[AnimationSelectorEntry] = Try {
-        val id = (xml \ "id").text.trim.toInt
-        val singleAnimationSelectorEntries = (xml \ "variants" \ "AnimationSelectorVariant")
-            .flatMap(AnimationSelectorVariantEntry.fromXML)
+    def fromXML(xml: Node): Try[AnimationSelectorEntry] =
+        val id = Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
+        val variants = (xml \ "variants" \ "AnimationSelectorVariant")
+            .map(AnimationSelectorVariantEntry.fromXML)
+            .invertTry
 
-        AnimationSelectorEntry(id, singleAnimationSelectorEntries)
-    }.toOption
+        for {
+            id <- id
+            variants <- variants
+        } yield {
+            AnimationSelectorEntry(id, variants)
+        }
+        

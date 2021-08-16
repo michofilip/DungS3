@@ -1,31 +1,40 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.{AnimationSelectorEntry, PhysicsSelectorEntry}
+import src.data.model.AnimationSelectorEntry
 import src.game.entity.parts.graphics.AnimationSelector
+import src.utils.TryUtils.*
 
+import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
 final class AnimationSelectorRepository private(animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
 
     override protected val dataById: Map[Int, AnimationSelector] =
-        def convertToAnimationSelector(animationSelectorEntry: AnimationSelectorEntry): AnimationSelector = {
-            val animations = for {
-                variant <- animationSelectorEntry.variants
-                animation <- animationRepository.findById(variant.animationId)
-            } yield {
-                (variant.state, variant.direction) -> animation
+        def animationSelectorFrom(animationSelectorEntry: AnimationSelectorEntry): Try[AnimationSelector] =
+            animationSelectorEntry.variants.map { variant =>
+                animationRepository.findById(variant.animationId).map { animation =>
+                    Success {
+                        (variant.state, variant.direction) -> animation
+                    }
+                }.getOrElse {
+                    Failure {
+                        new NoSuchElementException(s"Animation id: ${variant.animationId} not found!")
+                    }
+                }
+            }.invertTry.map { animations =>
+                AnimationSelector(animations)
             }
-
-            AnimationSelector(animations)
-        }
 
         val xml = XML.load(Resources.animationSelectors.reader())
 
-        (xml \ "AnimationSelector")
-            .flatMap(AnimationSelectorEntry.fromXML)
-            .map(animationSelectorEntry => animationSelectorEntry.id -> convertToAnimationSelector(animationSelectorEntry))
-            .toMap
+        (xml \ "PhysicsSelector").map { node =>
+            AnimationSelectorEntry.fromXML(node).flatMap { animationSelectorEntry =>
+                animationSelectorFrom(animationSelectorEntry).map { animationSelector =>
+                    animationSelectorEntry.id -> animationSelector
+                }
+            }
+        }.invertTry.map(_.toMap).get
 
 object AnimationSelectorRepository:
 

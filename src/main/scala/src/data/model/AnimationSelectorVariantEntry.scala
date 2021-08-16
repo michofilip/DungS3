@@ -10,10 +10,15 @@ final case class AnimationSelectorVariantEntry(state: Option[State], direction: 
 
 object AnimationSelectorVariantEntry:
 
-    def fromXML(xml: Node): Option[AnimationSelectorVariantEntry] = Try {
-        val state = (xml \ "state").map(_.text.trim).map(State.valueOf).headOption
-        val direction = (xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption
-        val animationId = (xml \ "animationId").text.trim.toInt
+    def fromXML(xml: Node): Try[AnimationSelectorVariantEntry] =
+        val state = Try((xml \ "state").map(_.text.trim).map(State.valueOf).headOption)
+        val direction = Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
+        val animationId = Try((xml \ "animationId").map(_.text.trim).map(_.toInt).head)
 
-        AnimationSelectorVariantEntry(state, direction, animationId)
-    }.toOption
+        for {
+            state <- state
+            direction <- direction
+            animationId <- animationId
+        } yield {
+            AnimationSelectorVariantEntry(state, direction, animationId)
+        }
