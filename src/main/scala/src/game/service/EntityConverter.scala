@@ -8,11 +8,12 @@ import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
+import scala.util.{Failure, Success, Try}
 import scala.xml.{Node, PrettyPrinter, XML}
 
 class EntityConverter private(entityPrototypeRepository: EntityPrototypeRepository):
 
-    def convertToEntity(entityEntry: EntityEntry): Option[Entity] =
+    def convertToEntity(entityEntry: EntityEntry): Try[Entity] =
         entityPrototypeRepository.findById(entityEntry.name).map { entityPrototype =>
 
             val stateProperty = entityPrototype.getStateProperty(entityEntry.state, entityEntry.stateTimestamp.map(Timestamp.apply))
@@ -20,15 +21,21 @@ class EntityConverter private(entityPrototypeRepository: EntityPrototypeReposito
             val physicsProperty = entityPrototype.getPhysicsProperty
             val graphicsProperty = entityPrototype.getGraphicsProperty
 
-            new Entity(
-                id = UUID.fromString(entityEntry.id),
-                name = entityEntry.name,
-                creationTimestamp = Timestamp(entityEntry.creationTimestamp),
-                stateProperty = stateProperty,
-                positionProperty = positionProperty,
-                physicsProperty = physicsProperty,
-                graphicsProperty = graphicsProperty
-            )
+            Success {
+                new Entity(
+                    id = UUID.fromString(entityEntry.id),
+                    name = entityEntry.name,
+                    creationTimestamp = Timestamp(entityEntry.creationTimestamp),
+                    stateProperty = stateProperty,
+                    positionProperty = positionProperty,
+                    physicsProperty = physicsProperty,
+                    graphicsProperty = graphicsProperty
+                )
+            }
+        }.getOrElse {
+            Failure {
+                new NoSuchElementException(s"EntityPrototype id: ${entityEntry.name} not found!")
+            }
         }
 
     def convertToEntityEntry(entity: Entity): EntityEntry =

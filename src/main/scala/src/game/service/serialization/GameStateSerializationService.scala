@@ -1,13 +1,15 @@
 package src.game.service.serialization
 
 import src.data.model.EntityEntry
+import src.exception.FailedToReadObject
 import src.game.GameState
 import src.game.entity.EntityRepository
 import src.game.service.serialization.{EntitySerializationService, EventSerializationService}
 import src.game.temporal.Timer
+import src.utils.TryUtils.*
 
 import scala.collection.immutable.Queue
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.xml.Node
 
 class GameStateSerializationService private(entitySerializationService: EntitySerializationService):
@@ -23,19 +25,25 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
             </events>
         </GameState>
 
-    def fromXml(xml: Node): Option[GameState] = Try {
-        val timer = (xml \ "Timer").headOption.flatMap(TimerSerializationService.fromXml)
-        val entities = (xml \ "entities" \ "Entity").flatMap(entitySerializationService.fromXml)
-        val events = (xml \ "events" \ "Event").flatMap(EventSerializationService.fromXml)
+    def fromXml(xml: Node): Try[GameState] =
+        val timer = Try((xml \ "Timer").map(TimerSerializationService.fromXml).head).flatten
+        val entities = (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).invertTry
+        val events = (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry
 
-        timer.map { timer =>
-            GameState(
-                timer = timer,
-                entities = EntityRepository(entities),
-                events = Queue(events: _*)
-            )
+        {
+            for
+                timer <- timer
+                entities <- entities
+                events <- events
+            yield
+                GameState(
+                    timer = timer,
+                    entities = EntityRepository(entities),
+                    events = Queue(events: _*)
+                )
+        }.recoverWith {
+            case e => Failure(new FailedToReadObject("GameState", e.getMessage))
         }
-    }.toOption.flatten
 
 object GameStateSerializationService:
 

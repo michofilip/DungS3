@@ -1,11 +1,13 @@
 package src.game.service.serialization
 
 import src.data.model.EntityEntry
+import src.exception.FailedToReadObject
 import src.game.event.Event
 import src.game.event.Event.{Despawn, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
+import src.utils.TryUtils.*
 
 import java.util.UUID
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.xml.Node
 
 object EventSerializationService:
@@ -46,7 +48,8 @@ object EventSerializationService:
             </Event>
     }
 
-    def fromXml(xml: Node): Option[Event] =
+    // TODO fix it
+    def fromXml(xml: Node): Try[Event] =
         (xml \ "@name").text.trim match {
             case "MoveBy" => Try {
                 MoveBy(
@@ -54,7 +57,7 @@ object EventSerializationService:
                     dx = (xml \ "dx").text.trim.toInt,
                     dy = (xml \ "dy").text.trim.toInt
                 )
-            }.toOption
+            }
 
             case "MoveTo" => Try {
                 MoveTo(
@@ -62,29 +65,29 @@ object EventSerializationService:
                     x = (xml \ "x").text.trim.toInt,
                     y = (xml \ "y").text.trim.toInt
                 )
-            }.toOption
+            }
 
             case "StartTimer" => Try {
                 StopTimer
-            }.toOption
+            }
 
             case "StopTimer" => Try {
                 StopTimer
-            }.toOption
+            }
 
             case "Despawn" => Try {
                 Despawn(
-                    entityIds =(xml \ "entityIds" \ "entityId").map(_.text.trim).map(UUID.fromString)
+                    entityIds = (xml \ "entityIds" \ "entityId").map(_.text.trim).map(UUID.fromString)
                 )
-            }.toOption
+            }
 
             case "Spawn" => Try {
                 Spawn(
                     useCurrentTimestamp = (xml \ "useCurrentTimestamp").text.trim.toBoolean,
-                    entities = (xml \ "entities" \ "Entity").flatMap(EntityEntry.fromXml),
-                    events = (xml \ "events" \ "Event").flatMap(EventSerializationService.fromXml)
+                    entities = (xml \ "entities" \ "Entity").map(EntityEntry.fromXml).invertTry.get,
+                    events = (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry.get
                 )
-            }.toOption
+            }
 
-            case _ => None
+            case _ => Failure(new FailedToReadObject("Event", "unknown event"))
         }

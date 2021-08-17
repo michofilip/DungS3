@@ -10,7 +10,8 @@ class GameStateFileProcessor private(gameStateSerializationService: GameStateSer
 
     def loadFromFile(file: File): Option[GameState] =
         val xml = XML.loadFile(file)
-        gameStateSerializationService.fromXml(xml)
+        // TODO fix it
+        gameStateSerializationService.fromXml(xml).toOption
 
     def saveToFile(file: File, gameState: GameState): Unit =
         val printWriter = PrintWriter(BufferedWriter(FileWriter(file)))
