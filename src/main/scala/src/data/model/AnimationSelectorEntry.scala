@@ -10,18 +10,12 @@ final case class AnimationSelectorEntry(id: Int, variants: Seq[AnimationSelector
 
 object AnimationSelectorEntry:
 
-    def fromXML(xml: Node): Try[AnimationSelectorEntry] =
-        val id = Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
-        val variants = (xml \ "variants" \ "AnimationSelectorVariant")
-            .map(AnimationSelectorVariantEntry.fromXML)
-            .invertTry
-
-        {
-            for
-                id <- id
-                variants <- variants
-            yield
-                AnimationSelectorEntry(id, variants)
-        }.recoverWith {
-            case e => Failure(new FailedToReadObject("AnimationSelectorEntry", e.getMessage))
-        }
+    def fromXML(xml: Node): Try[AnimationSelectorEntry] = {
+        for
+            id <- Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
+            variants <- (xml \ "variants" \ "AnimationSelectorVariant").map(AnimationSelectorVariantEntry.fromXML).invertTry
+        yield
+            AnimationSelectorEntry(id, variants)
+    }.recoverWith {
+        case e => Failure(new FailedToReadObject("AnimationSelectorEntry", e.getMessage))
+    }

@@ -9,20 +9,14 @@ final case class AnimationEntry(id: Int, fps: Double, looping: Boolean, frameIds
 
 object AnimationEntry:
 
-    def fromXML(xml: Node): Try[AnimationEntry] =
-        val id = Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
-        val fps = Try((xml \ "fps").map(_.text.trim).map(_.toDouble).head)
-        val looping = Try((xml \ "looping").map(_.text.trim).map(_.toBoolean).head)
-        val frameIds = Try((xml \ "frameIds" \ "frameId").map(_.text.trim).map(_.toInt))
-
-        {
-            for
-                id <- id
-                fps <- fps
-                looping <- looping
-                frameIds <- frameIds
-            yield
-                AnimationEntry(id, fps, looping, frameIds)
-        }.recoverWith {
-            case e => Failure(new FailedToReadObject("AnimationEntry", e.getMessage))
-        }
+    def fromXML(xml: Node): Try[AnimationEntry] = {
+        for
+            id <- Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
+            fps <- Try((xml \ "fps").map(_.text.trim).map(_.toDouble).head)
+            looping <- Try((xml \ "looping").map(_.text.trim).map(_.toBoolean).head)
+            frameIds <- Try((xml \ "frameIds" \ "frameId").map(_.text.trim).map(_.toInt))
+        yield
+            AnimationEntry(id, fps, looping, frameIds)
+    }.recoverWith {
+        case e => Failure(new FailedToReadObject("AnimationEntry", e.getMessage))
+    }

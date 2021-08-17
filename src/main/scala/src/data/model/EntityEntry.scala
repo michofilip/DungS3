@@ -41,30 +41,19 @@ final case class EntityEntry(id: String,
 
 object EntityEntry:
 
-    def fromXml(xml: Node): Try[EntityEntry] =
-        val id = Try((xml \ "id").map(_.text.trim).head)
-        val name = Try((xml \ "name").map(_.text.trim).head)
-        val creationTimestamp = Try((xml \ "creationTimestamp").map(_.text.trim).map(_.toLong).head)
-        val state = Try((xml \ "state").map(_.text.trim).map(State.valueOf).headOption)
-        val stateTimestamp = Try((xml \ "stateTimestamp").map(_.text.trim).map(_.toLong).headOption)
-        val x = Try((xml \ "x").map(_.text.trim).map(_.toInt).headOption)
-        val y = Try((xml \ "y").map(_.text.trim).map(_.toInt).headOption)
-        val direction = Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
-        val positionTimestamp = Try((xml \ "positionTimestamp").map(_.text.trim).map(_.toLong).headOption)
-
-        {
-            for
-                id <- id
-                name <- name
-                creationTimestamp <- creationTimestamp
-                state <- state
-                stateTimestamp <- stateTimestamp
-                x <- x
-                y <- y
-                direction <- direction
-                positionTimestamp <- positionTimestamp
-            yield
-                EntityEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
-        }.recoverWith {
-            case e => Failure(new FailedToReadObject("EntityEntry", e.getMessage))
-        }
+    def fromXml(xml: Node): Try[EntityEntry] = {
+        for
+            id <- Try((xml \ "id").map(_.text.trim).head)
+            name <- Try((xml \ "name").map(_.text.trim).head)
+            creationTimestamp <- Try((xml \ "creationTimestamp").map(_.text.trim).map(_.toLong).head)
+            state <- Try((xml \ "state").map(_.text.trim).map(State.valueOf).headOption)
+            stateTimestamp <- Try((xml \ "stateTimestamp").map(_.text.trim).map(_.toLong).headOption)
+            x <- Try((xml \ "x").map(_.text.trim).map(_.toInt).headOption)
+            y <- Try((xml \ "y").map(_.text.trim).map(_.toInt).headOption)
+            direction <- Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
+            positionTimestamp <- Try((xml \ "positionTimestamp").map(_.text.trim).map(_.toLong).headOption)
+        yield
+            EntityEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
+    }.recoverWith {
+        case e => Failure(new FailedToReadObject("EntityEntry", e.getMessage))
+    }
