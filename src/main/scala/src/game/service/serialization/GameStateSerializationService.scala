@@ -25,25 +25,20 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
             </events>
         </GameState>
 
-    def fromXml(xml: Node): Try[GameState] =
-        val timer = Try((xml \ "Timer").map(TimerSerializationService.fromXml).head).flatten
-        val entities = (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).invertTry
-        val events = (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry
-
-        {
-            for
-                timer <- timer
-                entities <- entities
-                events <- events
-            yield
-                GameState(
-                    timer = timer,
-                    entities = EntityRepository(entities),
-                    events = Queue(events: _*)
-                )
-        }.recoverWith {
-            case e => Failure(new FailedToReadObject("GameState", e.getMessage))
-        }
+    def fromXml(xml: Node): Try[GameState] = {
+        for
+            timer <- Try((xml \ "Timer").map(TimerSerializationService.fromXml).head).flatten
+            entities <- (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).invertTry
+            events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry
+        yield
+            GameState(
+                timer = timer,
+                entities = EntityRepository(entities),
+                events = Queue(events: _*)
+            )
+    }.recoverWith {
+        case e => Failure(new FailedToReadObject("GameState", e.getMessage))
+    }
 
 object GameStateSerializationService:
 

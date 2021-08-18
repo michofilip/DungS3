@@ -25,12 +25,10 @@ class GameStateBuilder private(entityConverter: EntityConverter):
             } yield {
                 mapChar(x, y, chars(y)(2 * x))
             }
+        }.flatten.flatMap { entityEntry =>
+            // TODO fix it
+            entityConverter.convertToEntity(entityEntry).toOption
         }
-            .flatten
-            .flatMap { entityEntry =>
-                // TODO fix it
-                entityConverter.convertToEntity(entityEntry).toOption
-            }
 
         GameState(
             timer = Timer(),

@@ -34,7 +34,7 @@ class EntityConverter private(entityPrototypeRepository: EntityPrototypeReposito
             }
         }.getOrElse {
             Failure {
-                new NoSuchElementException(s"EntityPrototype id: ${entityEntry.name} not found!")
+                new NoSuchElementException(s"EntityPrototype name: ${entityEntry.name} not found!")
             }
         }
 
