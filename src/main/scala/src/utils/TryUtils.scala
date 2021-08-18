@@ -8,7 +8,7 @@ object TryUtils:
         def inv(seq: Seq[Try[T]], agg: Seq[T]): Try[Seq[T]] = seq match
             case Success(value) +: rest => inv(rest, value +: agg)
             case Failure(exception) +: _ => Failure(exception)
-            case _ => Success(agg)
+            case _ => Success(agg.reverse)
 
         inv(seq, Seq.empty)
 
