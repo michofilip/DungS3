@@ -1,29 +1,44 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.{AnimationEntry, FrameEntry}
+import src.data.model.AnimationEntry
 import src.game.entity.parts.graphics.Animation
+import src.utils.TryUtils.*
 
+import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
 final class AnimationRepository private(frameRepository: FrameRepository) extends Repository[Int, Animation] :
 
     override protected val dataById: Map[Int, Animation] =
-        def convertToAnimation(animationEntry: AnimationEntry): Animation =
-            val frames = animationEntry.frameIds.flatMap(frameRepository.findById).toIndexedSeq
-
-            Animation(
-                fps = animationEntry.fps,
-                frames = frames,
-                looping = animationEntry.looping
-            )
+        def animationFrom(animationEntry: AnimationEntry): Try[Animation] =
+            animationEntry.frameIds.map { frameId =>
+                frameRepository.findById(frameId).map { frame =>
+                    Success {
+                        frame
+                    }
+                }.getOrElse {
+                    Failure {
+                        new NoSuchElementException(s"Frame id: $frameId not found!")
+                    }
+                }
+            }.invertTry.map { frames =>
+                Animation(
+                    fps = animationEntry.fps,
+                    frames = frames.toIndexedSeq,
+                    looping = animationEntry.looping
+                )
+            }
 
         val xml = XML.load(Resources.animations.reader())
 
-        (xml \ "Animation")
-            .flatMap(AnimationEntry.fromXML)
-            .map(animationEntry => animationEntry.id -> convertToAnimation(animationEntry))
-            .toMap
+        (xml \ "Animation").map { node =>
+            for
+                animationEntry <- AnimationEntry.fromXML(node)
+                animation <- animationFrom(animationEntry)
+            yield
+                animationEntry.id -> animation
+        }.invertTry.map(_.toMap).get
 
 object AnimationRepository:
 

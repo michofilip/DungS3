@@ -22,29 +22,26 @@ private class GameStateActor(gameStateProcessorActor: ActorRef[GameStateProcesso
             behavior(setup.copy(gameState = Some(gameState)))
 
         case AddEvents(events) =>
-            setup.gameState match {
+            setup.gameState match 
                 case Some(gameState) =>
                     behavior(setup.copy(gameState = Some(gameState.addEvents(events))))
                 case _ =>
                     Behaviors.same
-            }
 
         case ProcessGameState =>
-            setup.gameState match {
+            setup.gameState match 
                 case Some(gameState) if setup.processingEnabled =>
                     gameStateProcessorActor ! GameStateProcessorActor.Process(gameState)
                 case _ =>
                     gameStateProcessorActor ! GameStateProcessorActor.Skip
-            }
             Behaviors.same
 
         case DisplayGameState =>
-            setup.gameState match {
+            setup.gameState match 
                 case Some(gameState) if setup.displayingEnabled =>
                     gameStateDisplayActor ! GameStateDisplayActor.Display(gameState)
                 case _ =>
                     gameStateDisplayActor ! GameStateDisplayActor.Skip
-            }
             Behaviors.same
 
     }

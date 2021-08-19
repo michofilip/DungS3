@@ -25,9 +25,10 @@ class GameStateBuilder private(entityConverter: EntityConverter):
             } yield {
                 mapChar(x, y, chars(y)(2 * x))
             }
+        }.flatten.flatMap { entityEntry =>
+            // TODO log if failed
+            entityConverter.convertToEntity(entityEntry).toOption
         }
-            .flatten
-            .flatMap(entityConverter.convertToEntity)
 
         GameState(
             timer = Timer(),
@@ -89,14 +90,14 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 positionTimestamp = Some(0L)
             )
 
-        char match {
+        char match
             case ' ' => Seq.empty
             case '.' => Seq(makeFloor(x, y))
             case '#' => Seq(makeFloor(x, y), makeWall(x, y))
             case '+' => Seq(makeFloor(x, y), makeDoor(x, y))
             case '@' => Seq(makeFloor(x, y), makePlayer(x, y))
             case _ => Seq(makeFloor(x, y))
-        }
+
     }
 
 object GameStateBuilder:

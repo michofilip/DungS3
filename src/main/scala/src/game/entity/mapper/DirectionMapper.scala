@@ -6,46 +6,30 @@ sealed abstract class DirectionMapper extends Mapper[Direction]
 
 object DirectionMapper:
 
-    @Deprecated
-    case object Identity extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] = directionOpt
-
-    @Deprecated
-    final case class SetDirection(direction: Direction) extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] = Some(direction)
-
-    @Deprecated
-    case object RemoveDirection extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] = None
-
     final case class TurnTo(direction: Direction) extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] =
-            directionOpt.map(_ => direction)
+        override def apply(direction: Direction): Direction = direction
 
     case object TurnRight extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] =
-            directionOpt.map {
-                case Direction.North => Direction.East
-                case Direction.East => Direction.South
-                case Direction.South => Direction.West
-                case Direction.West => Direction.North
-            }
+        override def apply(direction: Direction): Direction = direction match {
+            case Direction.North => Direction.East
+            case Direction.East => Direction.South
+            case Direction.South => Direction.West
+            case Direction.West => Direction.North
+        }
 
     case object TurnLeft extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] =
-            directionOpt.map {
-                case Direction.North => Direction.West
-                case Direction.East => Direction.North
-                case Direction.South => Direction.East
-                case Direction.West => Direction.South
-            }
+        override def apply(direction: Direction): Direction = direction match {
+            case Direction.North => Direction.West
+            case Direction.East => Direction.North
+            case Direction.South => Direction.East
+            case Direction.West => Direction.South
+        }
 
     case object TurnBack extends DirectionMapper :
-        override def apply(directionOpt: Option[Direction]): Option[Direction] =
-            directionOpt.map {
-                case Direction.North => Direction.South
-                case Direction.East => Direction.West
-                case Direction.South => Direction.North
-                case Direction.West => Direction.East
-            }
+        override def apply(direction: Direction): Direction = direction match {
+            case Direction.North => Direction.South
+            case Direction.East => Direction.West
+            case Direction.South => Direction.North
+            case Direction.West => Direction.East
+        }
         

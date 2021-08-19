@@ -1,23 +1,21 @@
 package src.game.entity.holder
 
+import src.game.entity.Entity
 import src.game.entity.parts.graphics.{AnimationSelector, Frame, GraphicsProperty}
 import src.game.temporal.{Duration, Timestamp}
 
-trait GraphicsHolder:
-    this: CommonsHolder with StateHolder with PositionHolder =>
+trait GraphicsHolder[T <: Entity]:
+    this: CommonsHolder with StateHolder[T] with PositionHolder[T] =>
 
     protected val graphicsProperty: GraphicsProperty
 
+    def hasGraphics: Boolean = graphicsProperty.hasGraphics
+
+    def layer: Option[Int] = graphicsProperty.layer
+
     def frame(timestamp: Timestamp): Option[Frame] =
-        for {
-            animationSelector <- graphicsProperty.animationSelector
-            animation <- animationSelector.selectAnimation(state, direction)
-        } yield {
-            val animationTimestamp = stateTimestamp.getOrElse(creationTimestamp)
+        val animationTimestamp = stateTimestamp.getOrElse(creationTimestamp)
+        val animationDuration = Duration.durationBetween(animationTimestamp, timestamp)
 
-            animation.frame(Duration.durationBetween(animationTimestamp, timestamp))
-        }
-
-    def hasGraphics: Boolean = graphicsProperty.animationSelector.isDefined
-
-
+        graphicsProperty.frame(state, direction, animationDuration)
+        

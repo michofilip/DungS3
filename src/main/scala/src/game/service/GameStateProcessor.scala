@@ -7,12 +7,12 @@ import src.game.service.serialization.{EntitySerializationService, GameStateSeri
 class GameStateProcessor private(eventProcessor: EventProcessor):
 
     def processNextEvent(gameState: GameState): GameState =
-        gameState.events match {
+        gameState.events match 
             case event +: otherEvents =>
                 eventProcessor.processEvent(event, gameState.updated(events = otherEvents))
 
             case _ => gameState
-        }
+        
 
 object GameStateProcessor:
 

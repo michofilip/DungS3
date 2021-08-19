@@ -4,11 +4,12 @@ import src.game.GameState
 import src.game.service.serialization.GameStateSerializationService
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
+import scala.util.Try
 import scala.xml.{PrettyPrinter, XML}
 
 class GameStateFileProcessor private(gameStateSerializationService: GameStateSerializationService):
 
-    def loadFromFile(file: File): Option[GameState] =
+    def loadFromFile(file: File): Try[GameState] =
         val xml = XML.loadFile(file)
         gameStateSerializationService.fromXml(xml)
 

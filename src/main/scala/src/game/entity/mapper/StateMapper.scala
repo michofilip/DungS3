@@ -6,40 +6,28 @@ sealed abstract class StateMapper extends Mapper[State]
 
 object StateMapper:
 
-    @Deprecated
-    case object Identity extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt
-
-    @Deprecated
-    final case class SetState(state: State) extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = Some(state)
-
-    @Deprecated
-    case object RemoveState extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = None
-
     case object SwitchOff extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt match
-            case Some(State.On) => Some(State.Off)
-            case _ => stateOpt
+        override def apply(state: State): State = state match
+            case State.On => State.Off
+            case _ => state
 
     case object SwitchOn extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt match
-            case Some(State.Off) => Some(State.On)
-            case _ => stateOpt
+        override def apply(state: State): State = state match
+            case State.Off => State.On
+            case _ => state
 
     case object Switch extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt match
-            case Some(State.Off) => Some(State.On)
-            case Some(State.On) => Some(State.Off)
-            case _ => stateOpt
+        override def apply(state: State): State = state match
+            case State.Off => State.On
+            case State.On => State.Off
+            case _ => state
 
     case object Open extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt match
-            case Some(State.Closed) => Some(State.Open)
-            case _ => stateOpt
+        override def apply(state: State): State = state match
+            case State.Closed => State.Open
+            case _ => state
 
     case object Close extends StateMapper :
-        override def apply(stateOpt: Option[State]): Option[State] = stateOpt match
-            case Some(State.Open) => Some(State.Closed)
-            case _ => stateOpt
+        override def apply(state: State): State = state match
+            case State.Open => State.Closed
+            case _ => state

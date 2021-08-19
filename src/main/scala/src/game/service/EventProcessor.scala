@@ -12,7 +12,7 @@ import java.util.UUID
 
 class EventProcessor private(entityConverter: EntityConverter):
 
-    def processEvent(event: Event, gameState: GameState): GameState = event match {
+    def processEvent(event: Event, gameState: GameState): GameState = event match 
         case MoveTo(entityId, x, y) =>
             handleMove(entityId, gameState, PositionMapper.MoveTo(x, y))
 
@@ -42,14 +42,14 @@ class EventProcessor private(entityConverter: EntityConverter):
                 else
                     entityEntry
             }.flatMap { entityEntry =>
-                entityConverter.convertToEntity(entityEntry)
+                // TODO log if failed
+                entityConverter.convertToEntity(entityEntry).toOption
             }
 
             gameState.updated(
                 entities = gameState.entities ++ newEntities,
                 events = gameState.events ++ events
             )
-    }
 
 
 object EventProcessor:
