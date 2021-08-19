@@ -42,7 +42,7 @@ class EventProcessor private(entityConverter: EntityConverter):
                 else
                     entityEntry
             }.flatMap { entityEntry =>
-                // TODO fix it
+                // TODO log if failed
                 entityConverter.convertToEntity(entityEntry).toOption
             }
 

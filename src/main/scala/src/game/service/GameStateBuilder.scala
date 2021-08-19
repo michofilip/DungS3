@@ -26,7 +26,7 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 mapChar(x, y, chars(y)(2 * x))
             }
         }.flatten.flatMap { entityEntry =>
-            // TODO fix it
+            // TODO log if failed
             entityConverter.convertToEntity(entityEntry).toOption
         }
 
