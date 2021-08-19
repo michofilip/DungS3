@@ -9,6 +9,7 @@ import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}
 import java.util.UUID
+import scala.util.Try
 import scala.xml.{Node, NodeSeq, PrettyPrinter, XML}
 
 class EntitySerializationService private(entityConverter: EntityConverter):
@@ -16,7 +17,7 @@ class EntitySerializationService private(entityConverter: EntityConverter):
     def toXml(entity: Entity): Node =
         entityConverter.convertToEntityEntry(entity).toXml
 
-    def fromXml(xml: Node): Option[Entity] =
+    def fromXml(xml: Node): Try[Entity] =
         EntityEntry.fromXml(xml)
             .flatMap(entityConverter.convertToEntity)
 

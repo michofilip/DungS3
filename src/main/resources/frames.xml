@@ -23,7 +23,7 @@
     </Frame>
     <Frame name="door_open_east_west_1">
         <id>5</id>
-        <spriteId>5</spriteId>
+        <spriteId>tiles0-0-0</spriteId>
     </Frame>
     <Frame name="lever_off_1">
         <id>6</id>

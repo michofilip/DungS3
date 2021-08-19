@@ -1,11 +1,12 @@
 package src.data.model
 
+import src.exception.FailedToReadObject
 import src.game.entity.Entity
 import src.game.entity.parts.position.{Direction, Position}
 import src.game.entity.parts.state.State
 import src.game.temporal.Timestamp
 
-import scala.util.Try
+import scala.util.{Failure, Try}
 import scala.xml.{Node, NodeSeq}
 
 final case class EntityEntry(id: String,
@@ -40,16 +41,19 @@ final case class EntityEntry(id: String,
 
 object EntityEntry:
 
-    def fromXml(xml: Node): Option[EntityEntry] = Try {
-        val id = (xml \ "id").text.trim
-        val name = (xml \ "name").text.trim
-        val creationTimestamp = (xml \ "creationTimestamp").text.trim.toLong
-        val state = (xml \ "state").map(_.text.trim).map(State.valueOf).headOption
-        val stateTimestamp = (xml \ "stateTimestamp").map(_.text.trim.toLong).headOption
-        val x = (xml \ "x").map(_.text.trim.toInt).headOption
-        val y = (xml \ "y").map(_.text.trim.toInt).headOption
-        val direction = (xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption
-        val positionTimestamp = (xml \ "positionTimestamp").map(_.text.trim.toLong).headOption
-
-        EntityEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
-    }.toOption
+    def fromXml(xml: Node): Try[EntityEntry] = {
+        for
+            id <- Try((xml \ "id").map(_.text.trim).head)
+            name <- Try((xml \ "name").map(_.text.trim).head)
+            creationTimestamp <- Try((xml \ "creationTimestamp").map(_.text.trim).map(_.toLong).head)
+            state <- Try((xml \ "state").map(_.text.trim).map(State.valueOf).headOption)
+            stateTimestamp <- Try((xml \ "stateTimestamp").map(_.text.trim).map(_.toLong).headOption)
+            x <- Try((xml \ "x").map(_.text.trim).map(_.toInt).headOption)
+            y <- Try((xml \ "y").map(_.text.trim).map(_.toInt).headOption)
+            direction <- Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
+            positionTimestamp <- Try((xml \ "positionTimestamp").map(_.text.trim).map(_.toLong).headOption)
+        yield
+            EntityEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
+    }.recoverWith {
+        case e => Failure(new FailedToReadObject("EntityEntry", e.getMessage))
+    }

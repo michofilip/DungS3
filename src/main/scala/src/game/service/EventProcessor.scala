@@ -42,7 +42,8 @@ class EventProcessor private(entityConverter: EntityConverter):
                 else
                     entityEntry
             }.flatMap { entityEntry =>
-                entityConverter.convertToEntity(entityEntry)
+                // TODO log if failed
+                entityConverter.convertToEntity(entityEntry).toOption
             }
 
             gameState.updated(

@@ -4,38 +4,63 @@ import src.data.Resources
 import src.data.model.{AnimationSelectorEntry, EntityPrototypeEntry}
 import src.game.entity.EntityPrototype
 import src.game.entity.parts.physics.PhysicsSelector
+import src.utils.TryUtils.*
 
+import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
 final class EntityPrototypeRepository private(physicsSelectorRepository: PhysicsSelectorRepository,
                                               animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, EntityPrototype] :
 
     override protected val dataById: Map[String, EntityPrototype] =
-        def convertToEntityPrototype(entityPrototypeEntry: EntityPrototypeEntry): EntityPrototype =
-            val physicsSelector = entityPrototypeEntry.physicsSelectorId.flatMap { physicsSelectorId =>
-                physicsSelectorRepository.findById(physicsSelectorId)
-            }
+        def entityPrototypeFrom(entityPrototypeEntry: EntityPrototypeEntry): Try[EntityPrototype] =
+            val physicsSelector = entityPrototypeEntry.physicsSelectorId.map { physicsSelectorId =>
+                physicsSelectorRepository.findById(physicsSelectorId).map { physicsSelector =>
+                    Success {
+                        physicsSelector
+                    }
+                }.getOrElse {
+                    Failure {
+                        new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!")
+                    }
+                }
+            }.invertTry
 
-            val animationSelector = entityPrototypeEntry.animationSelectorId.flatMap { animationSelectorId =>
-                animationSelectorRepository.findById(animationSelectorId)
-            }
+            val animationSelector = entityPrototypeEntry.animationSelectorId.map { animationSelectorId =>
+                animationSelectorRepository.findById(animationSelectorId).map { animationSelector =>
+                    Success {
+                        animationSelector
+                    }
+                }.getOrElse {
+                    Failure {
+                        new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!")
+                    }
+                }
+            }.invertTry
 
-            EntityPrototype(
-                name = entityPrototypeEntry.name,
-                availableStates = entityPrototypeEntry.availableStates,
-                hasPosition = entityPrototypeEntry.hasPosition,
-                hasDirection = entityPrototypeEntry.hasDirection,
-                physicsSelector = physicsSelector,
-                layer = entityPrototypeEntry.layer,
-                animationSelector = animationSelector
-            )
+            for
+                physicsSelector <- physicsSelector
+                animationSelector <- animationSelector
+            yield
+                EntityPrototype(
+                    name = entityPrototypeEntry.name,
+                    availableStates = entityPrototypeEntry.availableStates,
+                    hasPosition = entityPrototypeEntry.hasPosition,
+                    hasDirection = entityPrototypeEntry.hasDirection,
+                    physicsSelector = physicsSelector,
+                    layer = entityPrototypeEntry.layer,
+                    animationSelector = animationSelector
+                )
 
         val xml = XML.load(Resources.entityPrototypes.reader())
 
-        (xml \ "EntityPrototype")
-            .flatMap(EntityPrototypeEntry.fromXML)
-            .map(entityPrototype => entityPrototype.name -> convertToEntityPrototype(entityPrototype))
-            .toMap
+        (xml \ "EntityPrototype").map { node =>
+            for
+                entityPrototypeEntry <- EntityPrototypeEntry.fromXML(node)
+                entityPrototype <- entityPrototypeFrom(entityPrototypeEntry)
+            yield
+                entityPrototypeEntry.name -> entityPrototype
+        }.invertTry.map(_.toMap).get
 
 object EntityPrototypeRepository:
 
