@@ -13,5 +13,6 @@ object Resources:
     val entityPrototypes = Source.fromResource("entityPrototypes.xml")
 
 
-     val tiles = new File("src/main/resources/tiles/tiles0.png")
-//    val tiles = Source.fromResource("tiles/tiles0.png")
+    val tileSets = "src/main/resources/tileSets"
+
+    val sprites = new File("src/main/resources/sprites.xml") 

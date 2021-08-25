@@ -17,8 +17,16 @@ object TryUtils:
         case Some(Failure(exception)) => Failure(exception)
         case None => Success(None)
 
+    private def _toTry[T](opt: Option[T], throwable: Throwable): Try[T] = opt match
+        case Some(value) => Success(value)
+        case None => Failure(throwable)
+
+
     extension[T] (iterable: Iterable[Try[T]])
         def invertTry: Try[Seq[T]] = _invertTry(iterable.toSeq)
 
     extension[T] (option: Option[Try[T]])
         def invertTry: Try[Option[T]] = _invertTry(option)
+
+    extension[T] (option: Option[T])
+        def toTry(throwable: Throwable): Try[T] = _toTry(option, throwable)
