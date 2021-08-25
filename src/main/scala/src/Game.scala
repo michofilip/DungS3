@@ -5,12 +5,12 @@ import scalafx.application.JFXApp3.PrimaryStage
 import scalafx.scene.Scene
 import scalafx.scene.layout.Pane
 import scalafx.stage.StageStyle
-import src.data.repository.SpriteRepository
+import src.data.repository.TileSetRepository
 
 object Game extends JFXApp3 {
 
     override def start(): Unit = {
-        val tileRepository: SpriteRepository = SpriteRepository()
+        val tileRepository: TileSetRepository = TileSetRepository()
         tileRepository.findAll.foreach(println)
 
 
