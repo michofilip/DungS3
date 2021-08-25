@@ -15,27 +15,11 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
     override protected val dataById: Map[String, EntityPrototype] =
         def entityPrototypeFrom(entityPrototypeEntry: EntityPrototypeEntry): Try[EntityPrototype] =
             val physicsSelector = entityPrototypeEntry.physicsSelectorId.map { physicsSelectorId =>
-                physicsSelectorRepository.findById(physicsSelectorId).map { physicsSelector =>
-                    Success {
-                        physicsSelector
-                    }
-                }.getOrElse {
-                    Failure {
-                        new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!")
-                    }
-                }
+                physicsSelectorRepository.findById(physicsSelectorId).toTry(new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!"))
             }.invertTry
 
             val animationSelector = entityPrototypeEntry.animationSelectorId.map { animationSelectorId =>
-                animationSelectorRepository.findById(animationSelectorId).map { animationSelector =>
-                    Success {
-                        animationSelector
-                    }
-                }.getOrElse {
-                    Failure {
-                        new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!")
-                    }
-                }
+                animationSelectorRepository.findById(animationSelectorId).toTry(new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!"))
             }.invertTry
 
             for

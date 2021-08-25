@@ -14,14 +14,8 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
         def animationSelectorFrom(animationSelectorEntry: AnimationSelectorEntry): Try[AnimationSelector] =
             animationSelectorEntry.variants.map { variant =>
                 animationRepository.findById(variant.animationId).map { animation =>
-                    Success {
-                        (variant.state, variant.direction) -> animation
-                    }
-                }.getOrElse {
-                    Failure {
-                        new NoSuchElementException(s"Animation id: ${variant.animationId} not found!")
-                    }
-                }
+                    (variant.state, variant.direction) -> animation
+                }.toTry(new NoSuchElementException(s"Animation id: ${variant.animationId} not found!"))
             }.invertTry.map { animations =>
                 AnimationSelector(animations)
             }

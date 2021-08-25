@@ -13,15 +13,7 @@ final class AnimationRepository private(frameRepository: FrameRepository) extend
     override protected val dataById: Map[Int, Animation] =
         def animationFrom(animationEntry: AnimationEntry): Try[Animation] =
             animationEntry.frameIds.map { frameId =>
-                frameRepository.findById(frameId).map { frame =>
-                    Success {
-                        frame
-                    }
-                }.getOrElse {
-                    Failure {
-                        new NoSuchElementException(s"Frame id: $frameId not found!")
-                    }
-                }
+                frameRepository.findById(frameId).toTry(new NoSuchElementException(s"Frame id: $frameId not found!"))
             }.invertTry.map { frames =>
                 Animation(
                     fps = animationEntry.fps,
