@@ -1,8 +1,8 @@
 package src.game.service
 
-import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
+import src.data.repository.{AnimationRepository, AnimationSelectorRepository, GameObjectPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.GameState
-import src.game.service.serialization.{EntitySerializationService, GameStateSerializationService}
+import src.game.service.serialization.{GameObjectSerializationService, GameStateSerializationService}
 
 class GameStateProcessor private(eventProcessor: EventProcessor):
 

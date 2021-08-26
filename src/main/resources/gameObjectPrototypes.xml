@@ -1,5 +1,5 @@
-<entityPrototypes>
-    <EntityPrototype>
+<gameObjectPrototypes>
+    <GameObjectPrototype>
         <name>floor</name>
         <availableStates/>
         <hasPosition>true</hasPosition>
@@ -7,8 +7,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>wall</name>
         <availableStates/>
         <hasPosition>true</hasPosition>
@@ -16,8 +16,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>player</name>
         <availableStates/>
         <hasPosition>true</hasPosition>
@@ -25,8 +25,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>door</name>
         <availableStates>
             <state>Open</state>
@@ -37,8 +37,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>lever</name>
         <availableStates>
             <state>Off</state>
@@ -49,8 +49,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>stairs-up</name>
         <availableStates/>
         <hasPosition>true</hasPosition>
@@ -58,8 +58,8 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-    <EntityPrototype>
+    </GameObjectPrototype>
+    <GameObjectPrototype>
         <name>stairs-down</name>
         <availableStates/>
         <hasPosition>true</hasPosition>
@@ -67,5 +67,5 @@
         <physicsSelectorId>1</physicsSelectorId>
         <layer>1</layer>
         <animationSelectorId>1</animationSelectorId>
-    </EntityPrototype>
-</entityPrototypes>
+    </GameObjectPrototype>
+</gameObjectPrototypes>

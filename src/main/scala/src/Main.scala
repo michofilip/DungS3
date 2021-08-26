@@ -1,15 +1,15 @@
 package src
 
-import src.data.model.EntityEntry
-import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
+import src.data.model.GameObjectEntry
+import src.data.repository.{AnimationRepository, AnimationSelectorRepository, FrameRepository, GameObjectPrototypeRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.GameState
+import src.game.event.Event
 import src.game.gameobject.mapper.{DirectionMapper, PositionMapper}
 import src.game.gameobject.parts.position.Direction
 import src.game.gameobject.parts.state.State
-import src.game.gameobject.{Entity, EntityPrototype, EntityRepository}
-import src.game.event.Event
-import src.game.service.serialization.{EntitySerializationService, GameStateSerializationService}
-import src.game.service.{EntityConverter, EventProcessor, GameStateFileProcessor, GameStateProcessor}
+import src.game.gameobject.{GameObject, GameObjectPrototype, GameObjectRepository}
+import src.game.service.serialization.{GameObjectSerializationService, GameStateSerializationService}
+import src.game.service.{EventProcessor, GameObjectConverter, GameStateFileProcessor, GameStateProcessor}
 import src.game.temporal.{Duration, Timer, Timestamp}
 
 import java.io.File
@@ -21,17 +21,17 @@ object Main:
     @main
     def start(): Unit =
 
-        val entityEntry1 = EntityEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(10), y = Some(20), direction = Some(Direction.East), positionTimestamp = Some(0L))
-        val entityEntry2 = EntityEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(0), y = Some(0), direction = Some(Direction.East), positionTimestamp = Some(0L))
+        val gameObjectEntry1 = GameObjectEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(10), y = Some(20), direction = Some(Direction.East), positionTimestamp = Some(0L))
+        val gameObjectEntry2 = GameObjectEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(0), y = Some(0), direction = Some(Direction.East), positionTimestamp = Some(0L))
 
-        val entity1 = EntityConverter().convertToEntity(entityEntry1).get
+        val gameObject1 = GameObjectConverter().fromEntry(gameObjectEntry1).get
 
-        val event1 = Event.MoveBy(entityId = entity1.id, dx = 10, dy = 15)
-        val event2 = Event.MoveTo(entityId = UUID.fromString(entityEntry2.id), x = -1, y = -1)
-        val event3 = Event.Spawn(useCurrentTimestamp = true, entities = Seq(entityEntry2), events = Seq(event2))
+        val event1 = Event.MoveBy(gameObjectId = gameObject1.id, dx = 10, dy = 15)
+        val event2 = Event.MoveTo(gameObjectId = UUID.fromString(gameObjectEntry2.id), x = -1, y = -1)
+        val event3 = Event.Spawn(useCurrentTimestamp = true, gameObjects = Seq(gameObjectEntry2), events = Seq(event2))
 
-        val entityRepository = EntityRepository(Seq(entity1))
-        val gameState0 = GameState(timer = Timer(running = true), entities = entityRepository, events = Queue(event1, event3))
+        val gameObjectRepository = GameObjectRepository(Seq(gameObject1))
+        val gameState0 = GameState(timer = Timer(running = true), gameObjects = gameObjectRepository, events = Queue(event1, event3))
         Thread.sleep(1000)
         val gameState1 = GameStateProcessor().processNextEvent(gameState0)
         Thread.sleep(1000)

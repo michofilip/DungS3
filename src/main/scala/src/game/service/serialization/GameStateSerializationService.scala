@@ -1,10 +1,10 @@
 package src.game.service.serialization
 
-import src.data.model.EntityEntry
+import src.data.model.GameObjectEntry
 import src.exception.FailedToReadObject
 import src.game.GameState
-import src.game.gameobject.EntityRepository
-import src.game.service.serialization.{EntitySerializationService, EventSerializationService}
+import src.game.gameobject.GameObjectRepository
+import src.game.service.serialization.{EventSerializationService, GameObjectSerializationService}
 import src.game.temporal.Timer
 import src.utils.TryUtils.*
 
@@ -12,14 +12,14 @@ import scala.collection.immutable.Queue
 import scala.util.{Failure, Try}
 import scala.xml.Node
 
-class GameStateSerializationService private(entitySerializationService: EntitySerializationService):
+class GameStateSerializationService private(gameObjectSerializationService: GameObjectSerializationService):
 
     def toXml(gameState: GameState): Node =
         <GameState>
             {TimerSerializationService.toXml(gameState.timer)}
-            <entities>
-                {gameState.entities.findAll.map(entitySerializationService.toXml)}
-            </entities>
+            <gameObjects>
+                {gameState.gameObjects.findAll.map(gameObjectSerializationService.toXml)}
+            </gameObjects>
             <events>
                 {gameState.events.map(EventSerializationService.toXml)}
             </events>
@@ -28,12 +28,12 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
     def fromXml(xml: Node): Try[GameState] = {
         for
             timer <- Try((xml \ "Timer").map(TimerSerializationService.fromXml).head).flatten
-            entities <- (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).toTrySeq
+            gameObjects <- (xml \ "gameObjects" \ "GameObject").map(gameObjectSerializationService.fromXml).toTrySeq
             events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).toTrySeq
         yield
             GameState(
                 timer = timer,
-                entities = EntityRepository(entities),
+                gameObjects = GameObjectRepository(gameObjects),
                 events = Queue(events: _*)
             )
     }.recoverWith {
@@ -42,6 +42,6 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
 
 object GameStateSerializationService:
 
-    private lazy val gameStateSerializationService = new GameStateSerializationService(EntitySerializationService())
+    private lazy val gameStateSerializationService = new GameStateSerializationService(GameObjectSerializationService())
 
     def apply(): GameStateSerializationService = gameStateSerializationService

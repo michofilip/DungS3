@@ -1,7 +1,7 @@
 package src.data.model
 
 import src.exception.FailedToReadObject
-import src.game.gameobject.Entity
+import src.game.gameobject.GameObject
 import src.game.gameobject.parts.position.{Direction, Position}
 import src.game.gameobject.parts.state.State
 import src.game.temporal.Timestamp
@@ -9,15 +9,15 @@ import src.game.temporal.Timestamp
 import scala.util.{Failure, Try}
 import scala.xml.{Node, NodeSeq}
 
-final case class EntityEntry(id: String,
-                             name: String,
-                             creationTimestamp: Long,
-                             state: Option[State],
-                             stateTimestamp: Option[Long],
-                             x: Option[Int],
-                             y: Option[Int],
-                             direction: Option[Direction],
-                             positionTimestamp: Option[Long]):
+final case class GameObjectEntry(id: String,
+                                 name: String,
+                                 creationTimestamp: Long,
+                                 state: Option[State],
+                                 stateTimestamp: Option[Long],
+                                 x: Option[Int],
+                                 y: Option[Int],
+                                 direction: Option[Direction],
+                                 positionTimestamp: Option[Long]):
 
     def position: Option[Position] = for {
         x <- x
@@ -27,7 +27,7 @@ final case class EntityEntry(id: String,
     }
 
     def toXml: Node =
-            <Entity>
+            <GameObject>
                 <id> {id} </id>
                 <name> {name} </name>
                 <creationTimestamp> {creationTimestamp} </creationTimestamp>
@@ -37,11 +37,11 @@ final case class EntityEntry(id: String,
                 {y.fold(NodeSeq.Empty) { y => <y> {y} </y> }}
                 {direction.fold(NodeSeq.Empty) { direction => <direction> {direction} </direction> }}
                 {positionTimestamp.fold(NodeSeq.Empty) { positionTimestamp => <positionTimestamp> {positionTimestamp} </positionTimestamp> }}
-            </Entity>
+            </GameObject>
 
-object EntityEntry:
+object GameObjectEntry:
 
-    def fromXml(xml: Node): Try[EntityEntry] = {
+    def fromXml(xml: Node): Try[GameObjectEntry] = {
         for
             id <- Try((xml \ "id").map(_.text.trim).head)
             name <- Try((xml \ "name").map(_.text.trim).head)
@@ -53,7 +53,7 @@ object EntityEntry:
             direction <- Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
             positionTimestamp <- Try((xml \ "positionTimestamp").map(_.text.trim).map(_.toLong).headOption)
         yield
-            EntityEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
+            GameObjectEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
     }.recoverWith {
-        case e => Failure(new FailedToReadObject("EntityEntry", e.getMessage))
+        case e => Failure(new FailedToReadObject("GameObject", e.getMessage))
     }

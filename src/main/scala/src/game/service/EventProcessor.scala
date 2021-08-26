@@ -1,23 +1,23 @@
 package src.game.service
 
-import src.data.model.EntityEntry
+import src.data.model.GameObjectEntry
 import src.game.GameState
-import src.game.gameobject.mapper.PositionMapper
 import src.game.event.Event
 import src.game.event.Event.*
-import src.game.service.EntityConverter
+import src.game.gameobject.mapper.PositionMapper
 import src.game.service.EventProcessor.handleMove
+import src.game.service.GameObjectConverter
 
 import java.util.UUID
 
-class EventProcessor private(entityConverter: EntityConverter):
+class EventProcessor private(gameObjectConverter: GameObjectConverter):
 
-    def processEvent(event: Event, gameState: GameState): GameState = event match 
-        case MoveTo(entityId, x, y) =>
-            handleMove(entityId, gameState, PositionMapper.MoveTo(x, y))
+    def processEvent(event: Event, gameState: GameState): GameState = event match
+        case MoveTo(gameObjectId, x, y) =>
+            handleMove(gameObjectId, gameState, PositionMapper.MoveTo(x, y))
 
-        case MoveBy(entityId, dx, dy) =>
-            handleMove(entityId, gameState, PositionMapper.MoveBy(dx, dy))
+        case MoveBy(gameObjectId, dx, dy) =>
+            handleMove(gameObjectId, gameState, PositionMapper.MoveBy(dx, dy))
 
         case StartTimer =>
             gameState.updated(timer = gameState.timer.started)
@@ -25,50 +25,50 @@ class EventProcessor private(entityConverter: EntityConverter):
         case StopTimer =>
             gameState.updated(timer = gameState.timer.stopped)
 
-        case Despawn(entityIds) =>
-            val entities = entityIds.flatMap(gameState.entities.findById)
-            gameState.updated(entities = gameState.entities -- entities)
+        case Despawn(gameObjectIds) =>
+            val gameObjects = gameObjectIds.flatMap(gameState.gameObjects.findById)
+            gameState.updated(gameObjects = gameState.gameObjects -- gameObjects)
 
-        case Spawn(useCurrentTimestamp, entities, events) =>
-            val newEntities = entities.map { entityEntry =>
+        case Spawn(useCurrentTimestamp, gameObjectEntries, events) =>
+            val newGameObjects = gameObjectEntries.map { gameObjectEntry =>
                 if useCurrentTimestamp then
                     val gameStateTimestamp = gameState.timer.timestamp.milliseconds
 
-                    entityEntry.copy(
+                    gameObjectEntry.copy(
                         creationTimestamp = gameStateTimestamp,
-                        stateTimestamp = entityEntry.stateTimestamp.map(_ => gameStateTimestamp),
-                        positionTimestamp = entityEntry.positionTimestamp.map(_ => gameStateTimestamp)
+                        stateTimestamp = gameObjectEntry.stateTimestamp.map(_ => gameStateTimestamp),
+                        positionTimestamp = gameObjectEntry.positionTimestamp.map(_ => gameStateTimestamp)
                     )
                 else
-                    entityEntry
-            }.flatMap { entityEntry =>
+                    gameObjectEntry
+            }.flatMap { gameObjectEntry =>
                 // TODO log if failed
-                entityConverter.convertToEntity(entityEntry).toOption
+                gameObjectConverter.fromEntry(gameObjectEntry).toOption
             }
 
             gameState.updated(
-                entities = gameState.entities ++ newEntities,
+                gameObjects = gameState.gameObjects ++ newGameObjects,
                 events = gameState.events ++ events
             )
 
 
 object EventProcessor:
 
-    private lazy val eventProcessor = new EventProcessor(EntityConverter())
+    private lazy val eventProcessor = new EventProcessor(GameObjectConverter())
 
     def apply(): EventProcessor = eventProcessor
 
-    private def handleMove(entityId: UUID, gameState: GameState, positionMapper: PositionMapper): GameState =
-        gameState.entities.findById(entityId)
-            .filter(entity => entity.hasPosition)
-            .fold(gameState) { entity =>
-                val updatedEntity = entity.updatedPosition(positionMapper = positionMapper, timestamp = gameState.timer.timestamp)
-                val isSolidAtTarget = updatedEntity.position.exists(gameState.entities.existSolidAtPosition)
+    private def handleMove(gameObjectId: UUID, gameState: GameState, positionMapper: PositionMapper): GameState =
+        gameState.gameObjects.findById(gameObjectId)
+            .filter(gameObject => gameObject.hasPosition)
+            .fold(gameState) { gameObject =>
+                val updatedGameObject = gameObject.updatedPosition(positionMapper = positionMapper, timestamp = gameState.timer.timestamp)
+                val isSolidAtTarget = updatedGameObject.position.exists(gameState.gameObjects.existSolidAtPosition)
 
                 if !isSolidAtTarget then
-                    val newEntities = gameState.entities - entity + updatedEntity
+                    val newGameObjects = gameState.gameObjects - gameObject + updatedGameObject
 
-                    gameState.updated(entities = newEntities)
+                    gameState.updated(gameObjects = newGameObjects)
                 else
                     gameState
             }

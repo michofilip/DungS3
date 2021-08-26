@@ -1,13 +1,13 @@
 package src.game.gameobject.holder
 
-import src.game.gameobject.Entity
+import src.game.gameobject.GameObject
 import src.game.gameobject.mapper.{DirectionMapper, PositionMapper}
 import src.game.gameobject.parts.position.PositionProperty.{EmptyPositionProperty, PositionOnlyPositionProperty, PositionWithDirectionPositionProperty}
 import src.game.gameobject.parts.position.{Direction, Position, PositionProperty}
 import src.game.gameobject.parts.state.StateProperty.{EmptyStateProperty, StatefullStateProperty}
 import src.game.temporal.Timestamp
 
-trait PositionHolder[T <: Entity]:
+trait PositionHolder[T <: GameObject]:
     protected val positionProperty: PositionProperty
 
     def hasPosition: Boolean = positionProperty.hasPosition

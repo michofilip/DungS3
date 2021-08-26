@@ -1,10 +1,10 @@
 package src.game.gameobject.holder
 
-import src.game.gameobject.Entity
+import src.game.gameobject.GameObject
 import src.game.gameobject.parts.graphics.{AnimationSelector, Frame, GraphicsProperty}
 import src.game.temporal.{Duration, Timestamp}
 
-trait GraphicsHolder[T <: Entity]:
+trait GraphicsHolder[T <: GameObject]:
     this: CommonsHolder with StateHolder[T] with PositionHolder[T] =>
 
     protected val graphicsProperty: GraphicsProperty

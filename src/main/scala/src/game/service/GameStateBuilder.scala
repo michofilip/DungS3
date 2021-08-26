@@ -1,8 +1,8 @@
 package src.game.service
 
-import src.data.model.EntityEntry
+import src.data.model.GameObjectEntry
 import src.game.GameState
-import src.game.gameobject.EntityRepository
+import src.game.gameobject.GameObjectRepository
 import src.game.gameobject.parts.state.State
 import src.game.temporal.Timer
 
@@ -12,34 +12,34 @@ import scala.collection.immutable.Queue
 import scala.io.{BufferedSource, Source}
 import scala.util.Try
 
-class GameStateBuilder private(entityConverter: EntityConverter):
+class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
 
     def load(mapName: String): Option[GameState] = Try {
         val map: BufferedSource = Source.fromResource(s"maps/$mapName.lvl")
         val chars: Vector[Vector[Char]] = map.getLines().toVector.map(line => line.toVector)
 
-        val entities = {
+        val gameObjects = {
             for {
                 x <- 0 until 64
                 y <- 0 until 64
             } yield {
                 mapChar(x, y, chars(y)(2 * x))
             }
-        }.flatten.flatMap { entityEntry =>
+        }.flatten.flatMap { gameObjectEntry =>
             // TODO log if failed
-            entityConverter.convertToEntity(entityEntry).toOption
+            gameObjectConverter.fromEntry(gameObjectEntry).toOption
         }
 
         GameState(
             timer = Timer(),
-            entities = EntityRepository(entities),
+            gameObjects = GameObjectRepository(gameObjects),
             events = Queue.empty
         )
     }.toOption
 
-    private def mapChar(x: Int, y: Int, char: Char): Seq[EntityEntry] = {
-        def makeFloor(x: Int, y: Int): EntityEntry =
-            EntityEntry(
+    private def mapChar(x: Int, y: Int, char: Char): Seq[GameObjectEntry] = {
+        def makeFloor(x: Int, y: Int): GameObjectEntry =
+            GameObjectEntry(
                 id = UUID.randomUUID().toString,
                 name = "floor",
                 creationTimestamp = 0L,
@@ -51,8 +51,8 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makeWall(x: Int, y: Int): EntityEntry =
-            EntityEntry(
+        def makeWall(x: Int, y: Int): GameObjectEntry =
+            GameObjectEntry(
                 id = UUID.randomUUID().toString,
                 name = "wall",
                 creationTimestamp = 0L,
@@ -64,8 +64,8 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makeDoor(x: Int, y: Int): EntityEntry =
-            EntityEntry(
+        def makeDoor(x: Int, y: Int): GameObjectEntry =
+            GameObjectEntry(
                 id = UUID.randomUUID().toString,
                 name = "door",
                 creationTimestamp = 0L,
@@ -77,8 +77,8 @@ class GameStateBuilder private(entityConverter: EntityConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makePlayer(x: Int, y: Int): EntityEntry =
-            EntityEntry(
+        def makePlayer(x: Int, y: Int): GameObjectEntry =
+            GameObjectEntry(
                 id = UUID.randomUUID().toString,
                 name = "player",
                 creationTimestamp = 0L,
@@ -102,6 +102,6 @@ class GameStateBuilder private(entityConverter: EntityConverter):
 
 object GameStateBuilder:
 
-    private lazy val gameStateBuilder = new GameStateBuilder(EntityConverter())
+    private lazy val gameStateBuilder = new GameStateBuilder(GameObjectConverter())
 
     def apply(): GameStateBuilder = gameStateBuilder

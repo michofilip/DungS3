@@ -1,6 +1,6 @@
 package src.game.service.serialization
 
-import src.data.model.EntityEntry
+import src.data.model.GameObjectEntry
 import src.exception.FailedToReadObject
 import src.game.event.Event
 import src.game.event.Event.{Despawn, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
@@ -13,16 +13,16 @@ import scala.xml.Node
 object EventSerializationService:
 
     def toXml(event: Event): Node = event match
-        case MoveBy(entityId, dx, dy) =>
+        case MoveBy(gameObjectId, dx, dy) =>
             <Event name="MoveBy">
-                <entityId> {entityId} </entityId>
+                <gameObjectId> {gameObjectId} </gameObjectId>
                 <dx> {dx} </dx>
                 <dy> {dy} </dy>
             </Event>
 
-        case MoveTo(entityId, x, y) =>
+        case MoveTo(gameObjectId, x, y) =>
             <Event name="MoveTo">
-                <entityId> {entityId} </entityId>
+                <gameObjectId> {gameObjectId} </gameObjectId>
                 <x> {x} </x>
                 <y> {y} </y>
             </Event>
@@ -33,17 +33,17 @@ object EventSerializationService:
         case StopTimer =>
                 <Event name="StopTimer" />
 
-        case Despawn(entityIds) =>
+        case Despawn(gameObjectIds) =>
             <Event name="Despawn">
-                <entityIds>
-                    {entityIds.map(entityId => {<entityId> {entityId} </entityId>})}
-                </entityIds>
+                <gameObjectIds>
+                    {gameObjectIds.map(gameObjectId => {<gameObjectId> {gameObjectId} </gameObjectId>})}
+                </gameObjectIds>
             </Event>
 
-        case Spawn(useCurrentTimestamp, entities, events) =>
+        case Spawn(useCurrentTimestamp, gameObjects, events) =>
             <Event name="Spawn">
                 <useCurrentTimestamp> {useCurrentTimestamp} </useCurrentTimestamp>
-                <entities> {entities.map(_.toXml)} </entities>
+                <gameObjects> {gameObjects.map(_.toXml)} </gameObjects>
                 <events> {events.map(EventSerializationService.toXml)} </events>
             </Event>
 
@@ -52,19 +52,19 @@ object EventSerializationService:
         (xml \ "@name").text.trim match
             case "MoveBy" =>
                 for
-                    entityId <- Try((xml \ "entityId").map(_.text.trim).map(UUID.fromString).head)
+                    gameObjectId <- Try((xml \ "gameObjectId").map(_.text.trim).map(UUID.fromString).head)
                     dx <- Try((xml \ "dx").map(_.text.trim).map(_.toInt).head)
                     dy <- Try((xml \ "dy").map(_.text.trim).map(_.toInt).head)
                 yield
-                    MoveBy(entityId, dx, dy)
+                    MoveBy(gameObjectId, dx, dy)
 
             case "MoveTo" =>
                 for
-                    entityId <- Try((xml \ "entityId").map(_.text.trim).map(UUID.fromString).head)
+                    gameObjectId <- Try((xml \ "gameObjectId").map(_.text.trim).map(UUID.fromString).head)
                     x <- Try((xml \ "x").map(_.text.trim).map(_.toInt).head)
                     y <- Try((xml \ "y").map(_.text.trim).map(_.toInt).head)
                 yield
-                    MoveTo(entityId, x, y)
+                    MoveTo(gameObjectId, x, y)
 
             case "StartTimer" =>
                 Success {
@@ -78,17 +78,17 @@ object EventSerializationService:
 
             case "Despawn" =>
                 for
-                    entityIds <- Try((xml \ "entityIds" \ "entityId").map(_.text.trim).map(UUID.fromString))
+                    gameObjectIds <- Try((xml \ "gameObjectIds" \ "gameObjectId").map(_.text.trim).map(UUID.fromString))
                 yield
-                    Despawn(entityIds)
+                    Despawn(gameObjectIds)
 
             case "Spawn" =>
                 for
                     useCurrentTimestamp <- Try((xml \ "useCurrentTimestamp").map(_.text.trim).map(_.toBoolean).head)
-                    entities <- (xml \ "entities" \ "Entity").map(EntityEntry.fromXml).toTrySeq
+                    gameObjects <- (xml \ "gameObjects" \ "GameObject").map(GameObjectEntry.fromXml).toTrySeq
                     events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).toTrySeq
                 yield
-                    Spawn(useCurrentTimestamp, entities, events)
+                    Spawn(useCurrentTimestamp, gameObjects, events)
 
             case _ =>
                 Failure(new FailedToReadObject("Event", "unknown event"))

@@ -10,7 +10,7 @@ object Resources:
     val frames = Source.fromResource("frames.xml")
     val animations = Source.fromResource("animations.xml")
     val animationSelectors = Source.fromResource("animationSelectors.xml")
-    val entityPrototypes = Source.fromResource("entityPrototypes.xml")
+    val gameObjectPrototypes = Source.fromResource("gameObjectPrototypes.xml")
 
 
     val tileSets = "src/main/resources/tileSets"

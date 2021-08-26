@@ -1,19 +1,19 @@
 package src.game
 
-import src.game.gameobject.EntityRepository
 import src.game.event.Event
+import src.game.gameobject.GameObjectRepository
 import src.game.temporal.Timer
 
 import scala.collection.immutable.Queue
 import scala.xml.Node
 
 // TODO turn, etc
-final class GameState(val timer: Timer, val entities: EntityRepository, val events: Queue[Event]):
+final class GameState(val timer: Timer, val gameObjects: GameObjectRepository, val events: Queue[Event]):
 
-    def updated(timer: Timer = timer, entities: EntityRepository = entities, events: Queue[Event] = events): GameState =
+    def updated(timer: Timer = timer, gameObjects: GameObjectRepository = gameObjects, events: Queue[Event] = events): GameState =
         GameState(
             timer = timer,
-            entities = entities,
+            gameObjects = gameObjects,
             events = events
         )
 
@@ -22,4 +22,4 @@ final class GameState(val timer: Timer, val entities: EntityRepository, val even
 
     override def toString: String =
         val eventsStr = events.mkString("[", ", ", "]")
-        s"GameState(timer=$timer, entities=$entities, events=$eventsStr)"
+        s"GameState(timer=$timer, gameObjects=$gameObjects, events=$eventsStr)"
