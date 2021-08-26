@@ -12,13 +12,18 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
 
     override protected val dataById: Map[Int, AnimationSelector] =
         def animationSelectorFrom(animationSelectorEntry: AnimationSelectorEntry): Try[AnimationSelector] =
-            animationSelectorEntry.variants.map { variant =>
+            val animations = animationSelectorEntry.variants.map { variant =>
                 animationRepository.findById(variant.animationId).map { animation =>
                     (variant.state, variant.direction) -> animation
-                }.toTry(new NoSuchElementException(s"Animation id: ${variant.animationId} not found!"))
-            }.invertTry.map { animations =>
+                }.toTry {
+                    new NoSuchElementException(s"Animation id: ${variant.animationId} not found!")
+                }
+            }.toTrySeq
+
+            for
+                animations <- animations
+            yield
                 AnimationSelector(animations)
-            }
 
         val xml = XML.load(Resources.animationSelectors.reader())
 
@@ -28,7 +33,7 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
                 animationSelector <- animationSelectorFrom(animationSelectorEntry)
             yield
                 animationSelectorEntry.id -> animationSelector
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object AnimationSelectorRepository:
 

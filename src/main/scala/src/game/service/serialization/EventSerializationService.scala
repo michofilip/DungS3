@@ -85,8 +85,8 @@ object EventSerializationService:
             case "Spawn" =>
                 for
                     useCurrentTimestamp <- Try((xml \ "useCurrentTimestamp").map(_.text.trim).map(_.toBoolean).head)
-                    entities <- (xml \ "entities" \ "Entity").map(EntityEntry.fromXml).invertTry
-                    events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry
+                    entities <- (xml \ "entities" \ "Entity").map(EntityEntry.fromXml).toTrySeq
+                    events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).toTrySeq
                 yield
                     Spawn(useCurrentTimestamp, entities, events)
 

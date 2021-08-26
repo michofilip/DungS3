@@ -13,7 +13,7 @@ object AnimationSelectorEntry:
     def fromXML(xml: Node): Try[AnimationSelectorEntry] = {
         for
             id <- Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
-            variants <- (xml \ "variants" \ "AnimationSelectorVariant").map(AnimationSelectorVariantEntry.fromXML).invertTry
+            variants <- (xml \ "variants" \ "AnimationSelectorVariant").map(AnimationSelectorVariantEntry.fromXML).toTrySeq
         yield
             AnimationSelectorEntry(id, variants)
     }.recoverWith {

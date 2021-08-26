@@ -15,12 +15,16 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
     override protected val dataById: Map[String, EntityPrototype] =
         def entityPrototypeFrom(entityPrototypeEntry: EntityPrototypeEntry): Try[EntityPrototype] =
             val physicsSelector = entityPrototypeEntry.physicsSelectorId.map { physicsSelectorId =>
-                physicsSelectorRepository.findById(physicsSelectorId).toTry(new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!"))
-            }.invertTry
+                physicsSelectorRepository.findById(physicsSelectorId).toTry {
+                    new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!")
+                }
+            }.toTryOption
 
             val animationSelector = entityPrototypeEntry.animationSelectorId.map { animationSelectorId =>
-                animationSelectorRepository.findById(animationSelectorId).toTry(new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!"))
-            }.invertTry
+                animationSelectorRepository.findById(animationSelectorId).toTry {
+                    new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!")
+                }
+            }.toTryOption
 
             for
                 physicsSelector <- physicsSelector
@@ -44,7 +48,7 @@ final class EntityPrototypeRepository private(physicsSelectorRepository: Physics
                 entityPrototype <- entityPrototypeFrom(entityPrototypeEntry)
             yield
                 entityPrototypeEntry.name -> entityPrototype
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object EntityPrototypeRepository:
 

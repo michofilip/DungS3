@@ -16,12 +16,18 @@ final class FrameRepository private(spriteRepository: SpriteRepository, tileSetR
     override protected val dataById: Map[Int, Frame] =
         def frameFrom(frameEntry: FrameEntry): Try[Frame] =
             for
-                spriteEntry <- spriteRepository.findById(frameEntry.spriteId).toTry(new NoSuchElementException(s"SpriteEntry id: ${frameEntry.spriteId} not found!"))
-                tileSet <- tileSetRepository.findById(spriteEntry.fileName).toTry(new NoSuchElementException(s"TileSet id: ${spriteEntry.fileName} not found!"))
-                sprite <- extractTile(tileSet, spriteEntry).toTry(new FailedToExtractImage())
+                spriteEntry <- spriteRepository.findById(frameEntry.spriteId).toTry {
+                    new NoSuchElementException(s"SpriteEntry id: ${frameEntry.spriteId} not found!")
+                }
+                tileSet <- tileSetRepository.findById(spriteEntry.fileName).toTry {
+                    new NoSuchElementException(s"TileSet id: ${spriteEntry.fileName} not found!")
+                }
+                sprite <- extractTile(tileSet, spriteEntry).toTry {
+                    new FailedToExtractImage()
+                }
             yield
                 Frame(sprite = sprite, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
-                
+
         def extractTile(tileSet: Image, spriteEntry: SpriteEntry): Option[Image] =
             tileSet.pixelReader.map { pixelReader =>
                 new WritableImage(
@@ -39,7 +45,7 @@ final class FrameRepository private(spriteRepository: SpriteRepository, tileSetR
                 frame <- frameFrom(frameEntry)
             yield
                 frameEntry.id -> frame
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object FrameRepository:
 

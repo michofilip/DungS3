@@ -13,7 +13,7 @@ object PhysicsSelectorEntry:
     def fromXML(xml: Node): Try[PhysicsSelectorEntry] = {
         for
             id <- Try((xml \ "id").map(_.text.trim).map(_.toInt).head)
-            variants <- (xml \ "variants" \ "PhysicsSelectorVariant").map(PhysicsSelectorVariantEntry.fromXML).invertTry
+            variants <- (xml \ "variants" \ "PhysicsSelectorVariant").map(PhysicsSelectorVariantEntry.fromXML).toTrySeq
         yield
             PhysicsSelectorEntry(id, variants)
     }.recoverWith {

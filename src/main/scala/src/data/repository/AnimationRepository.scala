@@ -12,15 +12,20 @@ final class AnimationRepository private(frameRepository: FrameRepository) extend
 
     override protected val dataById: Map[Int, Animation] =
         def animationFrom(animationEntry: AnimationEntry): Try[Animation] =
-            animationEntry.frameIds.map { frameId =>
-                frameRepository.findById(frameId).toTry(new NoSuchElementException(s"Frame id: $frameId not found!"))
-            }.invertTry.map { frames =>
+            val frames = animationEntry.frameIds.map { frameId =>
+                frameRepository.findById(frameId).toTry {
+                    new NoSuchElementException(s"Frame id: $frameId not found!")
+                }
+            }.toTrySeq
+
+            for
+                frames <- frames
+            yield
                 Animation(
                     fps = animationEntry.fps,
-                    frames = frames.toIndexedSeq,
+                    frames = frames,
                     looping = animationEntry.looping
                 )
-            }
 
         val xml = XML.load(Resources.animations.reader())
 
@@ -30,7 +35,7 @@ final class AnimationRepository private(frameRepository: FrameRepository) extend
                 animation <- animationFrom(animationEntry)
             yield
                 animationEntry.id -> animation
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object AnimationRepository:
 

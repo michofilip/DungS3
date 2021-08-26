@@ -25,9 +25,9 @@ object Animation:
     final class SingleRunAnimation(fps: Double, frames: IndexedSeq[Frame]) extends Animation(fps, frames) :
         override protected def frameIndex(frameNo: Int, frameLength: Int): Int = frameNo >< (0, frameLength - 1)
 
-    def apply(fps: Double, frames: IndexedSeq[Frame], looping: Boolean): Animation =
+    def apply(fps: Double, frames: Seq[Frame], looping: Boolean): Animation =
         if looping then
-            LoopingAnimation(fps = fps, frames = frames)
+            LoopingAnimation(fps = fps, frames = frames.toIndexedSeq)
         else
-            SingleRunAnimation(fps = fps, frames = frames)
+            SingleRunAnimation(fps = fps, frames = frames.toIndexedSeq)
             

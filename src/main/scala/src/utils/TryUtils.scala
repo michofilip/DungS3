@@ -22,11 +22,11 @@ object TryUtils:
         case None => Failure(throwable)
 
 
-    extension[T] (iterable: Iterable[Try[T]])
-        def invertTry: Try[Seq[T]] = _invertTry(iterable.toSeq)
+    extension[T] (seq: Seq[Try[T]])
+        def toTrySeq: Try[Seq[T]] = _invertTry(seq)
 
     extension[T] (option: Option[Try[T]])
-        def invertTry: Try[Option[T]] = _invertTry(option)
+        def toTryOption: Try[Option[T]] = _invertTry(option)
 
     extension[T] (option: Option[T])
         def toTry(throwable: Throwable): Try[T] = _toTry(option, throwable)

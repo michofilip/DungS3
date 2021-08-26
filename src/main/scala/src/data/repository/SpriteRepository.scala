@@ -19,7 +19,7 @@ final class SpriteRepository private() extends Repository[String, SpriteEntry] :
                 spriteEntry <- SpriteEntry.fromXML(node)
             yield
                 spriteEntry.id -> spriteEntry
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object SpriteRepository:
 

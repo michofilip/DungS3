@@ -12,13 +12,18 @@ final class PhysicsSelectorRepository private(physicsRepository: PhysicsReposito
 
     protected val dataById: Map[Int, PhysicsSelector] =
         def physicsSelectorFrom(physicsSelectorEntry: PhysicsSelectorEntry): Try[PhysicsSelector] =
-            physicsSelectorEntry.variants.map { variant =>
+            val physics = physicsSelectorEntry.variants.map { variant =>
                 physicsRepository.findById(variant.physicsId).map { physics =>
                     variant.state -> physics
-                }.toTry(new NoSuchElementException(s"Physics id: ${variant.physicsId} not found!"))
-            }.invertTry.map { physics =>
+                }.toTry {
+                    new NoSuchElementException(s"Physics id: ${variant.physicsId} not found!")
+                }
+            }.toTrySeq
+
+            for
+                physics <- physics
+            yield
                 PhysicsSelector(physics)
-            }
 
         val xml = XML.load(Resources.physicsSelectors.reader())
 
@@ -28,7 +33,7 @@ final class PhysicsSelectorRepository private(physicsRepository: PhysicsReposito
                 physicsSelector <- physicsSelectorFrom(physicsSelectorEntry)
             yield
                 physicsSelectorEntry.id -> physicsSelector
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object PhysicsSelectorRepository:
 

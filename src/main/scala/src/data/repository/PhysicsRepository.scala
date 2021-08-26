@@ -23,7 +23,7 @@ final class PhysicsRepository private() extends Repository[Int, Physics] :
                 physics <- physicsFrom(physicsEntry)
             yield
                 physicsEntry.id -> physics
-        }.invertTry.map(_.toMap).get
+        }.toTrySeq.map(_.toMap).get
 
 object PhysicsRepository:
 

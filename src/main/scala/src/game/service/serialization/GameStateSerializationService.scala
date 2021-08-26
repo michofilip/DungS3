@@ -28,8 +28,8 @@ class GameStateSerializationService private(entitySerializationService: EntitySe
     def fromXml(xml: Node): Try[GameState] = {
         for
             timer <- Try((xml \ "Timer").map(TimerSerializationService.fromXml).head).flatten
-            entities <- (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).invertTry
-            events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).invertTry
+            entities <- (xml \ "entities" \ "Entity").map(entitySerializationService.fromXml).toTrySeq
+            events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).toTrySeq
         yield
             GameState(
                 timer = timer,
