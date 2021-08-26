@@ -9,15 +9,15 @@ import src.game.temporal.Timestamp
 import scala.util.{Failure, Try}
 import scala.xml.{Node, NodeSeq}
 
-final case class GameObjectEntry(id: String,
-                                 name: String,
-                                 creationTimestamp: Long,
-                                 state: Option[State],
-                                 stateTimestamp: Option[Long],
-                                 x: Option[Int],
-                                 y: Option[Int],
-                                 direction: Option[Direction],
-                                 positionTimestamp: Option[Long]):
+final case class GameObjectEntity(id: String,
+                                  name: String,
+                                  creationTimestamp: Long,
+                                  state: Option[State],
+                                  stateTimestamp: Option[Long],
+                                  x: Option[Int],
+                                  y: Option[Int],
+                                  direction: Option[Direction],
+                                  positionTimestamp: Option[Long]):
 
     def position: Option[Position] = for {
         x <- x
@@ -39,9 +39,9 @@ final case class GameObjectEntry(id: String,
                 {positionTimestamp.fold(NodeSeq.Empty) { positionTimestamp => <positionTimestamp> {positionTimestamp} </positionTimestamp> }}
             </GameObject>
 
-object GameObjectEntry:
+object GameObjectEntity:
 
-    def fromXml(xml: Node): Try[GameObjectEntry] = {
+    def fromXml(xml: Node): Try[GameObjectEntity] = {
         for
             id <- Try((xml \ "id").map(_.text.trim).head)
             name <- Try((xml \ "name").map(_.text.trim).head)
@@ -53,7 +53,7 @@ object GameObjectEntry:
             direction <- Try((xml \ "direction").map(_.text.trim).map(Direction.valueOf).headOption)
             positionTimestamp <- Try((xml \ "positionTimestamp").map(_.text.trim).map(_.toLong).headOption)
         yield
-            GameObjectEntry(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
+            GameObjectEntity(id, name, creationTimestamp, state, stateTimestamp, x, y, direction, positionTimestamp)
     }.recoverWith {
         case e => Failure(new FailedToReadObject("GameObject", e.getMessage))
     }

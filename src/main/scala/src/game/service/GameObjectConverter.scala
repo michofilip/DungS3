@@ -1,6 +1,6 @@
 package src.game.service
 
-import src.data.model.{GameObjectEntry, PhysicsEntry}
+import src.data.model.{GameObjectEntity, PhysicsEntity}
 import src.data.repository.GameObjectPrototypeRepository
 import src.game.gameobject.GameObject
 import src.game.gameobject.parts.state.StateProperty
@@ -13,19 +13,19 @@ import scala.xml.{Node, PrettyPrinter, XML}
 
 class GameObjectConverter private(gameObjectPrototypeRepository: GameObjectPrototypeRepository):
 
-    def fromEntry(gameObjectEntry: GameObjectEntry): Try[GameObject] =
-        gameObjectPrototypeRepository.findById(gameObjectEntry.name).map { gameObjectPrototype =>
+    def fromEntity(gameObjectEntity: GameObjectEntity): Try[GameObject] =
+        gameObjectPrototypeRepository.findById(gameObjectEntity.name).map { gameObjectPrototype =>
 
-            val stateProperty = gameObjectPrototype.getStateProperty(gameObjectEntry.state, gameObjectEntry.stateTimestamp.map(Timestamp.apply))
-            val positionProperty = gameObjectPrototype.getPositionProperty(gameObjectEntry.position, gameObjectEntry.direction, gameObjectEntry.positionTimestamp.map(Timestamp.apply))
+            val stateProperty = gameObjectPrototype.getStateProperty(gameObjectEntity.state, gameObjectEntity.stateTimestamp.map(Timestamp.apply))
+            val positionProperty = gameObjectPrototype.getPositionProperty(gameObjectEntity.position, gameObjectEntity.direction, gameObjectEntity.positionTimestamp.map(Timestamp.apply))
             val physicsProperty = gameObjectPrototype.getPhysicsProperty
             val graphicsProperty = gameObjectPrototype.getGraphicsProperty
 
             Success {
                 new GameObject(
-                    id = UUID.fromString(gameObjectEntry.id),
-                    name = gameObjectEntry.name,
-                    creationTimestamp = Timestamp(gameObjectEntry.creationTimestamp),
+                    id = UUID.fromString(gameObjectEntity.id),
+                    name = gameObjectEntity.name,
+                    creationTimestamp = Timestamp(gameObjectEntity.creationTimestamp),
                     stateProperty = stateProperty,
                     positionProperty = positionProperty,
                     physicsProperty = physicsProperty,
@@ -34,12 +34,12 @@ class GameObjectConverter private(gameObjectPrototypeRepository: GameObjectProto
             }
         }.getOrElse {
             Failure {
-                new NoSuchElementException(s"GameObjectPrototype name: ${gameObjectEntry.name} not found!")
+                new NoSuchElementException(s"GameObjectPrototype name: ${gameObjectEntity.name} not found!")
             }
         }
 
-    def toEntry(gameObject: GameObject): GameObjectEntry =
-        GameObjectEntry(
+    def toEntity(gameObject: GameObject): GameObjectEntity =
+        GameObjectEntity(
             id = gameObject.id.toString,
             name = gameObject.name,
             creationTimestamp = gameObject.creationTimestamp.milliseconds,

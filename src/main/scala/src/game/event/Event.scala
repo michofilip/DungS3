@@ -1,6 +1,6 @@
 package src.game.event
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 
 import java.util.UUID
 
@@ -11,4 +11,4 @@ enum Event:
     case StartTimer extends Event
     case StopTimer extends Event
     case Despawn(gameObjectIds: Seq[UUID]) extends Event
-    case Spawn(useCurrentTimestamp: Boolean, gameObjects: Seq[GameObjectEntry], events: Seq[Event]) extends Event
+    case Spawn(useCurrentTimestamp: Boolean, gameObjects: Seq[GameObjectEntity], events: Seq[Event]) extends Event

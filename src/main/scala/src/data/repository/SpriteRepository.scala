@@ -1,7 +1,7 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.{PhysicsEntry, SpriteEntry}
+import src.data.model.{PhysicsEntity, SpriteEntity}
 import src.game.gameobject.parts.physics.Physics
 import src.utils.TryUtils.*
 
@@ -9,16 +9,16 @@ import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.{NodeSeq, XML}
 
-final class SpriteRepository private() extends Repository[String, SpriteEntry] :
+final class SpriteRepository private() extends Repository[String, SpriteEntity] :
 
-    override protected val dataById: Map[String, SpriteEntry] =
+    override protected val dataById: Map[String, SpriteEntity] =
         val xml = XML.load(new FileInputStream(Resources.sprites))
 
         (xml \ "Sprite").map { node =>
             for
-                spriteEntry <- SpriteEntry.fromXML(node)
+                spriteEntity <- SpriteEntity.fromXML(node)
             yield
-                spriteEntry.id -> spriteEntry
+                spriteEntity.id -> spriteEntity
         }.toTrySeq.map(_.toMap).get
 
 object SpriteRepository:

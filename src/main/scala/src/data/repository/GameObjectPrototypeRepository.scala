@@ -1,7 +1,7 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.{AnimationSelectorEntry, GameObjectPrototypeEntry}
+import src.data.model.{AnimationSelectorEntity, GameObjectPrototypeEntity}
 import src.game.gameobject.GameObjectPrototype
 import src.game.gameobject.parts.physics.PhysicsSelector
 import src.utils.TryUtils.*
@@ -13,14 +13,14 @@ final class GameObjectPrototypeRepository private(physicsSelectorRepository: Phy
                                                   animationSelectorRepository: AnimationSelectorRepository) extends Repository[String, GameObjectPrototype] :
 
     override protected val dataById: Map[String, GameObjectPrototype] =
-        def gameObjectPrototypeFrom(gameObjectPrototypeEntry: GameObjectPrototypeEntry): Try[GameObjectPrototype] =
-            val physicsSelector = gameObjectPrototypeEntry.physicsSelectorId.map { physicsSelectorId =>
+        def gameObjectPrototypeFrom(gameObjectPrototypeEntity: GameObjectPrototypeEntity): Try[GameObjectPrototype] =
+            val physicsSelector = gameObjectPrototypeEntity.physicsSelectorId.map { physicsSelectorId =>
                 physicsSelectorRepository.findById(physicsSelectorId).toTry {
                     new NoSuchElementException(s"PhysicsSelectorId id: $physicsSelectorId not found!")
                 }
             }.toTryOption
 
-            val animationSelector = gameObjectPrototypeEntry.animationSelectorId.map { animationSelectorId =>
+            val animationSelector = gameObjectPrototypeEntity.animationSelectorId.map { animationSelectorId =>
                 animationSelectorRepository.findById(animationSelectorId).toTry {
                     new NoSuchElementException(s"AnimationSelector id: $animationSelectorId not found!")
                 }
@@ -31,12 +31,12 @@ final class GameObjectPrototypeRepository private(physicsSelectorRepository: Phy
                 animationSelector <- animationSelector
             yield
                 GameObjectPrototype(
-                    name = gameObjectPrototypeEntry.name,
-                    availableStates = gameObjectPrototypeEntry.availableStates,
-                    hasPosition = gameObjectPrototypeEntry.hasPosition,
-                    hasDirection = gameObjectPrototypeEntry.hasDirection,
+                    name = gameObjectPrototypeEntity.name,
+                    availableStates = gameObjectPrototypeEntity.availableStates,
+                    hasPosition = gameObjectPrototypeEntity.hasPosition,
+                    hasDirection = gameObjectPrototypeEntity.hasDirection,
                     physicsSelector = physicsSelector,
-                    layer = gameObjectPrototypeEntry.layer,
+                    layer = gameObjectPrototypeEntity.layer,
                     animationSelector = animationSelector
                 )
 
@@ -44,10 +44,10 @@ final class GameObjectPrototypeRepository private(physicsSelectorRepository: Phy
 
         (xml \ "GameObjectPrototype").map { node =>
             for
-                gameObjectPrototypeEntry <- GameObjectPrototypeEntry.fromXML(node)
-                gameObjectPrototype <- gameObjectPrototypeFrom(gameObjectPrototypeEntry)
+                gameObjectPrototypeEntity <- GameObjectPrototypeEntity.fromXML(node)
+                gameObjectPrototype <- gameObjectPrototypeFrom(gameObjectPrototypeEntity)
             yield
-                gameObjectPrototypeEntry.name -> gameObjectPrototype
+                gameObjectPrototypeEntity.name -> gameObjectPrototype
         }.toTrySeq.map(_.toMap).get
 
 object GameObjectPrototypeRepository:

@@ -1,6 +1,6 @@
 package src.game.service
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 import src.game.GameState
 import src.game.event.Event
 import src.game.event.Event.*
@@ -29,21 +29,21 @@ class EventProcessor private(gameObjectConverter: GameObjectConverter):
             val gameObjects = gameObjectIds.flatMap(gameState.gameObjects.findById)
             gameState.updated(gameObjects = gameState.gameObjects -- gameObjects)
 
-        case Spawn(useCurrentTimestamp, gameObjectEntries, events) =>
-            val newGameObjects = gameObjectEntries.map { gameObjectEntry =>
+        case Spawn(useCurrentTimestamp, gameObjectEntities, events) =>
+            val newGameObjects = gameObjectEntities.map { gameObjectEntity =>
                 if useCurrentTimestamp then
                     val gameStateTimestamp = gameState.timer.timestamp.milliseconds
 
-                    gameObjectEntry.copy(
+                    gameObjectEntity.copy(
                         creationTimestamp = gameStateTimestamp,
-                        stateTimestamp = gameObjectEntry.stateTimestamp.map(_ => gameStateTimestamp),
-                        positionTimestamp = gameObjectEntry.positionTimestamp.map(_ => gameStateTimestamp)
+                        stateTimestamp = gameObjectEntity.stateTimestamp.map(_ => gameStateTimestamp),
+                        positionTimestamp = gameObjectEntity.positionTimestamp.map(_ => gameStateTimestamp)
                     )
                 else
-                    gameObjectEntry
-            }.flatMap { gameObjectEntry =>
+                    gameObjectEntity
+            }.flatMap { gameObjectEntity =>
                 // TODO log if failed
-                gameObjectConverter.fromEntry(gameObjectEntry).toOption
+                gameObjectConverter.fromEntity(gameObjectEntity).toOption
             }
 
             gameState.updated(

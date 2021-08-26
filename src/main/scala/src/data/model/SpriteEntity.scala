@@ -5,12 +5,12 @@ import src.exception.FailedToReadObject
 import scala.util.{Failure, Try}
 import scala.xml.Node
 
-case class SpriteEntry(fileName: String, baseSize: Int, positionX: Int, positionY: Int, width: Int, height: Int):
+case class SpriteEntity(fileName: String, baseSize: Int, positionX: Int, positionY: Int, width: Int, height: Int):
     def id: String = s"$fileName-$positionX-$positionY"
 
-object SpriteEntry:
+object SpriteEntity:
 
-    def fromXML(xml: Node): Try[SpriteEntry] = {
+    def fromXML(xml: Node): Try[SpriteEntity] = {
         for
             fileName <- Try((xml \ "fileName").map(_.text.trim).head)
             baseSize <- Try((xml \ "baseSize").map(_.text.trim).map(_.toInt).head)
@@ -19,7 +19,7 @@ object SpriteEntry:
             width <- Try((xml \ "width").map(_.text.trim).map(_.toInt).head)
             height <- Try((xml \ "height").map(_.text.trim).map(_.toInt).head)
         yield
-            SpriteEntry(fileName, baseSize, positionX, positionY, width, height)
+            SpriteEntity(fileName, baseSize, positionX, positionY, width, height)
     }.recoverWith {
-        case e => Failure(new FailedToReadObject("SpriteEntry", e.getMessage))
+        case e => Failure(new FailedToReadObject("SpriteEntity", e.getMessage))
     }

@@ -1,6 +1,6 @@
 package src.game.service.serialization
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 import src.exception.FailedToReadObject
 import src.game.GameState
 import src.game.gameobject.GameObjectRepository

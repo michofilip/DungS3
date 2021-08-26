@@ -3,7 +3,7 @@ package src.data.repository
 
 import scalafx.scene.image.{Image, WritableImage}
 import src.data.Resources
-import src.data.model.{FrameEntry, PhysicsEntry, SpriteEntry}
+import src.data.model.{FrameEntity, PhysicsEntity, SpriteEntity}
 import src.exception.FailedToExtractImage
 import src.game.gameobject.parts.graphics.Frame
 import src.utils.TryUtils.*
@@ -14,26 +14,26 @@ import scala.xml.XML
 final class FrameRepository private(spriteRepository: SpriteRepository, tileSetRepository: TileSetRepository) extends Repository[Int, Frame] :
 
     override protected val dataById: Map[Int, Frame] =
-        def frameFrom(frameEntry: FrameEntry): Try[Frame] =
+        def frameFrom(frameEntity: FrameEntity): Try[Frame] =
             for
-                spriteEntry <- spriteRepository.findById(frameEntry.spriteId).toTry {
-                    new NoSuchElementException(s"SpriteEntry id: ${frameEntry.spriteId} not found!")
+                spriteEntity <- spriteRepository.findById(frameEntity.spriteId).toTry {
+                    new NoSuchElementException(s"SpriteEntity id: ${frameEntity.spriteId} not found!")
                 }
-                tileSet <- tileSetRepository.findById(spriteEntry.fileName).toTry {
-                    new NoSuchElementException(s"TileSet id: ${spriteEntry.fileName} not found!")
+                tileSet <- tileSetRepository.findById(spriteEntity.fileName).toTry {
+                    new NoSuchElementException(s"TileSet id: ${spriteEntity.fileName} not found!")
                 }
-                sprite <- extractTile(tileSet, spriteEntry).toTry {
+                sprite <- extractTile(tileSet, spriteEntity).toTry {
                     new FailedToExtractImage()
                 }
             yield
-                Frame(sprite = sprite, offsetX = frameEntry.offsetX, offsetY = frameEntry.offsetY)
+                Frame(sprite = sprite, offsetX = frameEntity.offsetX, offsetY = frameEntity.offsetY)
 
-        def extractTile(tileSet: Image, spriteEntry: SpriteEntry): Option[Image] =
+        def extractTile(tileSet: Image, spriteEntity: SpriteEntity): Option[Image] =
             tileSet.pixelReader.map { pixelReader =>
                 new WritableImage(
                     pixelReader,
-                    spriteEntry.positionX * spriteEntry.baseSize, spriteEntry.positionY * spriteEntry.baseSize,
-                    spriteEntry.width * spriteEntry.baseSize, spriteEntry.height * spriteEntry.baseSize
+                    spriteEntity.positionX * spriteEntity.baseSize, spriteEntity.positionY * spriteEntity.baseSize,
+                    spriteEntity.width * spriteEntity.baseSize, spriteEntity.height * spriteEntity.baseSize
                 )
             }
 
@@ -41,10 +41,10 @@ final class FrameRepository private(spriteRepository: SpriteRepository, tileSetR
 
         (xml \ "Frame").map { node =>
             for
-                frameEntry <- FrameEntry.fromXML(node)
-                frame <- frameFrom(frameEntry)
+                frameEntity <- FrameEntity.fromXML(node)
+                frame <- frameFrom(frameEntity)
             yield
-                frameEntry.id -> frame
+                frameEntity.id -> frame
         }.toTrySeq.map(_.toMap).get
 
 object FrameRepository:

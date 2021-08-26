@@ -1,6 +1,6 @@
 package src
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 import src.data.repository.{AnimationRepository, AnimationSelectorRepository, FrameRepository, GameObjectPrototypeRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.GameState
 import src.game.event.Event
@@ -21,14 +21,14 @@ object Main:
     @main
     def start(): Unit =
 
-        val gameObjectEntry1 = GameObjectEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(10), y = Some(20), direction = Some(Direction.East), positionTimestamp = Some(0L))
-        val gameObjectEntry2 = GameObjectEntry(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(0), y = Some(0), direction = Some(Direction.East), positionTimestamp = Some(0L))
+        val gameObjectEntity1 = GameObjectEntity(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(10), y = Some(20), direction = Some(Direction.East), positionTimestamp = Some(0L))
+        val gameObjectEntity2 = GameObjectEntity(id = UUID.randomUUID().toString, name = "player", creationTimestamp = 0L, state = None, stateTimestamp = None, x = Some(0), y = Some(0), direction = Some(Direction.East), positionTimestamp = Some(0L))
 
-        val gameObject1 = GameObjectConverter().fromEntry(gameObjectEntry1).get
+        val gameObject1 = GameObjectConverter().fromEntity(gameObjectEntity1).get
 
         val event1 = Event.MoveBy(gameObjectId = gameObject1.id, dx = 10, dy = 15)
-        val event2 = Event.MoveTo(gameObjectId = UUID.fromString(gameObjectEntry2.id), x = -1, y = -1)
-        val event3 = Event.Spawn(useCurrentTimestamp = true, gameObjects = Seq(gameObjectEntry2), events = Seq(event2))
+        val event2 = Event.MoveTo(gameObjectId = UUID.fromString(gameObjectEntity2.id), x = -1, y = -1)
+        val event3 = Event.Spawn(useCurrentTimestamp = true, gameObjects = Seq(gameObjectEntity2), events = Seq(event2))
 
         val gameObjectRepository = GameObjectRepository(Seq(gameObject1))
         val gameState0 = GameState(timer = Timer(running = true), gameObjects = gameObjectRepository, events = Queue(event1, event3))

@@ -1,7 +1,7 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.{PhysicsEntry, PhysicsSelectorEntry}
+import src.data.model.{PhysicsEntity, PhysicsSelectorEntity}
 import src.game.gameobject.parts.physics.PhysicsSelector
 import src.utils.TryUtils.*
 
@@ -11,8 +11,8 @@ import scala.xml.{NodeSeq, XML}
 final class PhysicsSelectorRepository private(physicsRepository: PhysicsRepository) extends Repository[Int, PhysicsSelector] :
 
     protected val dataById: Map[Int, PhysicsSelector] =
-        def physicsSelectorFrom(physicsSelectorEntry: PhysicsSelectorEntry): Try[PhysicsSelector] =
-            val physics = physicsSelectorEntry.variants.map { variant =>
+        def physicsSelectorFrom(physicsSelectorEntity: PhysicsSelectorEntity): Try[PhysicsSelector] =
+            val physics = physicsSelectorEntity.variants.map { variant =>
                 physicsRepository.findById(variant.physicsId).map { physics =>
                     variant.state -> physics
                 }.toTry {
@@ -29,10 +29,10 @@ final class PhysicsSelectorRepository private(physicsRepository: PhysicsReposito
 
         (xml \ "PhysicsSelector").map { node =>
             for
-                physicsSelectorEntry <- PhysicsSelectorEntry.fromXML(node)
-                physicsSelector <- physicsSelectorFrom(physicsSelectorEntry)
+                physicsSelectorEntity <- PhysicsSelectorEntity.fromXML(node)
+                physicsSelector <- physicsSelectorFrom(physicsSelectorEntity)
             yield
-                physicsSelectorEntry.id -> physicsSelector
+                physicsSelectorEntity.id -> physicsSelector
         }.toTrySeq.map(_.toMap).get
 
 object PhysicsSelectorRepository:

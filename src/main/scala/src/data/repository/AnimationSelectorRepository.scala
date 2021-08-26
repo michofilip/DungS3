@@ -1,7 +1,7 @@
 package src.data.repository
 
 import src.data.Resources
-import src.data.model.AnimationSelectorEntry
+import src.data.model.AnimationSelectorEntity
 import src.game.gameobject.parts.graphics.AnimationSelector
 import src.utils.TryUtils.*
 
@@ -11,8 +11,8 @@ import scala.xml.XML
 final class AnimationSelectorRepository private(animationRepository: AnimationRepository) extends Repository[Int, AnimationSelector] :
 
     override protected val dataById: Map[Int, AnimationSelector] =
-        def animationSelectorFrom(animationSelectorEntry: AnimationSelectorEntry): Try[AnimationSelector] =
-            val animations = animationSelectorEntry.variants.map { variant =>
+        def animationSelectorFrom(animationSelectorEntity: AnimationSelectorEntity): Try[AnimationSelector] =
+            val animations = animationSelectorEntity.variants.map { variant =>
                 animationRepository.findById(variant.animationId).map { animation =>
                     (variant.state, variant.direction) -> animation
                 }.toTry {
@@ -29,10 +29,10 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
 
         (xml \ "AnimationSelector").map { node =>
             for
-                animationSelectorEntry <- AnimationSelectorEntry.fromXML(node)
-                animationSelector <- animationSelectorFrom(animationSelectorEntry)
+                animationSelectorEntity <- AnimationSelectorEntity.fromXML(node)
+                animationSelector <- animationSelectorFrom(animationSelectorEntity)
             yield
-                animationSelectorEntry.id -> animationSelector
+                animationSelectorEntity.id -> animationSelector
         }.toTrySeq.map(_.toMap).get
 
 object AnimationSelectorRepository:

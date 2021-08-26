@@ -1,6 +1,6 @@
 package src.game.service.serialization
 
-import src.data.model.{GameObjectEntry, PhysicsEntry}
+import src.data.model.{GameObjectEntity, PhysicsEntity}
 import src.data.repository.GameObjectPrototypeRepository
 import src.game.gameobject.GameObject
 import src.game.gameobject.parts.state.State
@@ -15,11 +15,11 @@ import scala.xml.{Node, NodeSeq, PrettyPrinter, XML}
 class GameObjectSerializationService private(gameObjectConverter: GameObjectConverter):
 
     def toXml(gameObject: GameObject): Node =
-        gameObjectConverter.toEntry(gameObject).toXml
+        gameObjectConverter.toEntity(gameObject).toXml
 
     def fromXml(xml: Node): Try[GameObject] =
-        GameObjectEntry.fromXml(xml)
-            .flatMap(gameObjectConverter.fromEntry)
+        GameObjectEntity.fromXml(xml)
+            .flatMap(gameObjectConverter.fromEntity)
 
 object GameObjectSerializationService:
 

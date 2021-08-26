@@ -1,6 +1,6 @@
 package src.game.service.serialization
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 import src.exception.FailedToReadObject
 import src.game.event.Event
 import src.game.event.Event.{Despawn, MoveBy, MoveTo, Spawn, StartTimer, StopTimer}
@@ -85,7 +85,7 @@ object EventSerializationService:
             case "Spawn" =>
                 for
                     useCurrentTimestamp <- Try((xml \ "useCurrentTimestamp").map(_.text.trim).map(_.toBoolean).head)
-                    gameObjects <- (xml \ "gameObjects" \ "GameObject").map(GameObjectEntry.fromXml).toTrySeq
+                    gameObjects <- (xml \ "gameObjects" \ "GameObject").map(GameObjectEntity.fromXml).toTrySeq
                     events <- (xml \ "events" \ "Event").map(EventSerializationService.fromXml).toTrySeq
                 yield
                     Spawn(useCurrentTimestamp, gameObjects, events)

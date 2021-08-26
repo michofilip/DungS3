@@ -1,6 +1,6 @@
 package src.game.service
 
-import src.data.model.GameObjectEntry
+import src.data.model.GameObjectEntity
 import src.game.GameState
 import src.game.gameobject.GameObjectRepository
 import src.game.gameobject.parts.state.State
@@ -25,9 +25,9 @@ class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
             } yield {
                 mapChar(x, y, chars(y)(2 * x))
             }
-        }.flatten.flatMap { gameObjectEntry =>
+        }.flatten.flatMap { gameObjectEntity =>
             // TODO log if failed
-            gameObjectConverter.fromEntry(gameObjectEntry).toOption
+            gameObjectConverter.fromEntity(gameObjectEntity).toOption
         }
 
         GameState(
@@ -37,9 +37,9 @@ class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
         )
     }.toOption
 
-    private def mapChar(x: Int, y: Int, char: Char): Seq[GameObjectEntry] = {
-        def makeFloor(x: Int, y: Int): GameObjectEntry =
-            GameObjectEntry(
+    private def mapChar(x: Int, y: Int, char: Char): Seq[GameObjectEntity] = {
+        def makeFloor(x: Int, y: Int): GameObjectEntity =
+            GameObjectEntity(
                 id = UUID.randomUUID().toString,
                 name = "floor",
                 creationTimestamp = 0L,
@@ -51,8 +51,8 @@ class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makeWall(x: Int, y: Int): GameObjectEntry =
-            GameObjectEntry(
+        def makeWall(x: Int, y: Int): GameObjectEntity =
+            GameObjectEntity(
                 id = UUID.randomUUID().toString,
                 name = "wall",
                 creationTimestamp = 0L,
@@ -64,8 +64,8 @@ class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makeDoor(x: Int, y: Int): GameObjectEntry =
-            GameObjectEntry(
+        def makeDoor(x: Int, y: Int): GameObjectEntity =
+            GameObjectEntity(
                 id = UUID.randomUUID().toString,
                 name = "door",
                 creationTimestamp = 0L,
@@ -77,8 +77,8 @@ class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
                 positionTimestamp = Some(0L)
             )
 
-        def makePlayer(x: Int, y: Int): GameObjectEntry =
-            GameObjectEntry(
+        def makePlayer(x: Int, y: Int): GameObjectEntity =
+            GameObjectEntity(
                 id = UUID.randomUUID().toString,
                 name = "player",
                 creationTimestamp = 0L,
