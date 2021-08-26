@@ -3,10 +3,10 @@ package src
 import src.data.model.EntityEntry
 import src.data.repository.{AnimationRepository, AnimationSelectorRepository, EntityPrototypeRepository, FrameRepository, PhysicsRepository, PhysicsSelectorRepository}
 import src.game.GameState
-import src.game.entity.mapper.{DirectionMapper, PositionMapper}
-import src.game.entity.parts.position.Direction
-import src.game.entity.parts.state.State
-import src.game.entity.{Entity, EntityPrototype, EntityRepository}
+import src.game.gameobject.mapper.{DirectionMapper, PositionMapper}
+import src.game.gameobject.parts.position.Direction
+import src.game.gameobject.parts.state.State
+import src.game.gameobject.{Entity, EntityPrototype, EntityRepository}
 import src.game.event.Event
 import src.game.service.serialization.{EntitySerializationService, GameStateSerializationService}
 import src.game.service.{EntityConverter, EventProcessor, GameStateFileProcessor, GameStateProcessor}

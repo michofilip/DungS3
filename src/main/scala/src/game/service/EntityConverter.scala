@@ -2,8 +2,8 @@ package src.game.service
 
 import src.data.model.{EntityEntry, PhysicsEntry}
 import src.data.repository.EntityPrototypeRepository
-import src.game.entity.Entity
-import src.game.entity.parts.state.StateProperty
+import src.game.gameobject.Entity
+import src.game.gameobject.parts.state.StateProperty
 import src.game.temporal.Timestamp
 
 import java.io.{BufferedWriter, File, FileWriter, PrintWriter}

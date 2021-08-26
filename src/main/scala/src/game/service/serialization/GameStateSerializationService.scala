@@ -3,7 +3,7 @@ package src.game.service.serialization
 import src.data.model.EntityEntry
 import src.exception.FailedToReadObject
 import src.game.GameState
-import src.game.entity.EntityRepository
+import src.game.gameobject.EntityRepository
 import src.game.service.serialization.{EntitySerializationService, EventSerializationService}
 import src.game.temporal.Timer
 import src.utils.TryUtils.*

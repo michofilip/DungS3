@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.AnimationEntry
-import src.game.entity.parts.graphics.Animation
+import src.game.gameobject.parts.graphics.Animation
 import src.utils.TryUtils.*
 
 import scala.util.{Failure, Success, Try}

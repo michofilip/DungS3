@@ -2,7 +2,7 @@ package src.game.service
 
 import src.data.model.EntityEntry
 import src.game.GameState
-import src.game.entity.mapper.PositionMapper
+import src.game.gameobject.mapper.PositionMapper
 import src.game.event.Event
 import src.game.event.Event.*
 import src.game.service.EntityConverter

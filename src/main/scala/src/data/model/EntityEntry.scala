@@ -1,9 +1,9 @@
 package src.data.model
 
 import src.exception.FailedToReadObject
-import src.game.entity.Entity
-import src.game.entity.parts.position.{Direction, Position}
-import src.game.entity.parts.state.State
+import src.game.gameobject.Entity
+import src.game.gameobject.parts.position.{Direction, Position}
+import src.game.gameobject.parts.state.State
 import src.game.temporal.Timestamp
 
 import scala.util.{Failure, Try}

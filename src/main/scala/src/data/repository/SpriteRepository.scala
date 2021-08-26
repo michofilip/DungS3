@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.{PhysicsEntry, SpriteEntry}
-import src.game.entity.parts.physics.Physics
+import src.game.gameobject.parts.physics.Physics
 import src.utils.TryUtils.*
 
 import java.io.FileInputStream

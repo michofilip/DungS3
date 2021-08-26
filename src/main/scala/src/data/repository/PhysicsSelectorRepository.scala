@@ -2,7 +2,7 @@ package src.data.repository
 
 import src.data.Resources
 import src.data.model.{PhysicsEntry, PhysicsSelectorEntry}
-import src.game.entity.parts.physics.PhysicsSelector
+import src.game.gameobject.parts.physics.PhysicsSelector
 import src.utils.TryUtils.*
 
 import scala.util.{Failure, Success, Try}

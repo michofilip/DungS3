@@ -5,7 +5,7 @@ import scalafx.scene.image.{Image, WritableImage}
 import src.data.Resources
 import src.data.model.{FrameEntry, PhysicsEntry, SpriteEntry}
 import src.exception.FailedToExtractImage
-import src.game.entity.parts.graphics.Frame
+import src.game.gameobject.parts.graphics.Frame
 import src.utils.TryUtils.*
 
 import scala.util.{Failure, Success, Try}

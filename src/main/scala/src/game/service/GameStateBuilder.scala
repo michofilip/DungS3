@@ -2,8 +2,8 @@ package src.game.service
 
 import src.data.model.EntityEntry
 import src.game.GameState
-import src.game.entity.EntityRepository
-import src.game.entity.parts.state.State
+import src.game.gameobject.EntityRepository
+import src.game.gameobject.parts.state.State
 import src.game.temporal.Timer
 
 import java.io.File

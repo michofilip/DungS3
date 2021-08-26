@@ -1,7 +1,7 @@
 package src.data.model
 
 import src.exception.FailedToReadObject
-import src.game.entity.parts.state.State
+import src.game.gameobject.parts.state.State
 
 import scala.util.{Failure, Try}
 import scala.xml.Node

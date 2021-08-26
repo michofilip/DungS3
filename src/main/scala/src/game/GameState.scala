@@ -1,6 +1,6 @@
 package src.game
 
-import src.game.entity.EntityRepository
+import src.game.gameobject.EntityRepository
 import src.game.event.Event
 import src.game.temporal.Timer
 
