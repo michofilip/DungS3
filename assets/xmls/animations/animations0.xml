@@ -1,0 +1,21 @@
+<animations>
+    <Animation>
+        <id>1</id>
+        <fps>30.0</fps>
+        <looping>false</looping>
+        <frameIds>
+            <frameId>1</frameId>
+            <frameId>2</frameId>
+            <frameId>3</frameId>
+            <frameId>4</frameId>
+        </frameIds>
+    </Animation>
+    <Animation>
+        <id>2</id>
+        <fps>30.0</fps>
+        <looping>true</looping>
+        <frameIds>
+            <frameId>1</frameId>
+        </frameIds>
+    </Animation>
+</animations>

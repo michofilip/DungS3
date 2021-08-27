@@ -3,8 +3,10 @@ package dod.data.repository
 import dod.data.Resources
 import dod.data.model.AnimationSelectorEntity
 import dod.game.gameobject.parts.graphics.AnimationSelector
+import dod.utils.FileUtils
 import dod.utils.TryUtils.*
 
+import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
@@ -25,14 +27,16 @@ final class AnimationSelectorRepository private(animationRepository: AnimationRe
             yield
                 AnimationSelector(animations)
 
-        val xml = XML.load(Resources.animationSelectors.reader())
-
-        (xml \ "AnimationSelector").map { node =>
-            for
-                animationSelectorEntity <- AnimationSelectorEntity.fromXML(node)
-                animationSelector <- animationSelectorFrom(animationSelectorEntity)
-            yield
-                animationSelectorEntity.id -> animationSelector
+        FileUtils.filesInDir(Resources.animationSelectors).map { file =>
+            XML.load(new FileInputStream(file))
+        }.flatMap { xml =>
+            (xml \ "AnimationSelector").map { node =>
+                for
+                    animationSelectorEntity <- AnimationSelectorEntity.fromXML(node)
+                    animationSelector <- animationSelectorFrom(animationSelectorEntity)
+                yield
+                    animationSelectorEntity.id -> animationSelector
+            }
         }.toTrySeq.map(_.toMap).get
 
 object AnimationSelectorRepository:

@@ -3,8 +3,10 @@ package dod.data.repository
 import dod.data.Resources
 import dod.data.model.AnimationEntity
 import dod.game.gameobject.parts.graphics.Animation
+import dod.utils.FileUtils
 import dod.utils.TryUtils.*
 
+import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
@@ -27,14 +29,16 @@ final class AnimationRepository private(frameRepository: FrameRepository) extend
                     looping = animationEntity.looping
                 )
 
-        val xml = XML.load(Resources.animations.reader())
-
-        (xml \ "Animation").map { node =>
-            for
-                animationEntity <- AnimationEntity.fromXML(node)
-                animation <- animationFrom(animationEntity)
-            yield
-                animationEntity.id -> animation
+        FileUtils.filesInDir(Resources.animations).map { file =>
+            XML.load(new FileInputStream(file))
+        }.flatMap { xml =>
+            (xml \ "Animation").map { node =>
+                for
+                    animationEntity <- AnimationEntity.fromXML(node)
+                    animation <- animationFrom(animationEntity)
+                yield
+                    animationEntity.id -> animation
+            }
         }.toTrySeq.map(_.toMap).get
 
 object AnimationRepository:

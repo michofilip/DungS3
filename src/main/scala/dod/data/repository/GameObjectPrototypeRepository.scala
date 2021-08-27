@@ -4,8 +4,10 @@ import dod.data.Resources
 import dod.data.model.{AnimationSelectorEntity, GameObjectPrototypeEntity}
 import dod.game.gameobject.GameObjectPrototype
 import dod.game.gameobject.parts.physics.PhysicsSelector
+import dod.utils.FileUtils
 import dod.utils.TryUtils.*
 
+import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
@@ -40,14 +42,16 @@ final class GameObjectPrototypeRepository private(physicsSelectorRepository: Phy
                     animationSelector = animationSelector
                 )
 
-        val xml = XML.load(Resources.gameObjectPrototypes.reader())
-
-        (xml \ "GameObjectPrototype").map { node =>
-            for
-                gameObjectPrototypeEntity <- GameObjectPrototypeEntity.fromXML(node)
-                gameObjectPrototype <- gameObjectPrototypeFrom(gameObjectPrototypeEntity)
-            yield
-                gameObjectPrototypeEntity.name -> gameObjectPrototype
+        FileUtils.filesInDir(Resources.gameObjectPrototypes).map { file =>
+            XML.load(new FileInputStream(file))
+        }.flatMap { xml =>
+            (xml \ "GameObjectPrototype").map { node =>
+                for
+                    gameObjectPrototypeEntity <- GameObjectPrototypeEntity.fromXML(node)
+                    gameObjectPrototype <- gameObjectPrototypeFrom(gameObjectPrototypeEntity)
+                yield
+                    gameObjectPrototypeEntity.name -> gameObjectPrototype
+            }
         }.toTrySeq.map(_.toMap).get
 
 object GameObjectPrototypeRepository:

@@ -3,8 +3,10 @@ package dod.data.repository
 import dod.data.Resources
 import dod.data.model.{PhysicsEntity, PhysicsSelectorEntity}
 import dod.game.gameobject.parts.physics.PhysicsSelector
+import dod.utils.FileUtils
 import dod.utils.TryUtils.*
 
+import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.{NodeSeq, XML}
 
@@ -25,14 +27,16 @@ final class PhysicsSelectorRepository private(physicsRepository: PhysicsReposito
             yield
                 PhysicsSelector(physics)
 
-        val xml = XML.load(Resources.physicsSelectors.reader())
-
-        (xml \ "PhysicsSelector").map { node =>
-            for
-                physicsSelectorEntity <- PhysicsSelectorEntity.fromXML(node)
-                physicsSelector <- physicsSelectorFrom(physicsSelectorEntity)
-            yield
-                physicsSelectorEntity.id -> physicsSelector
+        FileUtils.filesInDir(Resources.physicsSelectors).map { file =>
+            XML.load(new FileInputStream(file))
+        }.flatMap { xml =>
+            (xml \ "PhysicsSelector").map { node =>
+                for
+                    physicsSelectorEntity <- PhysicsSelectorEntity.fromXML(node)
+                    physicsSelector <- physicsSelectorFrom(physicsSelectorEntity)
+                yield
+                    physicsSelectorEntity.id -> physicsSelector
+            }
         }.toTrySeq.map(_.toMap).get
 
 object PhysicsSelectorRepository:

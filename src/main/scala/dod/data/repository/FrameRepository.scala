@@ -1,13 +1,15 @@
 package dod.data.repository
 
 
-import scalafx.scene.image.{Image, WritableImage}
 import dod.data.Resources
 import dod.data.model.{FrameEntity, PhysicsEntity, SpriteEntity}
 import dod.exception.FailedToExtractImage
 import dod.game.gameobject.parts.graphics.Frame
+import dod.utils.FileUtils
 import dod.utils.TryUtils.*
+import scalafx.scene.image.{Image, WritableImage}
 
+import java.io.FileInputStream
 import scala.util.{Failure, Success, Try}
 import scala.xml.XML
 
@@ -37,14 +39,16 @@ final class FrameRepository private(spriteRepository: SpriteRepository, tileSetR
                 )
             }
 
-        val xml = XML.load(Resources.frames.reader())
-
-        (xml \ "Frame").map { node =>
-            for
-                frameEntity <- FrameEntity.fromXML(node)
-                frame <- frameFrom(frameEntity)
-            yield
-                frameEntity.id -> frame
+        FileUtils.filesInDir(Resources.frames).map { file =>
+            XML.load(new FileInputStream(file))
+        }.flatMap { xml =>
+            (xml \ "Frame").map { node =>
+                for
+                    frameEntity <- FrameEntity.fromXML(node)
+                    frame <- frameFrom(frameEntity)
+                yield
+                    frameEntity.id -> frame
+            }
         }.toTrySeq.map(_.toMap).get
 
 object FrameRepository:
