@@ -6,7 +6,7 @@ import dod.game.gameobject.GameObjectRepository
 import dod.game.gameobject.parts.state.State
 import dod.game.temporal.Timer
 
-import java.io.File
+import java.io.{File, FileInputStream}
 import java.util.UUID
 import scala.collection.immutable.Queue
 import scala.io.{BufferedSource, Source}
@@ -15,7 +15,7 @@ import scala.util.Try
 class GameStateBuilder private(gameObjectConverter: GameObjectConverter):
 
     def load(mapName: String): Option[GameState] = Try {
-        val map: BufferedSource = Source.fromResource(s"maps/$mapName.lvl")
+        val map: BufferedSource = Source.fromFile(s"assets/maps/$mapName.lvl")
         val chars: Vector[Vector[Char]] = map.getLines().toVector.map(line => line.toVector)
 
         val gameObjects = {
