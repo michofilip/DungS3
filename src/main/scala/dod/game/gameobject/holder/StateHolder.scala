@@ -5,7 +5,7 @@ import dod.game.gameobject.mapper.StateMapper
 import dod.game.gameobject.parts.state.{State, StateProperty}
 import dod.game.temporal.Timestamp
 
-trait StateHolder[T <: GameObject]:
+trait StateHolder[T <: GameObject] {
     protected val stateProperty: Option[StateProperty]
 
     def hasState: Boolean = stateProperty.isDefined
@@ -14,4 +14,5 @@ trait StateHolder[T <: GameObject]:
 
     def stateTimestamp: Option[Timestamp] = stateProperty.map(_.stateTimestamp)
 
-    def updatedState(stateMapper: StateMapper, timestamp: Timestamp): T 
+    def updatedState(stateMapper: StateMapper, timestamp: Timestamp): T
+}

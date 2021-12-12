@@ -5,7 +5,7 @@ import dod.game.gameobject.mapper.{DirectionMapper, PositionMapper}
 import dod.game.gameobject.parts.position.{Direction, Position, PositionProperty}
 import dod.game.temporal.Timestamp
 
-trait PositionHolder[T <: GameObject]:
+trait PositionHolder[T <: GameObject] {
     protected val positionProperty: Option[PositionProperty]
 
     def hasPosition: Boolean = positionProperty.isDefined
@@ -19,4 +19,4 @@ trait PositionHolder[T <: GameObject]:
     def updatedPosition(positionMapper: PositionMapper, timestamp: Timestamp): T
 
     def updatedDirection(directionMapper: DirectionMapper, timestamp: Timestamp): T
-
+}
