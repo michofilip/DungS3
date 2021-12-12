@@ -51,3 +51,5 @@ object Main:
         GameStateFileProcessor().saveToFile(File("gameState3.xml"), gameState3)
         //        Thread.sleep(1000)
         GameStateFileProcessor().loadFromFile(File("gameState0.xml")).foreach(println)
+        
+        gameObject1.frame(Timestamp.zero)

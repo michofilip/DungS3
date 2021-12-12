@@ -15,38 +15,33 @@ final class GameObjectPrototype(private val name: String,
                                 private val physicsSelector: Option[PhysicsSelector],
                                 private val animationSelector: Option[AnimationSelector]):
 
-    def getStateProperty(state: Option[State], stateTimestamp: Option[Timestamp]): StateProperty =
+    def getStateProperty(state: Option[State], stateTimestamp: Option[Timestamp]): Option[StateProperty] =
         if availableStates.isEmpty then
-            StateProperty.empty
+            None
         else state match
-            case Some(state) if availableStates.contains(state) => StateProperty(state, stateTimestamp.getOrElse(defaultTimestamp))
-            case _ => StateProperty(availableStates.head, stateTimestamp.getOrElse(defaultTimestamp))
+            case Some(state) if availableStates.contains(state) => Some(StateProperty(state, stateTimestamp.getOrElse(defaultTimestamp)))
+            case _ => Some(StateProperty(availableStates.head, stateTimestamp.getOrElse(defaultTimestamp)))
 
-    def getPositionProperty(position: Option[Position], direction: Option[Direction], positionTimestamp: Option[Timestamp]): PositionProperty =
-        if !hasPosition then
-            PositionProperty.empty
-        else if hasDirection then
-            PositionProperty(
+    def getPositionProperty(position: Option[Position], direction: Option[Direction], positionTimestamp: Option[Timestamp]): Option[PositionProperty] =
+        if hasPosition then
+            Some(PositionProperty(
                 position = position.getOrElse(defaultPosition),
                 direction = direction.getOrElse(defaultDirection),
-                timestamp = positionTimestamp.getOrElse(defaultTimestamp)
-            )
+                positionTimestamp = positionTimestamp.getOrElse(defaultTimestamp)
+            ))
         else
-            PositionProperty(
-                position = position.getOrElse(defaultPosition),
-                timestamp = positionTimestamp.getOrElse(defaultTimestamp)
-            )
+            None
 
-    def getPhysicsProperty: PhysicsProperty = {
+    def getPhysicsProperty: Option[PhysicsProperty] = {
         for
             physicsSelector <- physicsSelector
         yield
             PhysicsProperty(
                 physicsSelector = physicsSelector
             )
-    }.getOrElse(PhysicsProperty.empty)
+    }
 
-    def getGraphicsProperty: GraphicsProperty = {
+    def getGraphicsProperty: Option[GraphicsProperty] = {
         for
             layer <- layer
             animationSelector <- animationSelector
@@ -55,7 +50,7 @@ final class GameObjectPrototype(private val name: String,
                 layer = layer,
                 animationSelector = animationSelector
             )
-    }.getOrElse(GraphicsProperty.empty)
+    }
 
 
 object GameObjectPrototype:

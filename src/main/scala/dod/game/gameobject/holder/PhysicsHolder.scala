@@ -6,8 +6,8 @@ import dod.game.gameobject.parts.physics.{Physics, PhysicsProperty, PhysicsSelec
 trait PhysicsHolder[T <: GameObject]:
     this: StateHolder[T] =>
 
-    protected val physicsProperty: PhysicsProperty
+    protected val physicsProperty: Option[PhysicsProperty]
 
-    def hasPhysics: Boolean = physicsProperty.hasPhysics
+    def hasPhysics: Boolean = physicsProperty.isDefined
 
-    def physics: Option[Physics] = physicsProperty.physics(state)
+    def physics: Option[Physics] = physicsProperty.flatMap(_.physics(state))
