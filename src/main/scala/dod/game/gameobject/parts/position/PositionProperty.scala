@@ -4,9 +4,9 @@ import dod.game.gameobject.mapper.{DirectionMapper, PositionMapper}
 import dod.game.gameobject.parts.position.{Direction, PositionProperty}
 import dod.game.temporal.Timestamp
 
-class PositionProperty(val position: Position,
-                       val direction: Direction,
-                       val positionTimestamp: Timestamp):
+final class PositionProperty(val position: Position,
+                             val direction: Direction,
+                             val positionTimestamp: Timestamp) {
 
     def updatedPosition(positionMapper: PositionMapper, timestamp: Timestamp): PositionProperty =
         positionMapper(position) match
@@ -17,4 +17,4 @@ class PositionProperty(val position: Position,
         directionMapper(direction) match
             case direction if direction != this.direction => new PositionProperty(position, direction, timestamp)
             case _ => this
-            
+}
