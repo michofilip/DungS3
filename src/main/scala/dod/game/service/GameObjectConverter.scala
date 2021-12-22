@@ -3,6 +3,7 @@ package dod.game.service
 import dod.data.model.{GameObjectEntity, PhysicsEntity}
 import dod.data.repository.GameObjectPrototypeRepository
 import dod.game.gameobject.GameObject
+import dod.game.gameobject.parts.commons.CommonsProperty
 import dod.game.gameobject.parts.state.StateProperty
 import dod.game.temporal.Timestamp
 
@@ -16,6 +17,7 @@ class GameObjectConverter private(gameObjectPrototypeRepository: GameObjectProto
     def fromEntity(gameObjectEntity: GameObjectEntity): Try[GameObject] =
         gameObjectPrototypeRepository.findById(gameObjectEntity.name).map { gameObjectPrototype =>
 
+            val commonsProperty = gameObjectPrototype.getCommonsProperty(Timestamp(gameObjectEntity.creationTimestamp))
             val stateProperty = gameObjectPrototype.getStateProperty(gameObjectEntity.state, gameObjectEntity.stateTimestamp.map(Timestamp.apply))
             val positionProperty = gameObjectPrototype.getPositionProperty(gameObjectEntity.position, gameObjectEntity.direction, gameObjectEntity.positionTimestamp.map(Timestamp.apply))
             val physicsProperty = gameObjectPrototype.getPhysicsProperty
@@ -24,8 +26,7 @@ class GameObjectConverter private(gameObjectPrototypeRepository: GameObjectProto
             Success {
                 new GameObject(
                     id = UUID.fromString(gameObjectEntity.id),
-                    name = gameObjectEntity.name,
-                    creationTimestamp = Timestamp(gameObjectEntity.creationTimestamp),
+                    commonsProperty = commonsProperty,
                     stateProperty = stateProperty,
                     positionProperty = positionProperty,
                     physicsProperty = physicsProperty,

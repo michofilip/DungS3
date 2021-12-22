@@ -8,7 +8,7 @@ import dod.utils.MathUtils.*
 
 import scala.concurrent.duration
 
-abstract class Animation(val fps: Double, private val frames: IndexedSeq[Frame]):
+abstract class Animation(val fps: Double, private val frames: IndexedSeq[Frame]) {
     val length: Duration = (frames.length / fps * 1000).milliseconds
 
     def frame(duration: Duration): Frame =
@@ -16,18 +16,22 @@ abstract class Animation(val fps: Double, private val frames: IndexedSeq[Frame])
         frames(frameIndex(frameNo, frames.length))
 
     protected def frameIndex(frameNo: Int, frameLength: Int): Int
+}
 
-object Animation:
+object Animation {
 
-    final class LoopingAnimation(fps: Double, frames: IndexedSeq[Frame]) extends Animation(fps, frames) :
+    final class LoopingAnimation(fps: Double, frames: IndexedSeq[Frame]) extends Animation(fps, frames) {
         override protected def frameIndex(frameNo: Int, frameLength: Int): Int = frameNo %% frameLength
+    }
 
-    final class SingleRunAnimation(fps: Double, frames: IndexedSeq[Frame]) extends Animation(fps, frames) :
+    final class SingleRunAnimation(fps: Double, frames: IndexedSeq[Frame]) extends Animation(fps, frames) {
         override protected def frameIndex(frameNo: Int, frameLength: Int): Int = frameNo >< (0, frameLength - 1)
+    }
 
     def apply(fps: Double, frames: Seq[Frame], looping: Boolean): Animation =
         if looping then
             LoopingAnimation(fps = fps, frames = frames.toIndexedSeq)
         else
             SingleRunAnimation(fps = fps, frames = frames.toIndexedSeq)
-            
+
+}

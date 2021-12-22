@@ -1,7 +1,8 @@
 package dod.game.gameobject.parts.state
 
-enum State:
+enum State {
     case Off
     case On
     case Open
     case Closed
+}
