@@ -5,6 +5,7 @@ lazy val scalaxmlVersion = "2.0.1"
 lazy val akkaVersion = "2.6.18"
 lazy val logbackVersion = "1.2.9"
 lazy val scalafxVersion = "17.0.1-R26"
+lazy val javafxVersion = "16"
 
 // Fork a new JVM for 'run' and 'test:run', to avoid JavaFX double initialization problems
 fork := true
@@ -40,6 +41,6 @@ lazy val root = project
                 case _ => throw new Exception("Unknown platform!")
             }
             Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-                .map(m => "org.openjfx" % s"javafx-$m" % "16" classifier osName)
+                .map(m => "org.openjfx" % s"javafx-$m" % javafxVersion classifier osName)
         }
     )
