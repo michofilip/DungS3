@@ -1,6 +1,7 @@
 package dod.game.gameobject
 
 import dod.game.gameobject.GameObjectPrototype.*
+import dod.game.gameobject.parts.commons.CommonsProperty
 import dod.game.gameobject.parts.graphics.{AnimationSelector, GraphicsProperty}
 import dod.game.gameobject.parts.physics.{PhysicsProperty, PhysicsSelector}
 import dod.game.gameobject.parts.position.{Direction, Position, PositionProperty}
@@ -10,10 +11,12 @@ import dod.game.temporal.Timestamp
 final class GameObjectPrototype(private val name: String,
                                 private val availableStates: Seq[State],
                                 private val hasPosition: Boolean,
-                                private val hasDirection: Boolean,
                                 private val layer: Option[Int],
                                 private val physicsSelector: Option[PhysicsSelector],
-                                private val animationSelector: Option[AnimationSelector]):
+                                private val animationSelector: Option[AnimationSelector]) {
+
+    def getCommonsProperty(creationTimestamp: Timestamp): CommonsProperty =
+        CommonsProperty(name, creationTimestamp)
 
     def getStateProperty(state: Option[State], stateTimestamp: Option[Timestamp]): Option[StateProperty] =
         if availableStates.isEmpty then
@@ -51,9 +54,10 @@ final class GameObjectPrototype(private val name: String,
                 animationSelector = animationSelector
             )
     }
+}
 
-
-object GameObjectPrototype:
+object GameObjectPrototype {
     private val defaultTimestamp = Timestamp.zero
     private val defaultPosition = Position(0, 0)
     private val defaultDirection = Direction.North
+}

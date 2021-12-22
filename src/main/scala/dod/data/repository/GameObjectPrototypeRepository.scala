@@ -36,7 +36,6 @@ final class GameObjectPrototypeRepository private(physicsSelectorRepository: Phy
                     name = gameObjectPrototypeEntity.name,
                     availableStates = gameObjectPrototypeEntity.availableStates,
                     hasPosition = gameObjectPrototypeEntity.hasPosition,
-                    hasDirection = gameObjectPrototypeEntity.hasDirection,
                     physicsSelector = physicsSelector,
                     layer = gameObjectPrototypeEntity.layer,
                     animationSelector = animationSelector

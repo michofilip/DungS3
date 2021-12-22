@@ -17,7 +17,7 @@ class GameObjectConverter private(gameObjectPrototypeRepository: GameObjectProto
     def fromEntity(gameObjectEntity: GameObjectEntity): Try[GameObject] =
         gameObjectPrototypeRepository.findById(gameObjectEntity.name).map { gameObjectPrototype =>
 
-            val commonsProperty = CommonsProperty(gameObjectEntity.name, Timestamp(gameObjectEntity.creationTimestamp))
+            val commonsProperty = gameObjectPrototype.getCommonsProperty(Timestamp(gameObjectEntity.creationTimestamp))
             val stateProperty = gameObjectPrototype.getStateProperty(gameObjectEntity.state, gameObjectEntity.stateTimestamp.map(Timestamp.apply))
             val positionProperty = gameObjectPrototype.getPositionProperty(gameObjectEntity.position, gameObjectEntity.direction, gameObjectEntity.positionTimestamp.map(Timestamp.apply))
             val physicsProperty = gameObjectPrototype.getPhysicsProperty
