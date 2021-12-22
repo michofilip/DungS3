@@ -2,9 +2,9 @@ import sbt.Keys.{fork, libraryDependencies, scalacOptions}
 
 lazy val scalatestVersion = "3.2.9"
 lazy val scalaxmlVersion = "2.0.1"
-lazy val akkaVersion = "2.6.17"
-lazy val logbackVersion = "1.2.7"
-lazy val scalafxVersion = "16.0.0-R25"
+lazy val akkaVersion = "2.6.18"
+lazy val logbackVersion = "1.2.9"
+lazy val scalafxVersion = "17.0.1-R26"
 
 // Fork a new JVM for 'run' and 'test:run', to avoid JavaFX double initialization problems
 fork := true
